@@ -1,4 +1,4 @@
-This project is our school proejct for the end of the year.
+This project is our school project for the end of the year.
 
 Basicly what it will do is, you'll have yourself a nicely designed Car Rental website, stacked with backend features, to create a better experience for your company.
 
