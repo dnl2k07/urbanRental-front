@@ -1,46 +1,50 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../pics/urbanRentalLogo.png';
-import Register from "./Register";
+import Navbar from "../components/NavBar"
+import { useState,useEffect } from "react"
+import { data, useNavigate } from "react-router-dom"
+import { whoAmI, logout } from "../usersFolder/users"
+export default function Home() {
+const navigate = useNavigate
 
-export default function HomePage() {
+    const [user, setUser] = useState(null)
+    const [userError,setUserError]=useState(null)
 
-    return (
-        <div>
-            <nav className="navbar navbar-expand-lg">
-                <Link to="/">
-                    <img src={logo} alt="URLogo" width={250} />
-                </Link>
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+    useEffect(()=>{
+        async function load(){
+            const data= await whoAmI()
+            console.log(data);
+            if(!data.error){
+                setUser(data)
+            }
+            setUserError(data.error)
+        }
+        load()
+    },[])
 
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+    async function failedLogin(){
+        const data = await logout()
+        if (data.error === "nincs cookie") {
+            setUserError("Nincs aktív bejelentkezés!")
+        }
+    }
 
-                    <ul className="navbar-nav">
-                        <li className="nav-item navLinks m-2">
-                            <a className="nav-link disabled" href="#">Rentable car collection</a>
-                        </li>
-                        <li className="nav-item navLinks m-2">
-                            <a className="nav-link disabled" href="#">Location</a>
-                        </li>
-                    </ul>
-                    <ul className="navbar-nav ms-auto ml-auto">
-                        <li className="nav-item navLinks m-2 fw-bolder">
-                            <Link className="nav-link" to="/login">Login</Link>
-                        </li>
-                        <li className="nav-item navLinks m-2 fw-bolder">
-                            <Link className="nav-link" to="/register">Register</Link>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
-                <h1 id="homePageHI">Welcome home! :D</h1>
-            </div>
+    async function onLogout(){
+        const data = await logout()
+
+        if (data.error) {
+            return setUserError(data.error)
+        }
+        setUser(null)
+        failedLogin()
+        navigate('/')
+
+    }
+    
+
+    return(
+        <div className="logoutErrorBox">
+            <Navbar user={user} onLogout={onLogout}></Navbar>
+
+            {userError && true && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5" >{userError}</div>}
         </div>
-    );
+    )
 }
-
