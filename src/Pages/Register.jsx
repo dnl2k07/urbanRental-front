@@ -69,9 +69,6 @@ export default function Register() {
                         <li className="nav-item navLinks m-2 fw-bolder">
                             <Link className="nav-link" to="/login">Login</Link>
                         </li>
-                        <li className="nav-item navLinks m-2 fw-bolder">
-                            <a className="nav-link disabled" href="#">Register</a>
-                        </li>
                     </ul>
                 </div>
             </nav>

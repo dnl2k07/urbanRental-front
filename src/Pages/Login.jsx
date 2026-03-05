@@ -66,9 +66,6 @@ export default function Login() {
                     </ul>
                     <ul className="navbar-nav ms-auto ml-auto">
                         <li className="nav-item navLinks m-2 fw-bolder">
-                            <a className="nav-link disabled" href="#">Login</a>
-                        </li>
-                        <li className="nav-item navLinks m-2 fw-bolder">
                             <Link className="nav-link" to="/register">Register</Link>
                         </li>
                     </ul>
