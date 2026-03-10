@@ -1,4 +1,5 @@
 import Navbar from "../components/NavBar"
+import MainPageBody from "../components/MainPageBody"
 import { useState,useEffect } from "react"
 import { data, useNavigate } from "react-router-dom"
 import { whoAmI, logout } from "../usersFolder/users"
@@ -36,14 +37,13 @@ const navigate = useNavigate
         setUser(null)
         failedLogin()
         navigate('/')
-
     }
     
 
     return(
         <div className="logoutErrorBox">
             <Navbar user={user} onLogout={onLogout}></Navbar>
-
+            <MainPageBody user={user}></MainPageBody>
             {userError && true && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5" >{userError}</div>}
         </div>
     )

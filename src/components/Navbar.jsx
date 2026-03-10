@@ -11,7 +11,7 @@ export default function Navbar({ user, onLogout }) {
                 <div className="container-fluid px-4 d-flex align-items-center">
 
                     <Link to="/">
-                        <img src={logo} alt="URLogo" width={250} />
+                        <img src={logo} className="logo" alt="URLogo" width={250} />
                     </Link>
 
                     <button
@@ -27,15 +27,15 @@ export default function Navbar({ user, onLogout }) {
 
                         {isLoggedIn ? (
                             <>
-                                <Link to='/myGallery' className="px-3 py-1 text-decoration-none" style={{ fontSize: 24, color: "black" }}>Képek</Link>
-                                <Link to='/profile' className="px-3 py-1 text-decoration-none" style={{ fontSize: 24, color: "black" }}>Fiokom</Link>
+                                <Link to='/reservation' className="px-3 py-1 text-decoration-none" style={{ fontSize: 24, color: "black" }}>My rentals</Link>
+                                <Link to='/profile' className="px-3 py-1 text-decoration-none" style={{ fontSize: 24, color: "black" }}>My Profile</Link>
 
                                 {isAdmin && (
                                     <Link to='/admin' className="px-3 py-1 text-decoration-none" style={{ fontSize: 24, color: "black" }}>
                                         Admin panel
                                     </Link>
                                 )}
-                                <Link to='/logout' className="px-3 py-1 text-decoration-none" onClick={onLogout} style={{ fontSize: 24, color: "black" }}>Logout</Link>
+                                <Link to='/logout' className="px-3 py-1 text-decoration-none logoutBtn" onClick={onLogout} style={{ fontSize: 24, color: "black" }}>Logout</Link>
 
                             </>
                         ) : (
