@@ -1,5 +1,4 @@
 import Navbar from "../components/NavBar"
-import MainPageBody from "../components/MainPageBody"
 import { useState, useEffect } from "react"
 import { data } from "react-router-dom"
 import { whoAmI, logout } from "../usersFolder/users"
