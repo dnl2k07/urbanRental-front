@@ -1,8 +1,8 @@
 import Navbar from "../components/NavBar"
-import MainPageBody from "../components/MainPageBody"
 import { useState,useEffect } from "react"
 import { data, useNavigate } from "react-router-dom"
 import { whoAmI, logout } from "../usersFolder/users"
+import backgroundPic from "../pics/BackgroundPic.png"
 export default function Home() {
 const navigate = useNavigate
 
@@ -43,7 +43,30 @@ const navigate = useNavigate
     return(
         <div className="logoutErrorBox">
             <Navbar user={user} onLogout={onLogout}></Navbar>
-            <MainPageBody user={user}></MainPageBody>
+            <div className="container-fluid min-vh-100 pt-5 p-0" id="mainWindow">
+                <div className="row g-0 h-100 align-items-center">
+                    
+                    <div className="col-md-4 px-5">
+                        <h1 className="display-4">Hey, {user?.username || 'Tester'}!</h1>
+                        <p className="lead">Welcome to Urban Rentals.</p>
+                    </div>
+
+                    <div className="col-md-8 p-0 d-flex justify-content-end">
+                        <img 
+                            src={backgroundPic} 
+                            alt="Background picture" 
+                            className="img-fluid"
+                            style={{ 
+                                width: '100%', 
+                                height: 'auto', 
+                                objectFit: 'cover',
+                                display: 'block' 
+                            }}
+                        />
+                    </div>
+
+                </div>
+            </div>
             {userError && true && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5" >{userError}</div>}
         </div>
     )
