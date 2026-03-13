@@ -6,6 +6,14 @@ import backgroundPic from "../pics/BackgroundPic.png"
 export default function AdminPage() {
     const navigate = useNavigate
 
+        //     < input
+        // name = "name"
+        // value = { user.name }
+        // onChange = { handleChange }
+        // placeholder = "Név"
+        //>
+
+    const [car, setCar] = useState({});
     const [user, setUser] = useState(null)
     const [userError, setUserError] = useState(null)
 
@@ -41,14 +49,13 @@ export default function AdminPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const userData = {
+        const adminData = {
             email: email,
             psw: psw
         };
 
         try {
-            const response = await fetch("http://localhost:3000/users/login", {
+            const response = await fetch("http://localhost:3000/admin/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -83,38 +90,37 @@ export default function AdminPage() {
                         <h1 className="display-4 greetingText">Hey, {user?.username || 'Admin-With-No-Name'}!</h1>
                         <div class="car-box">
                             <p>New car</p>
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <div class="admin-box">
-                                    <input required="number" name="carCategoryId" />
+                                    <input required="number" name="carCategoryId" onChange={(e) => setCategoryID(e.target.value)} />
                                     <label>Car category ID</label>
                                 </div>
                                 <div class="admin-box">
-                                    <input required="text" name="carBrand" />
+                                    <input required="text" name="carBrand" onChange={(e) => setCarBrand(e.target.value)} />
                                     <label>Car brand</label>
                                 </div>
                                 <div class="admin-box">
-                                    <input required="text" name="carModel" />
+                                    <input required="text" name="carModel" onChange={(e) => setCarModel(e.target.value)} />
                                     <label>Car model</label>
                                 </div>
                                 <div class="admin-box">
-                                    <input required="text" name="carColor" />
+                                    <input required="text" name="carColor" onChange={(e) => setCarColor(e.target.value)} />
                                     <label>Car color</label>
                                 </div>
                                 <div class="admin-box">
-                                    <input required="text" name="carTransmission" />
+                                    <input required="text" name="carTransmission" onChange={(e) => setTransmission(e.target.value)} />
                                     <label>Transmission</label>
                                 </div>
                                 <div class="admin-box">
-                                    <input required="text" name="carNumber" />
+                                    <input required="text" name="carNumber" onChange={(e) => setCarPass(e.target.value)} />
                                     <label>Car pass number</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="file" name="carNumber" type="file" multiple />
-                                </div>
-
+                                <button type="submit" className="btn btn-secondary w-100">
+                                    Upload new car
+                                </button>
                                 {/* <div class="mb-3">
                                     <label class="form-label">Upload car pictures</label>
-                                    <input type="file" class="form-control" name="carPics" accept="image/*" multiple>
+                                    <input type="file" class="form-control" name="carPics" onChange={handleCarsUpload} accept="image/*" multiple/>
                                 </div> */}
                             </form>
                         </div>
@@ -140,3 +146,4 @@ export default function AdminPage() {
         </div>
     )
 }
+
