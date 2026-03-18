@@ -1,38 +1,50 @@
-import logo from '../pics/urbanRentalLogo.png';
+import { useState } from "react"; // 1. Ezt importáld!
 
-const BACKEND_URL = 'http://localhost:3000'; // Or your deployed backend
+const BACKEND_URL = 'http://localhost:3000';
 
+// 2. Csak EGY függvény legyen, és az adjon vissza (return) HTML-t!
 export default function Card({ car }) {
-    const imageUrl = car.img ? `${BACKEND_URL}/${car.img}` : logo;
+    const [imgIndex, setImgIndex] = useState(0);
 
+    // Kezeljük, ha a backendről sima stringként, vagy tömbként jön a kép
+    // (A korábbi JOIN-os megoldástól függően)
+
+    const currentImg = `${BACKEND_URL}/${car.img}`;
+    console.log("DEBUG - Ez a kép URL-je:", currentImg);
     return (
-        <div className="card bg-dark text-white my-3" style={{ width: "18rem" }}>
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" src={imageUrl} alt="Car pictures" />
-                    </div>
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" src={imageUrl} alt="Car pictures" />
-                    </div>
+        <div className="card h-100 shadow-sm border-0 overflow-hidden mb-4" style={{ borderRadius: '15px', marginBlockStart: '100px' }}>
+            {/* Kép rész */}
+            <div className="position-relative" style={{ height: '200px' }}>
+                <div className="position-relative" style={{ height: '200px', backgroundColor: '#f0f0f0' }}>
+                    <img
+                        src={currentImg}
+                        className="card-img-top w-100 h-100"
+                        style={{ objectFit: 'cover' }}
+                        alt={`${car.brand} ${car.model}`}
+                        onError={(e) => {
+                            console.log("Nem jön be a kép:", e.target.src);
+                            e.target.src = "https://via.placeholder.com";
+                        }}
+                    />
                 </div>
+                <span className="badge bg-primary position-absolute top-0 end-0 m-2">
+                    {car.price_per_day} HUF / day
+                </span>
+            </div>
 
+            {/* Adatok rész */}
+            <div className="card-body">
+                <h5 className="card-title fw-bold text-uppercase">{car.brand} {car.model}</h5>
+                <div className="d-flex justify-content-between text-muted mb-2">
+                    <span>{car.transmission}</span>
+                    <span>{car.year}</span>
+                    <span>{car.color}</span>
+                </div>
+                <hr />
+                <div className="d-grid">
+                    <button className="btn btn-outline-secondary">Details</button>
+                </div>
             </div>
-            <div className="card-img-overlay carousel-item active">
-                <h5 className="card-title">{car.brand} {car.model}</h5>
-                <p className="card-text">Szín: {car.color}</p>
-                <p className="card-text"><small>Évjárat: {car.year}</small></p>
-                <p className="card-text"><small>Ár: {car.price_per_day} Ft/nap</small></p>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
-
     );
 }

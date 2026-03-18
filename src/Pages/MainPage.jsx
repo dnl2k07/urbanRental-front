@@ -14,18 +14,23 @@ export default function Home() {
 
     useEffect(() => {
         async function loadCars() {
-            const data = await getCars()
-            console.log("Cars from backend:", data)
-    
-            // Ez a helyes, ha egyetlen autó van a result-ban:
-            if(data.result) {
-                setCars(Array.isArray(data.result) ? data.result : [data.result])
-            } else {
-                setCars([])
+            const response = await getCars();
+            console.log("Nyers válasz a szervertől:", response);
+
+            // Megnézzük, hol van az adat (lehet response.result vagy maga a response)
+            let dataToSet = [];
+
+            if (Array.isArray(response)) {
+                dataToSet = response;
+            } else if (response && response.result) {
+                dataToSet = Array.isArray(response.result) ? response.result : [response.result];
             }
+
+            console.log("Beállított cars state:", dataToSet);
+            setCars(dataToSet);
         }
-        loadCars()
-    }, [])
+        loadCars();
+    }, []);
 
     useEffect(() => {
         async function load() {
@@ -59,35 +64,36 @@ export default function Home() {
 
     return (
         <div className="logoutErrorBox">
-            <Navbar user={user} onLogout={onLogout}></Navbar>
-            <div className="container-fluid min-vh-100 pt-5 p-0" id="mainWindow">
-                <div className="row g-0 h-100 align-items-center">
+            <Navbar user={user} onLogout={onLogout} />
+            <div className="container-fluid min-vh-100 pt-5" id="mainWindow">
+                <div className="row h-100">
 
-                    <div className="col-md-4 px-5">
-                        <h1 className="display-4">Hey, {user?.username || 'Tester'}!</h1>
-                        {cars.map(car => (
-                            <Card key={car.vehicle_id} car={car} />
-                        ))}
-
+                    {/* BAL OLDAL: Üdvözlés és infó */}
+                    <div className="col-md-3 px-5 d-flex flex-column justify-content-center">
+                        <h1 className="display-4 fw-bold">Hey, {user?.username || 'Tester'}!</h1>
+                        <p>Válogass prémium autóink közül a lenti listából.</p>
                     </div>
 
-                    <div className="col-md-8 p-0 d-flex justify-content-end">
-                        <img
-                            src={backgroundPic}
-                            alt="Background picture"
-                            className="img-fluid"
-                            style={{
-                                width: '100%',
-                                height: 'auto',
-                                objectFit: 'cover',
-                                display: 'block'
-                            }}
-                        />
+                    {/* JOBB OLDAL: A kártyák rácsa (Grid) */}
+                    <div className="col-md-9 pe-5">
+                        <div className="row g-4 overflow-auto" style={{ maxHeight: '85vh' }}>
+                            {cars.length > 0 ? (
+                                cars.map(car => (
+                                    <div className="col-12 col-lg-6 col-xl-4" key={car.vehicle_id}>
+                                        <Card car={car} />
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center mt-5">
+                                    <h3>Nincsenek elérhető autók... 🚗</h3>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                 </div>
             </div>
-            {userError && true && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5" >{userError}</div>}
+            {userError && <div className="alert alert-danger fixed-bottom m-3 w-25">{userError}</div>}
         </div>
     )
 }

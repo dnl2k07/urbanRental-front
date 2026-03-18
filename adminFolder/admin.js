@@ -1,14 +1,12 @@
 import { useState } from "react";
 
 const handleCarsUpload = (e) => {
-    const files = Array.from(e.target.files); // convert FileList to array
+    const files = Array.from(e.target.files);
   
-    if (files.length > 5) {
-      alert("You can upload maximum 5 cars");
+    if (files.length > 10) {
+      alert("You can upload maximum 10 cars");
       return;
     }
-  
-    console.log(files); // all uploaded images
 };
 
 export default function CarUpload() {
@@ -17,8 +15,8 @@ export default function CarUpload() {
     const handleCarsUpload = (e) => {
       const files = Array.from(e.target.files);
   
-      if (files.length > 5) {
-        alert("Max 5 images allowed");
+      if (files.length > 10) {
+        alert("Max 10 images allowed");
         return;
       }
   

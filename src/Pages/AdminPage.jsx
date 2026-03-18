@@ -50,60 +50,55 @@ export default function AdminPage() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setUploadMsg(null);
+    e.preventDefault();
+    setUploadMsg(null);
 
-        const formData = new FormData();
-        Object.keys(car).forEach(key => {
-            formData.append(key, car[key]);
+    const formData = new FormData();
+    Object.keys(car).forEach(key => formData.append(key, car[key]));
+
+    const files = e.currentTarget.querySelector('input[name="img"]').files;
+    for (let i = 0; i < files.length; i++) {
+        formData.append("img", files[i]);
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/admin/carwithimgupload', {
+            method: "POST",
+            body: formData,
+            credentials: "include"
         });
 
-        const files = e.target.carPics.files;
-        for (let i = 0; i < files.length; i++) {
-            formData.append("img", files[i]);
+        const text = await response.text();
+        console.log("RAW RESPONSE:", text);
+        console.log("STATUS:", response.status);
+
+        let result;
+        try { 
+            result = JSON.parse(text); 
+        } catch {
+            result = { error: text };
         }
 
-        try {
-            const userId = user?.user_id || 1;
-            const response = await fetch(`http://localhost:3000/admin/carwithimgupload/${userId}`, {
-                method: "POST",
-                body: formData,
-                credentials: "include"
+        if (response.ok) {
+            setUploadMsg(`✅ Sikeres feltöltés!`);
+            setCar({
+                category_id: "",
+                brand: "",
+                model: "",
+                color: "",
+                transmission: "",
+                license_plate: "",
+                year: "",
+                price_per_day: ""
             });
-
-            const text = await response.text();
-            console.log("RAW RESPONSE:", text);
-            console.log("STATUS:", response.status);
-
-            let result;
-            try {
-                result = JSON.parse(text);
-            } catch (err) {
-                // Ha nem JSON, akkor kiírjuk a nyers választ
-                setUploadMsg(`❌ Szerver nem JSON-t küldött (status: ${response.status}): ${text.slice(0, 200)}`);
-                return;
-            }
-            console.log(response);
-            if (response.ok) {
-                setUploadMsg(`✅ Sikeres feltöltés!`);
-                setCar({
-                    category_id: "",
-                    brand: "",
-                    model: "",
-                    color: "",
-                    transmission: "",
-                    license_plate: "",
-                    year: "",
-                    price_per_day: ""
-                });
-                e.target.reset();
-            } else {
-                setUploadMsg(`❌ Hiba: ${result.error || 'Ismeretlen hiba'}`);
-            }
-        } catch (err) {
-            setUploadMsg(`❌ Hálózati hiba: ${err.message}`);
+            e.target.reset();
+        } else {
+            setUploadMsg(`❌ Hiba: ${result.error || 'Ismeretlen hiba'}`);
         }
-    };
+    } catch (err) {
+        setUploadMsg(`❌ Hálózati hiba: ${err.message}`);
+    }
+};
 
     return (
         <div className="logoutErrorBox">
@@ -154,7 +149,7 @@ export default function AdminPage() {
                                 </div>
                                 <div className="mb-3">
                                     <label className="form-label">Upload car pictures</label>
-                                    <input type="file" className="form-control" name="carPics" accept="image/*" multiple />
+                                    <input type="file" className="form-control" name="img" accept="image/*" multiple />
                                 </div>
                                 <button type="submit" className="btn btn-secondary w-100">
                                     Upload new car
