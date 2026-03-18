@@ -19,7 +19,7 @@ export default function AdminPage() {
     const [user, setUser] = useState(null)
     const [userError, setUserError] = useState(null)
     const [uploadMsg, setUploadMsg] = useState(null)
-    
+
     useEffect(() => {
         async function load() {
             const data = await whoAmI()
@@ -31,7 +31,7 @@ export default function AdminPage() {
         }
         load()
     }, [])
-    
+
     async function onLogout() {
         const data = await logout()
         if (data.error) {
@@ -40,7 +40,7 @@ export default function AdminPage() {
         setUser(null)
         navigate('/')
     }
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCar(prev => ({
@@ -48,21 +48,21 @@ export default function AdminPage() {
             [name]: value,
         }));
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setUploadMsg(null);
-    
+
         const formData = new FormData();
         Object.keys(car).forEach(key => {
             formData.append(key, car[key]);
         });
-    
+
         const files = e.target.carPics.files;
         for (let i = 0; i < files.length; i++) {
             formData.append("img", files[i]);
         }
-    
+
         try {
             const userId = user?.user_id || 1;
             const response = await fetch(`http://localhost:3000/admin/carwithimgupload/${userId}`, {
@@ -70,11 +70,11 @@ export default function AdminPage() {
                 body: formData,
                 credentials: "include"
             });
-    
+
             const text = await response.text();
             console.log("RAW RESPONSE:", text);
             console.log("STATUS:", response.status);
-    
+
             let result;
             try {
                 result = JSON.parse(text);
@@ -85,7 +85,7 @@ export default function AdminPage() {
             }
             console.log(response);
             if (response.ok) {
-                setUploadMsg(`✅ Sikeres feltöltés! Vehicle ID: ${result.vehicle_id}, képek: ${result.uploaded}`);
+                setUploadMsg(`✅ Sikeres feltöltés!`);
                 setCar({
                     category_id: "",
                     brand: "",
@@ -104,17 +104,21 @@ export default function AdminPage() {
             setUploadMsg(`❌ Hálózati hiba: ${err.message}`);
         }
     };
-    
+
     return (
         <div className="logoutErrorBox">
             <Navbar user={user} onLogout={onLogout} />
             <div className="container-fluid min-vh-100 pt-5 p-0" id="mainWindow">
                 <div className="row g-0 h-100 align-items-center">
-    
                     <div className="col-md-4 px-5">
-                        <h1 className="display-4 greetingText">Hey, {user?.username || 'Admin-With-No-Name'}!</h1>
                         <div className="car-box">
                             <p>New car</p>
+                            {/* XD 
+                            <div class="tooltip-container">
+                                <span class="text">Tooltip</span>
+                                <span class="tooltip">Uiverse.io</span>
+                            </div>
+                            XD */}
                             <form onSubmit={handleSubmit}>
                                 <div className="admin-box">
                                     <input type="number" name="category_id" value={car.category_id} onChange={handleChange} required />
@@ -159,21 +163,21 @@ export default function AdminPage() {
                             {uploadMsg && <div className="alert alert-info mt-3">{uploadMsg}</div>}
                         </div>
                     </div>
-    
+
                     <div className="col-md-8 p-0 d-flex justify-content-end">
                         <img
                             src={backgroundPic}
                             alt="Background picture"
                             className="img-fluid"
                             style={{
-                                width: '100%',
+                                width: '90%',
                                 height: 'auto',
                                 objectFit: 'cover',
                                 display: 'block'
                             }}
                         />
                     </div>
-    
+
                 </div>
             </div>
             {userError && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5">{userError}</div>}
