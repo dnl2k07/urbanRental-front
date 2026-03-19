@@ -3,6 +3,9 @@ import { useState,useEffect } from "react"
 import { data, useNavigate } from "react-router-dom"
 import { whoAmI, logout } from "../usersFolder/users"
 import backgroundPic from "../pics/BackgroundPic.png"
+import Card from "../components/Card"
+
+
 export default function Home() {
 const navigate = useNavigate
 
