@@ -63,3 +63,16 @@ export async function logout(){
     }
     return await res.json()
 }
+
+export async function getCars(){
+    const res = await fetch(`${BACKEND_URL}/cars`, {
+        method: 'GET',
+        credentials: 'include'
+    })
+
+    if (!res.ok) {
+        const data = await res.json()
+        return {error: data?.error}
+    }
+    return await res.json()
+}

@@ -1,122 +1,161 @@
 import Navbar from "../components/NavBar"
 import { useState, useEffect } from "react"
-import { data, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { whoAmI, logout } from "../usersFolder/users"
 import backgroundPic from "../pics/BackgroundPic.png"
-export default function AdminPage() {
-    const navigate = useNavigate
 
+export default function AdminPage() {
+    const navigate = useNavigate()
+    const [car, setCar] = useState({
+        category_id: "",
+        brand: "",
+        model: "",
+        color: "",
+        transmission: "",
+        license_plate: "",
+        year: "",
+        price_per_day: ""
+    });
     const [user, setUser] = useState(null)
     const [userError, setUserError] = useState(null)
+    const [uploadMsg, setUploadMsg] = useState(null)
 
     useEffect(() => {
         async function load() {
             const data = await whoAmI()
-            console.log(data);
             if (!data.error) {
                 setUser(data)
+            } else {
+                setUserError(data.error)
             }
-            setUserError(data.error)
         }
         load()
     }, [])
 
-    async function failedLogin() {
-        const data = await logout()
-        if (data.error === "nincs cookie") {
-            setUserError("Nincs aktív bejelentkezés!")
-        }
-    }
-
     async function onLogout() {
         const data = await logout()
-
         if (data.error) {
             return setUserError(data.error)
         }
         setUser(null)
-        failedLogin()
         navigate('/')
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const userData = {
-            email: email,
-            psw: psw
-        };
-
-        try {
-            const response = await fetch("http://localhost:3000/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData),
-                credentials: "include"
-            });
-
-            const data = await response.json();
-
-            console.log("Server response:", data);
-
-            if (response.ok) {
-                navigate("/");
-            } else {
-                alert(data.message || "Login failed");
-            }
-
-        } catch (error) {
-            console.error("Error:", error);
-        }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCar(prev => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUploadMsg(null);
+
+    const formData = new FormData();
+    Object.keys(car).forEach(key => formData.append(key, car[key]));
+
+    const files = e.currentTarget.querySelector('input[name="img"]').files;
+    for (let i = 0; i < files.length; i++) {
+        formData.append("img", files[i]);
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/admin/carwithimgupload', {
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        });
+
+        const text = await response.text();
+        console.log("RAW RESPONSE:", text);
+        console.log("STATUS:", response.status);
+
+        let result;
+        try { 
+            result = JSON.parse(text); 
+        } catch {
+            result = { error: text };
+        }
+
+        if (response.ok) {
+            setUploadMsg(`✅ Sikeres feltöltés!`);
+            setCar({
+                category_id: "",
+                brand: "",
+                model: "",
+                color: "",
+                transmission: "",
+                license_plate: "",
+                year: "",
+                price_per_day: ""
+            });
+            e.target.reset();
+        } else {
+            setUploadMsg(`❌ Hiba: ${result.error || 'Ismeretlen hiba'}`);
+        }
+    } catch (err) {
+        setUploadMsg(`❌ Hálózati hiba: ${err.message}`);
+    }
+};
 
     return (
         <div className="logoutErrorBox">
-            <Navbar user={user} onLogout={onLogout}></Navbar>
+            <Navbar user={user} onLogout={onLogout} />
             <div className="container-fluid min-vh-100 pt-5 p-0" id="mainWindow">
                 <div className="row g-0 h-100 align-items-center">
-
                     <div className="col-md-4 px-5">
-                        <h1 className="display-4 greetingText">Hey, {user?.username || 'Admin-With-No-Name'}!</h1>
-                        <div class="car-box">
+                        <div className="car-box">
                             <p>New car</p>
-                            <form>
-                                <div class="admin-box">
-                                    <input required="number" name="carCategoryId" />
+                            {/* XD 
+                            <div class="tooltip-container">
+                                <span class="text">Tooltip</span>
+                                <span class="tooltip">Uiverse.io</span>
+                            </div>
+                            XD */}
+                            <form onSubmit={handleSubmit}>
+                                <div className="admin-box">
+                                    <input type="number" name="category_id" value={car.category_id} onChange={handleChange} required />
                                     <label>Car category ID</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="text" name="carBrand" />
+                                <div className="admin-box">
+                                    <input type="text" name="brand" value={car.brand} onChange={handleChange} required />
                                     <label>Car brand</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="text" name="carModel" />
+                                <div className="admin-box">
+                                    <input type="text" name="model" value={car.model} onChange={handleChange} required />
                                     <label>Car model</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="text" name="carColor" />
+                                <div className="admin-box">
+                                    <input type="text" name="color" value={car.color} onChange={handleChange} required />
                                     <label>Car color</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="text" name="carTransmission" />
+                                <div className="admin-box">
+                                    <input type="text" name="transmission" value={car.transmission} onChange={handleChange} required />
                                     <label>Transmission</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="text" name="carNumber" />
-                                    <label>Car pass number</label>
+                                <div className="admin-box">
+                                    <input type="text" name="license_plate" value={car.license_plate} onChange={handleChange} required />
+                                    <label>License plate</label>
                                 </div>
-                                <div class="admin-box">
-                                    <input required="file" name="carNumber" type="file" multiple />
+                                <div className="admin-box">
+                                    <input type="number" name="year" value={car.year} onChange={handleChange} required />
+                                    <label>Year</label>
                                 </div>
-
-                                {/* <div class="mb-3">
-                                    <label class="form-label">Upload car pictures</label>
-                                    <input type="file" class="form-control" name="carPics" accept="image/*" multiple>
-                                </div> */}
+                                <div className="admin-box">
+                                    <input type="number" name="price_per_day" value={car.price_per_day} onChange={handleChange} required />
+                                    <label>Price per day</label>
+                                </div>
+                                <div className="mb-3">
+                                    <label className="form-label">Upload car pictures</label>
+                                    <input type="file" className="form-control" name="img" accept="image/*" multiple />
+                                </div>
+                                <button type="submit" className="btn btn-secondary w-100">
+                                    Upload new car
+                                </button>
                             </form>
+                            {uploadMsg && <div className="alert alert-info mt-3">{uploadMsg}</div>}
                         </div>
                     </div>
 
@@ -126,7 +165,7 @@ export default function AdminPage() {
                             alt="Background picture"
                             className="img-fluid"
                             style={{
-                                width: '100%',
+                                width: '90%',
                                 height: 'auto',
                                 objectFit: 'cover',
                                 display: 'block'
@@ -136,7 +175,7 @@ export default function AdminPage() {
 
                 </div>
             </div>
-            {userError && true && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5" >{userError}</div>}
+            {userError && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5">{userError}</div>}
         </div>
     )
 }
