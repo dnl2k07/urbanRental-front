@@ -9,7 +9,7 @@ export default function Card({ car }) {
     // Kezeljük, ha a backendről sima stringként, vagy tömbként jön a kép
     // (A korábbi JOIN-os megoldástól függően)
 
-    const currentImg = `${BACKEND_URL}/${car.img}`;
+    const currentImg = `${BACKEND_URL}/public/${car.img}`;
     console.log("DEBUG - Ez a kép URL-je:", currentImg);
     return (
         <div className="card h-100 shadow-sm border-0 overflow-hidden mb-4" style={{ borderRadius: '15px', marginBlockStart: '100px' }}>
@@ -18,6 +18,7 @@ export default function Card({ car }) {
                 <div className="position-relative" style={{ height: '200px', backgroundColor: '#f0f0f0' }}>
                     <img
                         src={currentImg}
+                        data-log={currentImg}
                         className="card-img-top w-100 h-100"
                         style={{ objectFit: 'cover' }}
                         alt={`${car.brand} ${car.model}`}
