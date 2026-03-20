@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../pics/urbanRentalLogo.png';
 import { Link } from "react-router-dom";
 import Login from "./Login";
-import NavBar from "../components/NavBar";
+import Navbar from "../components/NavBar";
 
 export default function Register() {
     const [email, setEmail] = useState("");
@@ -48,7 +48,7 @@ export default function Register() {
 
     return (
         <div>
-            <NavBar></NavBar>
+            <Navbar></Navbar>
             <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
                 <h1 id="registerText">REGISTER</h1>
                 <div className="d-flex flex-column w-50 registerBox">
@@ -96,6 +96,12 @@ export default function Register() {
                         <button type="submit" className="btn btn-secondary w-100">
                             Register
                         </button>
+                        <div id="accountHaveP">
+                            <p id="smallLoginText">You already have an account?</p>
+                            <Link to="/login">
+                                <button >Login here!</button>
+                            </Link>
+                        </div>
 
                     </form>
                 </div>

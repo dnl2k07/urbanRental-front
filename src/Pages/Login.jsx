@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../pics/urbanRentalLogo.png';
 import { Link } from "react-router-dom";
-import Register from "./Register";
-import NavBar from "../components/NavBar";
+import Navbar from "../components/NavBar";
+
 export default function Login() {
     const [email, setEmail] = useState("");
     const [psw, setPsw] = useState("");
-
     const navigate = useNavigate();
     const [hiba, setHiba] = useState('')
     const [uzenet, setUzenet] = useState('')
@@ -47,7 +45,7 @@ export default function Login() {
 
     return (
         <div>
-            <NavBar></NavBar>
+            <Navbar/>
             <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
                 <h1 id="registerText">LOGIN</h1>
                 <div className="d-flex flex-column w-50 registerBox">
@@ -79,7 +77,12 @@ export default function Login() {
                         <button type="submit" className="btn btn-secondary w-100">
                             Login
                         </button>
-
+                        <div id="accountHaveP">
+                            <p id="smallLoginText">You don't have an account yet?</p>
+                            <Link to="/register">
+                                <button >Create one!</button>
+                            </Link>
+                        </div>
                     </form>
                 </div>
             </div>
