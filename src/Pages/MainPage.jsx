@@ -1,9 +1,9 @@
-import Navbar from "../components/NavBar"
 import { useState, useEffect } from "react"
 import { data, useNavigate } from "react-router-dom"
 import { whoAmI, logout, getCars } from "../usersFolder/users"
 import backgroundPic from "../pics/BackgroundPic.png"
 import Card from "../components/Card"
+import Navbar from "../components/Navbar2"
 
 export default function Home() {
     const navigate = useNavigate()

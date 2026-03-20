@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar2";
 
 export default function AdminCategoryManagement() {
     const [user, setUser] = useState(null);

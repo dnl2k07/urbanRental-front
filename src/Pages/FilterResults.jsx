@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Navbar from "../components/NavBar";
 import Card from "../components/Card";
+import Navbar from "../components/Navbar2";
 
 export default function FilterResults() {
     const [user, setUser] = useState(null);

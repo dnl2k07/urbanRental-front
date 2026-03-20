@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar2";
 
 export default function CarDetails() {
     const { id } = useParams();

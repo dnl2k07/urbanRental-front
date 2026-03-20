@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../pics/urbanRentalLogo.png';
 import { Link } from "react-router-dom";
 import Login from "./Login";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar2";
 
 export default function Register() {
     const [email, setEmail] = useState("");

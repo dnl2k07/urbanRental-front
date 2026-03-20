@@ -1,8 +1,8 @@
-import Navbar from "../components/NavBar"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { whoAmI, logout, newProfilePic } from "../usersFolder/users"
 import backgroundPic from "../pics/BackgroundPic.png"
+import Navbar from "../components/Navbar2"
 
 export default function UserProfile() {
     const navigate = useNavigate()
