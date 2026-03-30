@@ -151,13 +151,14 @@ export default function AdminCategoryManagement() {
                             <h2>Category Management</h2>
                             <p>Create and manage car categories.</p>
                         </div>
-                    <div className="col-md-4 text-end">
-                        <button 
-                            onClick={() => setError(null)}
-                            className="btn btn-outline-secondary"
-                        >
-                            Clear Messages
-                        </button>
+                        <div className="col-md-4 text-end">
+                            <button 
+                                onClick={() => setError(null)}
+                                className="btn btn-outline-secondary"
+                            >
+                                Clear Messages
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -255,7 +256,7 @@ export default function AdminCategoryManagement() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         </div>
     );
 }

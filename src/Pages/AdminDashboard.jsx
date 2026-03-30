@@ -65,19 +65,20 @@ export default function AdminDashboard() {
                             <h2>Admin Dashboard</h2>
                             <p>Welcome, {user?.username}. Manage your system from here.</p>
                         </div>
-                    <div className="col-md-4 text-end">
-                        <button 
-                            onClick={() => navigate('/admin/users')}
-                            className="btn btn-outline-primary me-2"
-                        >
-                            Users
-                        </button>
-                        <button 
-                            onClick={() => navigate('/admin/categories')}
-                            className="btn btn-outline-success me-2"
-                        >
-                            Categories
-                        </button>
+                        <div className="col-md-4 text-end">
+                            <button 
+                                onClick={() => navigate('/admin/users')}
+                                className="btn btn-outline-primary me-2"
+                            >
+                                Users
+                            </button>
+                            <button 
+                                onClick={() => navigate('/admin/categories')}
+                                className="btn btn-outline-success me-2"
+                            >
+                                Categories
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -218,7 +219,7 @@ export default function AdminDashboard() {
                         </form>
                     </div>
                 </div>
-            </div>
+            </>
         </div>
     );
 }

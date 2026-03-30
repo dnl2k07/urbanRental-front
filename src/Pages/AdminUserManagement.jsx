@@ -120,13 +120,14 @@ export default function AdminUserManagement() {
                             <h2>User Management</h2>
                             <p>View and manage all users in the system.</p>
                         </div>
-                    <div className="col-md-4 text-end">
-                        <button 
-                            onClick={() => setError(null)}
-                            className="btn btn-outline-secondary"
-                        >
-                            Clear Messages
-                        </button>
+                        <div className="col-md-4 text-end">
+                            <button 
+                                onClick={() => setError(null)}
+                                className="btn btn-outline-secondary"
+                            >
+                                Clear Messages
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -197,7 +198,7 @@ export default function AdminUserManagement() {
                         </p>
                     </div>
                 </div>
-            </div>
+            </>
         </div>
     );
 }

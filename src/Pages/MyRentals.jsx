@@ -153,7 +153,8 @@ export default function MyRentals() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
+                </div>
+            </>
+        </div>
     );
 }
