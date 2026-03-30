@@ -8,6 +8,12 @@ export default function AdminDashboard() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, []);
 
     useEffect(() => {
         async function loadUser() {
@@ -39,7 +45,7 @@ export default function AdminDashboard() {
         loadUser();
     }, []);
 
-    if (loading) return <div className="text-center mt-5">Loading...</div>;
+    if (loading) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>;
     if (error) return <div className="alert alert-danger text-center mt-5">{error}</div>;
 
     const stats = [
@@ -50,14 +56,15 @@ export default function AdminDashboard() {
     ];
 
     return (
-        <>
-            <Navbar user={user} />
-            <div className="container-fluid min-vh-100 pt-5 p-4">
-                <div className="row mb-4">
-                    <div className="col-md-8">
-                        <h2>Admin Dashboard</h2>
-                        <p>Welcome, {user?.username}. Manage your system from here.</p>
-                    </div>
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
+            <>
+                <Navbar user={user} />
+                <div className="container-fluid min-vh-100 pt-5 p-4">
+                    <div className="row mb-4">
+                        <div className={`col-md-8 ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                            <h2>Admin Dashboard</h2>
+                            <p>Welcome, {user?.username}. Manage your system from here.</p>
+                        </div>
                     <div className="col-md-4 text-end">
                         <button 
                             onClick={() => navigate('/admin/users')}
@@ -77,8 +84,8 @@ export default function AdminDashboard() {
                 {/* Stats Cards */}
                 <div className="row g-4 mb-4">
                     {stats.map((stat, index) => (
-                        <div key={index} className="col-md-3 col-sm-6">
-                            <div className={`card ${stat.color} text-white shadow-sm h-100`}>
+                        <div key={index} className={`col-md-3 col-sm-6 animate-fade-in-up`} style={{ animationDelay: `${index * 0.1}s` }}>
+                            <div className={`card ${stat.color} text-white shadow-sm h-100 animate-scale-in`}>
                                 <div className="card-body">
                                     <h5 className="card-title">{stat.title}</h5>
                                     <p className="display-4 mb-0">{stat.value}</p>
@@ -89,10 +96,10 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Quick Actions */}
-                <div className="row mb-4">
-                    <h3>Quick Actions</h3>
-                    <div className="col-md-12">
-                        <div className="card shadow-sm border-0">
+                <div className={`row mb-4 ${isVisible ? 'animate-fade-in-up' : ''}`} style={{ animationDelay: '0.4s' }}>
+                    <h3 className="animate-pulse-custom">Quick Actions</h3>
+                    <div className={`col-md-12 ${isVisible ? 'animate-fade-in' : ''}`}>
+                        <div className="card shadow-sm border-0 animate-scale-in">
                             <div className="card-body">
                                 <div className="row g-3 text-center">
                                     <div className="col-md-3 col-sm-6">
@@ -135,10 +142,10 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Recent Activity Section */}
-                <div className="row mb-4">
-                    <h3>Recent Activity</h3>
-                    <div className="col-md-12">
-                        <div className="card shadow-sm border-0">
+                <div className={`row mb-4 ${isVisible ? 'animate-fade-in-up' : ''}`} style={{ animationDelay: '0.8s' }}>
+                    <h3 className="animate-pulse-custom">Recent Activity</h3>
+                    <div className={`col-md-12 ${isVisible ? 'animate-fade-in' : ''}`}>
+                        <div className="card shadow-sm border-0 animate-scale-in">
                             <div className="card-body">
                                 <p className="text-center text-muted">Activity log will be displayed here</p>
                                 {/* This would show recent reservations, user actions, etc. */}
@@ -148,9 +155,9 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Admin Car Upload - Quick Access */}
-                <div className="row">
-                    <h3>Quick Car Upload</h3>
-                    <div className="col-md-12">
+                <div className={`row ${isVisible ? 'animate-fade-in-up' : ''}`} style={{ animationDelay: '1.0s' }}>
+                    <h3 className="animate-pulse-custom">Quick Car Upload</h3>
+                    <div className={`col-md-12 ${isVisible ? 'animate-fade-in' : ''}`}>
                         <form 
                             id="quickCarUploadForm"
                             action="http://localhost:3000/admin/carwithimgupload" 
@@ -212,6 +219,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar2";
 
 export default function Login() {
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 10);
+    }, []);
     const [email, setEmail] = useState("");
     const [psw, setPsw] = useState("");
     const navigate = useNavigate();
@@ -44,11 +50,11 @@ export default function Login() {
     };
 
     return (
-        <div>
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
             <Navbar/>
-            <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
-                <h1 id="registerText">LOGIN</h1>
-                <div className="d-flex flex-column w-50 registerBox">
+            <div className="container d-flex flex-column justify-content-center align-items-center vh-100 mt-5">
+                <h1 id="registerText" className={isVisible ? 'animate-fade-in-down' : ''}>LOGIN</h1>
+                <div className={`d-flex flex-column w-50 registerBox ${isVisible ? 'animate-scale-in' : ''}`}>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group mb-3">
                             <label htmlFor="inputEmail">Email address</label>

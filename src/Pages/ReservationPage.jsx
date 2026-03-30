@@ -15,7 +15,13 @@ export default function ReservationPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, []);
+
     // Reservation form state
     const [formData, setFormData] = useState({
         vehicle_id: initialVehicleId || '',
@@ -171,7 +177,7 @@ export default function ReservationPage() {
         }
     };
 
-    if (loading) return <div className="text-center mt-5">Loading...</div>;
+    if (loading) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>;
 
     // If user is not logged in, redirect is handled in useEffect
     if (!user && !error.includes('logged in')) {
@@ -179,20 +185,21 @@ export default function ReservationPage() {
     }
 
     return (
-        <>
-            <Navbar user={user} />
-            <div className="container-fluid min-vh-100 pt-5 p-4">
-                <div className="row justify-content-center">
-                    <div className="col-md-8 col-lg-6">
-                        <div className="card shadow-sm border-0">
-                            <div className="card-header bg-primary text-white">
-                                <h3 className="mb-0">Reserve a Car</h3>
-                            </div>
-                            
-                            {error && <div className="alert alert-danger">{error}</div>}
-                            {success && <div className="alert alert-success">{success}</div>}
-                            
-                            <div className="card-body">
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
+            <>
+                <Navbar user={user} />
+                <div className="container-fluid min-vh-100 pt-5 p-4">
+                    <div className="row justify-content-center">
+                        <div className={`col-md-8 col-lg-6 ${isVisible ? 'animate-fade-in' : ''}`}>
+                            <div className="card shadow-sm border-0 animate-scale-in">
+                                <div className="card-header bg-primary text-white">
+                                    <h3 className="mb-0">Reserve a Car</h3>
+                                </div>
+                                
+                                {error && <div className="alert alert-danger animate-fade-in">{error}</div>}
+                                {success && <div className="alert alert-success animate-bounce-in">{success}</div>}
+                                
+                                <div className="card-body">
                                 {!car ? (
                                     // Show car selection dropdown if no car is selected
                                     <>
@@ -301,8 +308,8 @@ export default function ReservationPage() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
+            </>
+        </div>
     );
 }
 

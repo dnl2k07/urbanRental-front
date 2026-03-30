@@ -11,6 +11,12 @@ export default function Home() {
     const [user, setUser] = useState(null)
     const [userError, setUserError] = useState(null)
     const [cars, setCars] = useState([])
+    const [isVisible, setIsVisible] = useState(false)
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, [])
 
     useEffect(() => {
         async function loadCars() {
@@ -63,19 +69,19 @@ export default function Home() {
     }
 
     return (
-        <div className="logoutErrorBox">
+        <div className={`logoutErrorBox page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
             <Navbar user={user} onLogout={onLogout} />
             <div className="container-fluid min-vh-100 pt-5" id="mainWindow">
                 <div className="row h-100">
 
                     {/* BAL OLDAL: Üdvözlés és infó */}
-                    <div className="col-md-3 px-5 d-flex flex-column justify-content-center">
-                        <h1 className="display-4 fw-bold">Hey, {user?.username || 'Tester'}!</h1>
+                    <div className={`col-md-3 px-5 d-flex flex-column justify-content-center ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                        <h1 className="display-4 fw-bold animate-pulse-custom">Hey, {user?.username || 'Tester'}!</h1>
                         <p>Válogass prémium autóink közül a lenti listából.</p>
                     </div>
 
                     {/* JOBB OLDAL: A kártyák rácsa (Grid) */}
-                    <div className="col-md-9 pe-5">
+                    <div className={`col-md-9 pe-5 ${isVisible ? 'animate-fade-in-right' : ''}`}>
                         <div className="row g-4 overflow-auto" style={{ maxHeight: '85vh' }}>
                             {cars.length > 0 ? (
                                 cars.map(car => (

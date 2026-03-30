@@ -7,7 +7,13 @@ export default function AdminCategoryManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, []);
+
     // Form state
     const [form, setForm] = useState({
         category_name: '',
@@ -133,17 +139,18 @@ export default function AdminCategoryManagement() {
         }
     };
 
-    if (loading) return <div className="text-center mt-5">Loading...</div>;
+    if (loading) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>;
 
     return (
-        <>
-            <Navbar user={user} />
-            <div className="container-fluid min-vh-100 pt-5 p-4">
-                <div className="row mb-4">
-                    <div className="col-md-8">
-                        <h2>Category Management</h2>
-                        <p>Create and manage car categories.</p>
-                    </div>
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
+            <>
+                <Navbar user={user} />
+                <div className="container-fluid min-vh-100 pt-5 p-4">
+                    <div className="row mb-4">
+                        <div className={`col-md-8 ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                            <h2>Category Management</h2>
+                            <p>Create and manage car categories.</p>
+                        </div>
                     <div className="col-md-4 text-end">
                         <button 
                             onClick={() => setError(null)}
@@ -249,6 +256,6 @@ export default function AdminCategoryManagement() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

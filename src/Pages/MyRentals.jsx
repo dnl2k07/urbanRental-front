@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar2";
 
-
 export default function MyRentals() {
     const [user, setUser] = useState(null);
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, []);
 
     useEffect(() => {
         async function loadData() {
@@ -47,20 +52,40 @@ export default function MyRentals() {
         loadData();
     }, []);
 
-    if (loading) return <div className="text-center mt-5">Loading...</div>;
+    async function deleteReservation(id) {
+        try {
+            const response = await fetch(`http://localhost:3000/users/deletereservation/${id}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                // Update state to remove deleted reservation
+                setReservations(prev => prev.filter(res => res.reservation_id !== id));
+                setError("Reservation cancelled successfully");
+            } else {
+                setError("Failed to cancel reservation");
+            }
+        } catch (err) {
+            setError("Network error: " + err.message);
+        }
+    }
+
+    if (loading) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>;
 
     return (
-        <>
-            <Navbar user={user} />
-            <div className="container-fluid min-vh-100 pt-5 p-4">
-                <div className="row justify-content-center">
-                    <div className="col-md-10">
-                        <div className="card shadow-sm border-0 mb-4">
-                            <div className="card-header bg-primary text-white">
-                                <h3 className="mb-0">My Reservations</h3>
-                            </div>
-                            
-                            {error && <div className="alert alert-danger mx-3 mt-3">{error}</div>}
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
+            <>
+                <Navbar user={user} />
+                <div className="container-fluid min-vh-100 pt-5 p-4">
+                    <div className="row justify-content-center">
+                        <div className={`col-md-10 ${isVisible ? 'animate-fade-in' : ''}`}>
+                            <div className="card shadow-sm border-0 mb-4 animate-scale-in">
+                                <div className="card-header bg-primary text-white">
+                                    <h3 className="mb-0">My Reservations</h3>
+                                </div>
+                                
+                                {error && <div className="alert alert-danger mx-3 mt-3 animate-fade-in">{error}</div>}
                             {reservations.length === 0 && !error && (
                                 <div className="text-center py-5">
                                     <h4>No reservations found. Start by reserving a car!</h4>
@@ -131,23 +156,4 @@ export default function MyRentals() {
             </div>
         </>
     );
-
-    async function deleteReservation(id) {
-        try {
-            const response = await fetch(`http://localhost:3000/users/deletereservation/${id}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-            
-            if (response.ok) {
-                // Update state to remove deleted reservation
-                setReservations(prev => prev.filter(res => res.reservation_id !== id));
-                setError("Reservation cancelled successfully");
-            } else {
-                setError("Failed to cancel reservation");
-            }
-        } catch (err) {
-            setError("Network error: " + err.message);
-        }
-    }
 }

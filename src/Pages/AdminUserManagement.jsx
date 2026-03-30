@@ -8,6 +8,12 @@ export default function AdminUserManagement() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, []);
 
     useEffect(() => {
         async function loadUser() {
@@ -102,17 +108,18 @@ export default function AdminUserManagement() {
         }
     };
 
-    if (loading) return <div className="text-center mt-5">Loading...</div>;
+    if (loading) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>;
 
     return (
-        <>
-            <Navbar user={user} />
-            <div className="container-fluid min-vh-100 pt-5 p-4">
-                <div className="row mb-4">
-                    <div className="col-md-8">
-                        <h2>User Management</h2>
-                        <p>View and manage all users in the system.</p>
-                    </div>
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
+            <>
+                <Navbar user={user} />
+                <div className="container-fluid min-vh-100 pt-5 p-4">
+                    <div className="row mb-4">
+                        <div className={`col-md-8 ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                            <h2>User Management</h2>
+                            <p>View and manage all users in the system.</p>
+                        </div>
                     <div className="col-md-4 text-end">
                         <button 
                             onClick={() => setError(null)}
@@ -191,6 +198,6 @@ export default function AdminUserManagement() {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

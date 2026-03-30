@@ -8,7 +8,13 @@ export default function FilterResults() {
     const [filteredCars, setFilteredCars] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, []);
+
     // Filter form state
     const [filters, setFilters] = useState({
         brand: '',
@@ -125,166 +131,168 @@ export default function FilterResults() {
         setFilteredCars(cars); // Reset to all cars
     };
 
-    if (loading && cars.length === 0) return <div className="text-center mt-5">Loading...</div>;
+    if (loading && cars.length === 0) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>;
 
     const brands = [...new Set(cars.map(car => car.brand).filter(Boolean))];
     const colors = [...new Set(cars.map(car => car.color).filter(Boolean))];
     const transmissions = [...new Set(cars.map(car => car.transmission).filter(Boolean))];
 
     return (
-        <>
-            <Navbar user={user} />
-            <div className="container-fluid min-vh-100 pt-5 p-4">
-                <div className="row justify-content-center">
-                    {/* Filter Sidebar */}
-                    <div className="col-md-3 mb-4">
-                        <div className="card shadow-sm border-0 sticky-top" style={{ top: '80px' }}>
-                            <div className="card-header bg-primary text-white">
-                                <h5 className="mb-0">Filters</h5>
-                            </div>
-                            <div className="card-body">
-                                {/* Brand Filter */}
-                                <div className="mb-3">
-                                    <label htmlFor="brand" className="form-label">Brand</label>
-                                    <select
-                                        id="brand"
-                                        name="brand"
-                                        value={filters.brand}
-                                        onChange={handleFilterChange}
-                                        className="form-select"
-                                    >
-                                        <option value="">All Brands</option>
-                                        {brands.map(brand => (
-                                            <option key={brand} value={brand}>{brand}</option>
-                                        ))}
-                                    </select>
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
+            <>
+                <Navbar user={user} />
+                <div className="container-fluid min-vh-100 pt-5 p-4">
+                    <div className="row justify-content-center">
+                        {/* Filter Sidebar */}
+                        <div className={`col-md-3 mb-4 ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                            <div className="card shadow-sm border-0 sticky-top animate-scale-in" style={{ top: '80px' }}>
+                                <div className="card-header bg-primary text-white">
+                                    <h5 className="mb-0">Filters</h5>
                                 </div>
-
-                                {/* Color Filter */}
-                                <div className="mb-3">
-                                    <label htmlFor="color" className="form-label">Color</label>
-                                    <select
-                                        id="color"
-                                        name="color"
-                                        value={filters.color}
-                                        onChange={handleFilterChange}
-                                        className="form-select"
-                                    >
-                                        <option value="">All Colors</option>
-                                        {colors.map(color => (
-                                            <option key={color} value={color}>{color}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Transmission Filter */}
-                                <div className="mb-3">
-                                    <label htmlFor="transmission" className="form-label">Transmission</label>
-                                    <select
-                                        id="transmission"
-                                        name="transmission"
-                                        value={filters.transmission}
-                                        onChange={handleFilterChange}
-                                        className="form-select"
-                                    >
-                                        <option value="">All Transmissions</option>
-                                        {transmissions.map(trans => (
-                                            <option key={trans} value={trans}>{trans}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                {/* Year Range */}
-                                <div className="mb-3">
-                                    <label className="form-label">Year Range</label>
-                                    <div className="input-group">
-                                        <span className="input-group-text">From</span>
-                                        <input
-                                            type="number"
-                                            name="year_from"
-                                            value={filters.year_from}
+                                <div className="card-body">
+                                    {/* Brand Filter */}
+                                    <div className="mb-3">
+                                        <label htmlFor="brand" className="form-label">Brand</label>
+                                        <select
+                                            id="brand"
+                                            name="brand"
+                                            value={filters.brand}
                                             onChange={handleFilterChange}
-                                            className="form-control"
-                                            placeholder="e.g. 2018"
-                                        />
-                                        <span className="input-group-text">To</span>
-                                        <input
-                                            type="number"
-                                            name="year_to"
-                                            value={filters.year_to}
-                                            onChange={handleFilterChange}
-                                            className="form-control"
-                                            placeholder="e.g. 2023"
-                                        />
+                                            className="form-select"
+                                        >
+                                            <option value="">All Brands</option>
+                                            {brands.map(brand => (
+                                                <option key={brand} value={brand}>{brand}</option>
+                                            ))}
+                                        </select>
                                     </div>
-                                </div>
 
-                                {/* Price Range */}
-                                <div className="mb-3">
-                                    <label className="form-label">Price Range (HUF/day)</label>
-                                    <div className="input-group">
-                                        <span className="input-group-text">From</span>
-                                        <input
-                                            type="number"
-                                            name="price_from"
-                                            value={filters.price_from}
+                                    {/* Color Filter */}
+                                    <div className="mb-3">
+                                        <label htmlFor="color" className="form-label">Color</label>
+                                        <select
+                                            id="color"
+                                            name="color"
+                                            value={filters.color}
                                             onChange={handleFilterChange}
-                                            className="form-control"
-                                            placeholder="e.g. 10000"
-                                        />
-                                        <span className="input-group-text">To</span>
-                                        <input
-                                            type="number"
-                                            name="price_to"
-                                            value={filters.price_to}
-                                            onChange={handleFilterChange}
-                                            className="form-control"
-                                            placeholder="e.g. 50000"
-                                        />
+                                            className="form-select"
+                                        >
+                                            <option value="">All Colors</option>
+                                            {colors.map(color => (
+                                                <option key={color} value={color}>{color}</option>
+                                            ))}
+                                        </select>
                                     </div>
-                                </div>
 
-                                {/* Action Buttons */}
-                                <button 
-                                    onClick={applyFilters}
-                                    className="btn btn-primary w-100 mb-2"
-                                >
-                                    Apply Filters
-                                </button>
-                                <button 
-                                    onClick={clearFilters}
-                                    className="btn btn-outline-secondary w-100"
-                                >
-                                    Clear Filters
-                                </button>
+                                    {/* Transmission Filter */}
+                                    <div className="mb-3">
+                                        <label htmlFor="transmission" className="form-label">Transmission</label>
+                                        <select
+                                            id="transmission"
+                                            name="transmission"
+                                            value={filters.transmission}
+                                            onChange={handleFilterChange}
+                                            className="form-select"
+                                        >
+                                            <option value="">All Transmissions</option>
+                                            {transmissions.map(trans => (
+                                                <option key={trans} value={trans}>{trans}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    {/* Year Range */}
+                                    <div className="mb-3">
+                                        <label className="form-label">Year Range</label>
+                                        <div className="input-group">
+                                            <span className="input-group-text">From</span>
+                                            <input
+                                                type="number"
+                                                name="year_from"
+                                                value={filters.year_from}
+                                                onChange={handleFilterChange}
+                                                className="form-control"
+                                                placeholder="e.g. 2018"
+                                            />
+                                            <span className="input-group-text">To</span>
+                                            <input
+                                                type="number"
+                                                name="year_to"
+                                                value={filters.year_to}
+                                                onChange={handleFilterChange}
+                                                className="form-control"
+                                                placeholder="e.g. 2023"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Price Range */}
+                                    <div className="mb-3">
+                                        <label className="form-label">Price Range (HUF/day)</label>
+                                        <div className="input-group">
+                                            <span className="input-group-text">From</span>
+                                            <input
+                                                type="number"
+                                                name="price_from"
+                                                value={filters.price_from}
+                                                onChange={handleFilterChange}
+                                                className="form-control"
+                                                placeholder="e.g. 10000"
+                                            />
+                                            <span className="input-group-text">To</span>
+                                            <input
+                                                type="number"
+                                                name="price_to"
+                                                value={filters.price_to}
+                                                onChange={handleFilterChange}
+                                                className="form-control"
+                                                placeholder="e.g. 50000"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <button 
+                                        onClick={applyFilters}
+                                        className="btn btn-primary w-100 mb-2 animate-scale-in"
+                                    >
+                                        Apply Filters
+                                    </button>
+                                    <button 
+                                        onClick={clearFilters}
+                                        className="btn btn-outline-secondary w-100 animate-scale-in"
+                                    >
+                                        Clear Filters
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Results */}
-                    <div className="col-md-9">
-                        <h3 className="mb-4">Cars matching your criteria</h3>
-                        
-                        {error && <div className="alert alert-warning">{error}</div>}
-                        
-                        <div className="row g-4 overflow-auto" style={{ maxHeight: '85vh' }}>
-                            {filteredCars.length > 0 ? (
-                                filteredCars.map(car => (
-                                    <div key={car.vehicle_id} className="col-12 col-lg-6 col-xl-4">
-                                        <Card car={car} />
-                                    </div>
-                                ))
-                            ) : (
-                                !error && (
-                                    <div className="text-center mt-5">
-                                        <h3>No cars found. Try adjusting your filters!</h3>
-                                    </div>
-                                )
-                            )}
+                        {/* Results */}
+                        <div className={`col-md-9 ${isVisible ? 'animate-fade-in-right' : ''}`}>
+                            <h3 className="mb-4 animate-pulse-custom">Cars matching your criteria</h3>
+                            
+                            {error && <div className="alert alert-warning animate-fade-in">{error}</div>}
+                            
+                            <div className="row g-4 overflow-auto" style={{ maxHeight: '85vh' }}>
+                                {filteredCars.length > 0 ? (
+                                    filteredCars.map(car => (
+                                        <div key={car.vehicle_id} className="col-12 col-lg-6 col-xl-4 animate-fade-in-up">
+                                            <Card car={car} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    !error && (
+                                        <div className="text-center mt-5">
+                                            <h3>No cars found. Try adjusting your filters!</h3>
+                                        </div>
+                                    )
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
+            </>
+        </div>
     );
 }

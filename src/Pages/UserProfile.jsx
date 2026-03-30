@@ -11,6 +11,12 @@ export default function UserProfile() {
     const [userError, setUserError] = useState(null)
     const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [isVisible, setIsVisible] = useState(false)
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, [])
 
     useEffect(() => {
         async function load() {
@@ -91,16 +97,17 @@ export default function UserProfile() {
         }
     }
 
-    if (loading && !user) return <div className="text-center mt-5">Loading...</div>
+    if (loading && !user) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>
 
     return (
-        <>
+        <>        
+        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
             <Navbar user={user} onLogout={onLogout} />
             <div className="container-fluid min-vh-100 pt-5 p-0" id="profileWindow">
                 <div className="row g-0 h-100 align-items-center">
-                    <div className="col-md-4 px-5 align-items-start">
-                        <h1 className="nameDisplay">Hey, {user?.username || "not the user's name apperantely :("}!</h1>
-                        <p className="question">Want to make your profile look like really you? <br/> You can make it here!</p>
+                    <div className={`col-md-4 px-5 align-items-start ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                        <h1 className="nameDisplay">{user?.username || "not the user's name apperantely :("}!</h1>
+                        <p className="question animate-bounce-in">Want to make your profile look like really you? <br/> You can make it here!</p>
                         
                         {/* Profile Image Upload */}
                         <div className="mt-4">

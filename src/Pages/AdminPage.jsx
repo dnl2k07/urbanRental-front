@@ -19,6 +19,12 @@ export default function AdminPage() {
     const [user, setUser] = useState(null)
     const [userError, setUserError] = useState(null)
     const [uploadMsg, setUploadMsg] = useState(null)
+    const [isVisible, setIsVisible] = useState(false)
+
+    // Trigger animation on mount
+    useEffect(() => {
+        setTimeout(() => setIsVisible(true), 50);
+    }, [])
 
     useEffect(() => {
         async function load() {
@@ -101,12 +107,12 @@ export default function AdminPage() {
 };
 
     return (
-        <div className="logoutErrorBox">
+        <div className={`logoutErrorBox page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
             <Navbar user={user} onLogout={onLogout} />
             <div className="container-fluid min-vh-100 pt-5 p-0" id="mainWindow">
                 <div className="row g-0 h-100 align-items-center">
-                    <div className="col-md-4 px-5">
-                        <div className="car-box">
+                    <div className={`col-md-4 px-5 ${isVisible ? 'animate-fade-in-left' : ''}`}>
+                        <div className="car-box animate-scale-in">
                             <p>New car</p>
                             {/* XD 
                             <div class="tooltip-container">
