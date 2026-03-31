@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { data, useNavigate } from "react-router-dom"
-import { whoAmI, logout, getCars } from "../usersFolder/users"
+import { whoAmI, logout, getCars } from "../../js/users"
 import backgroundPic from "../pics/BackgroundPic.png"
 import Card from "../components/Card"
 import Navbar from "../components/Navbar2"
@@ -21,9 +21,8 @@ export default function Home() {
     useEffect(() => {
         async function loadCars() {
             const response = await getCars();
-            console.log("Nyers válasz a szervertől:", response);
+            //console.log("Nyers válasz a szervertől:", response);
 
-            // Megnézzük, hol van az adat (lehet response.result vagy maga a response)
             let dataToSet = [];
 
             if (Array.isArray(response)) {
@@ -82,7 +81,7 @@ export default function Home() {
 
                     {/* JOBB OLDAL: A kártyák rácsa (Grid) */}
                     <div className={`col-md-9 pe-5 ${isVisible ? 'animate-fade-in-right' : ''}`}>
-                        <div className="row g-4 overflow-auto" style={{ maxHeight: '85vh' }}>
+                        <div className="row" style={{ maxHeight: '85vh' }}>
                             {cars.length > 0 ? (
                                 cars.map(car => (
                                     <div className="col-12 col-lg-6 col-xl-4" key={car.vehicle_id}>

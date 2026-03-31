@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { whoAmI, logout } from "../usersFolder/users"
+import { useAuth } from "../context/AuthContext"
 import backgroundPic from "../pics/BackgroundPic.png"
 import Navbar from "../components/Navbar2"
+import { Navigate } from "react-router-dom"
 
 export default function AdminPage() {
+    const { user, loading, onLogout } = useAuth()
+    console.log(user);
+    const [allUsers,setAllUsers]=useState(null)
+    const[errorAllusers,seterrorAllusers]=useState('')
     const navigate = useNavigate()
     const [car, setCar] = useState({
         category_id: "",
@@ -16,7 +21,6 @@ export default function AdminPage() {
         year: "",
         price_per_day: ""
     });
-    const [user, setUser] = useState(null)
     const [userError, setUserError] = useState(null)
     const [uploadMsg, setUploadMsg] = useState(null)
     const [isVisible, setIsVisible] = useState(false)
@@ -38,15 +42,18 @@ export default function AdminPage() {
         load()
     }, [])
 
-    async function onLogout() {
-        const data = await logout()
-        if (data.error) {
-            return setUserError(data.error)
-        }
-        setUser(null)
-        navigate('/')
+    if (loading) {
+        return (
+            <div className="container py-5">
+                <div className="spinner-border text-danger">
+                    Loading..
+                </div>
+            </div>
+        )
     }
-
+    if (!user || user.role !== 'admin') {
+        return <Navigate to='/' />
+    }
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCar(prev => ({

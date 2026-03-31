@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { whoAmI, logout, newProfilePic } from "../usersFolder/users"
+import { useAuth } from "../context/AuthContext"
 import backgroundPic from "../pics/BackgroundPic.png"
 import Navbar from "../components/Navbar2"
 
 export default function UserProfile() {
+    const { user, loading, onLogout } = useAuth()
     const navigate = useNavigate()
-    
-    const [user, setUser] = useState(null)
+
     const [userError, setUserError] = useState(null)
     const [success, setSuccess] = useState(null)
-    const [loading, setLoading] = useState(true)
     const [isVisible, setIsVisible] = useState(false)
 
     // Trigger animation on mount
@@ -44,16 +43,6 @@ export default function UserProfile() {
         }
     }
 
-    async function onLogout() {
-        const data = await logout()
-
-        if (data.error) {
-            return setUserError(data.error)
-        }
-        setUser(null)
-        failedLogin()
-        navigate('/')
-    }
 
     // Profile image upload handler
     const handleImageUpload = async (e) => {

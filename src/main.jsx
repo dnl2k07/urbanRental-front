@@ -16,23 +16,27 @@ import CarDetails from './Pages/CarDetails';
 import FilterResults from './Pages/FilterResults';
 import './Design/AdminCarUpload.css'
 
+import { AuthProvider } from './context/AuthContext'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Login />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/reservation" element={<ReservationPage />} />
-        <Route path="/my-rentals" element={<MyRentals />} />
-        <Route path="/car/:id" element={<CarDetails />} />
-        <Route path="/filter-results" element={<FilterResults />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/users" element={<AdminUserManagement />} />
-        <Route path="/admin/categories" element={<AdminCategoryManagement />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Login />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/reservation" element={<ReservationPage />} />
+          <Route path="/my-rentals" element={<MyRentals />} />
+          <Route path="/car/:id" element={<CarDetails />} />
+          <Route path="/filter-results" element={<FilterResults />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/users" element={<AdminUserManagement />} />
+          <Route path="/admin/categories" element={<AdminCategoryManagement />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </StrictMode>
 )
