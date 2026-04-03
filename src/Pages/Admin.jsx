@@ -101,8 +101,6 @@ export default function Admin() {
 
                 <h3>Rentals</h3>
                 //table that handles rentals statuses edit delete completed
-                
-
 
 
             </div>

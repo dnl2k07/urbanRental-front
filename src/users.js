@@ -67,7 +67,7 @@ export async function logout(){
 
 export async function getAllUsers(){
     console.log("Attempting to fetch all users...");
-    const res = await fetch(`/admin/alluser`,{
+    const res = await fetch(`${Admin_URL}/alluser`,{
         method:'GET',
         credentials:'include'
     })
