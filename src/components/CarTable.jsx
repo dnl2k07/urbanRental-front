@@ -1,19 +1,22 @@
 import Gomb from "./Gomb";
-export default function CarTable({allCars, onEdit, onDelete, onAdd}) {
-  console.log("CarTable received users:", allCars);
 
-  // Handle case when allcars is null or undefined
-  if (!allCars) {
-    console.log("No cars to display");
-    return <div>No cars available</div>;
-  }
+export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
+  console.log("CarTable received cars:", allCars);
+
+  // Make sure allCars is an array
+  const cars = Array.isArray(allCars) ? allCars : [];
+
+//   if (cars.length === 0) {
+//     console.log("No cars to display");
+//     return <div>No cars available</div>;
+//   }
 
   return (
     <>
       <Gomb
         buttonClass="btn btn-sm btn-success"
         content="Add New car"
-        onClick={() => onAdd(car)}
+        onClick={() => onAdd({})} // Fix: you probably meant to pass an empty object or a new car object
       />
       <table className="table table-striped table-hover table-dark">
         <thead>
@@ -31,7 +34,7 @@ export default function CarTable({allCars, onEdit, onDelete, onAdd}) {
           </tr>
         </thead>
         <tbody>
-          {allCars.map((car) => (
+          {cars.map((car) => (
             <tr className="text-center" key={car.vehicle_id}>
               <td>{car.vehicle_id}</td>
               <td>{car.category_id}</td>

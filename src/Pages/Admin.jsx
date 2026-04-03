@@ -15,8 +15,8 @@ import {
 import CarTable from "../components/CarTable";
 
 export default function Admin() {
-  //usestates
-  //auth
+ //usestates
+    //auth
   const { user, loading, onLogout } = useAuth();
   //console.log(user);
   //user
@@ -29,7 +29,7 @@ export default function Admin() {
   const [showModal, setshowModal] = useState(false);
 
   //caredittable
-  const [allvehicle, setallvehicle] = useState(null);
+  const [allvehicle, setallvehicle] = useState([]);
   const [selectedCar, setselectedCar] = useState(null);
   const [category_id, setCategory_id] = useState("");
   const [brand, setBrand] = useState("");
@@ -40,8 +40,8 @@ export default function Admin() {
   const [year, setYear] = useState("");
   const [price_per_day, setPricePerDay] = useState("");
   const [img, setimg] = useState([]);
-  const [showCarModal, setCARshowModal] = useState(false);
-  const [showNewCarModal, setNewCARshowModal] = useState(false);
+  const [showCarModal, setshowCarModal] = useState(false);
+  const [showNewCarModal, setshowNewCarModal] = useState(false);
 
 
   //end of usestates
@@ -158,7 +158,7 @@ export default function Admin() {
   async function handleCarEdit(car) {
     setgeneralerror("");
     setselectedCar(car);
-    setCARshowModal(true);
+    setshowCarModal(true);
   }
   async function editCar(vehicle_id) {
     setgeneralerror("");
@@ -189,7 +189,7 @@ export default function Admin() {
   async function handleNewcar(car) {
     setgeneralerror("");
     setselectedCar(car);
-    setNewCARshowModal(true);
+    setshowNewCarModal(true);
   }
   async function NewCarwithimgupload() {
     setgeneralerror("");
@@ -228,18 +228,19 @@ export default function Admin() {
         />
         <h3>Car Controls</h3>
         <CarTable
-          allCars={allvehicle}
+          allCars={[allvehicle]}
           onEdit={handleCarEdit}
           onDelete={handleCarDelete}
           onAdd={handleNewcar}
         ></CarTable>
         <h3>Car category</h3>
-        //table that handles rentals statuses edit delete completed
+        {/* //table that handles rentals statuses edit delete completed */}
         <h3>Reservations</h3>
-        //table that handles reservations edit delete
+        {/* //table that handles reservations edit delete */}
         <h3>Rentals</h3>
-        //table that handles rentals statuses edit delete completed
+        {/* //table that handles rentals statuses edit delete completed */}
       </div>
+      {/* usermodal */}
       {showModal && selectedUser && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -290,7 +291,7 @@ export default function Admin() {
           </div>
         </div>
       )}
-      //car model for editing
+      {/* //car model for editing */}
       {showCarModal && selectedCar && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -371,7 +372,7 @@ export default function Admin() {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => setCARshowModal(false)}
+              onClick={() => setshowCarModal(false)}
             >
               Close
             </button>
@@ -387,7 +388,7 @@ export default function Admin() {
         </div>
       )}
 
-      //car modal for new car
+      {/* //car modal for new car */}
       {showNewCarModal && selectedCar && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -477,7 +478,7 @@ export default function Admin() {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => setNewCARshowModal(false)}
+              onClick={() => setshowNewCarModal(false)}
             >
               Close
             </button>
