@@ -175,20 +175,35 @@ export async function deleteCar(vehicle_id){
      return await res.json()
  }
 
- export async function NewCarwithimg(category_id, brand, model, color, transmission, license_plate, year, price_per_day,img){
-     const res=await fetch(`${Admin_URL}/carwithimgupload`,
-         {
-             method:'POST',
-             credentials:'include',
-             headers: {
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify({ category_id, brand, model, color, transmission, license_plate, year, price_per_day,img })
-         }
-     )
-     if(!res.ok){
-         const data=await res.json()
-         return {error:data?.error}
-     }
-     return await res.json()
- }
+  export async function NewCarwithimg(category_id, brand, model, color, transmission, license_plate, year, price_per_day,img){
+      // Create FormData object to properly handle file uploads
+      const formData = new FormData();
+      formData.append('category_id', category_id);
+      formData.append('brand', brand);
+      formData.append('model', model);
+      formData.append('color', color);
+      formData.append('transmission', transmission);
+      formData.append('license_plate', license_plate);
+      formData.append('year', year);
+      formData.append('price_per_day', price_per_day);
+      
+      // Append all image files
+      if (img && img.length > 0) {
+          img.forEach((file, index) => {
+              formData.append('img', file);
+          });
+      }
+      
+      const res=await fetch(`${Admin_URL}/carwithimgupload`,
+          {
+              method:'POST',
+              credentials:'include',
+              body: formData
+          }
+      )
+      if(!res.ok){
+          const data=await res.json()
+          return {error:data?.error}
+      }
+      return await res.json()
+  }

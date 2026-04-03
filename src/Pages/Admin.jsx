@@ -157,8 +157,16 @@ export default function Admin() {
   }
   async function handleCarEdit(car) {
     setgeneralerror("");
-    setselectedCar(car);
-    setshowCarModal(true);
+  setselectedCar(car);
+  setCategory_id(car.category_id || "");
+  setBrand(car.brand || "");
+  setModel(car.model || "");
+  setColor(car.color || "");
+  setTransmission(car.transmission || "");
+  setLicensePlate(car.license_plate || "");
+  setYear(car.year || "");
+  setPricePerDay(car.price_per_day || "");
+  setshowCarModal(true);
   }
   async function editCar(vehicle_id) {
     setgeneralerror("");
@@ -188,7 +196,26 @@ export default function Admin() {
 //this will fail if the database doesnt have a category coresponding to it idk how to fix it
   async function handleNewcar(car) {
     setgeneralerror("");
-    setselectedCar(car);
+    // Initialize with empty values for a new car
+    setselectedCar({
+      category_id: "",
+      brand: "",
+      model: "",
+      color: "",
+      transmission: "",
+      license_plate: "",
+      year: "",
+      price_per_day: ""
+    });
+    setCategory_id("");
+    setBrand("");
+    setModel("");
+    setColor("");
+    setTransmission("");
+    setLicensePlate("");
+    setYear("");
+    setPricePerDay("");
+    setimg([]);
     setshowNewCarModal(true);
   }
   async function NewCarwithimgupload() {
@@ -275,7 +302,10 @@ export default function Admin() {
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => setshowModal(false)}
+                onClick={() => {
+                  setshowModal(false);
+                  setselectedUser(null);
+                }}
               >
                 Close
               </button>
@@ -300,7 +330,7 @@ export default function Admin() {
               <input
                 type="text"
                 className="form-control"
-                defaultValue={selectedCar.category_id}
+                value={category_id}
                 onChange={(e) => setCategory_id(e.target.value)}
                 placeholder="1"
               />
@@ -309,7 +339,7 @@ export default function Admin() {
               <input
                 type="text"
                 className="form-control"
-                defaultValue={selectedCar.brand}
+                value={brand}
                 onChange={(e) => setBrand(e.target.value)}
                 placeholder="Toyota"
               />
@@ -318,7 +348,7 @@ export default function Admin() {
               <input
                 type="text"
                 className="form-control"
-                defaultValue={selectedCar.model}
+                value={model}
                 onChange={(e) => setModel(e.target.value)}
                 placeholder="Camry"
               />
@@ -372,7 +402,10 @@ export default function Admin() {
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => setshowCarModal(false)}
+              onClick={() => {
+                setshowCarModal(false);
+                setselectedCar(null);
+              }}
             >
               Close
             </button>
@@ -389,7 +422,7 @@ export default function Admin() {
       )}
 
       {/* //car modal for new car */}
-      {showNewCarModal && selectedCar && (
+      {showNewCarModal  && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
@@ -470,15 +503,30 @@ export default function Admin() {
                 className="form-control"
                 accept="image/*"
                 multiple
-                defaultValue={selectedCar.img}
-                onChange={(e) => setimg(e.target.value)}
+                onChange={(e) => {
+                  const files = Array.from(e.target.files);
+                  setimg(files);
+                }}
               />
             </div>
 
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => setshowNewCarModal(false)}
+              onClick={() => {
+                setshowNewCarModal(false);
+                setselectedCar(null);
+                // Reset form fields
+                setCategory_id("");
+                setBrand("");
+                setModel("");
+                setColor("");
+                setTransmission("");
+                setLicensePlate("");
+                setYear("");
+                setPricePerDay("");
+                setimg([]);
+              }}
             >
               Close
             </button>
