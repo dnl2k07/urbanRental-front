@@ -1,5 +1,5 @@
 import Gomb from "./Gomb";
-export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
+export default function CarTable({allCars, onEdit, onDelete, onAdd}) {
   console.log("CarTable received users:", allCars);
 
   // Handle case when allcars is null or undefined

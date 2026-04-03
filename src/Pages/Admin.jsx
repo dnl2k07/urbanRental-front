@@ -39,8 +39,9 @@ export default function Admin() {
   const [license_plate, setLicensePlate] = useState("");
   const [year, setYear] = useState("");
   const [price_per_day, setPricePerDay] = useState("");
+  const [img, setimg] = useState([]);
   const [showCarModal, setCARshowModal] = useState(false);
-  const [showNewCarModal, setNewCARshowModal] = useState(false);.-.-.-.--,.-,
+  const [showNewCarModal, setNewCARshowModal] = useState(false);
 
 
   //end of usestates
@@ -182,16 +183,18 @@ export default function Admin() {
     return loadCars();
   }
 
+
+
+//this will fail if the database doesnt have a category coresponding to it idk how to fix it
   async function handleNewcar(car) {
     setgeneralerror("");
     setselectedCar(car);
     setNewCARshowModal(true);
   }
-  async function newcar(vehicle_id) {
+  async function NewCarwithimgupload() {
     setgeneralerror("");
 
     const data = await NewCarwithimg(
-      vehicle_id,
       category_id,
       brand,
       model,
@@ -200,13 +203,14 @@ export default function Admin() {
       license_plate,
       year,
       price_per_day,
+      img
     );
 
     if (data.error) {
       setgeneralerror(data.error);
       return alert(data.error);
     }
-    alert("sikeres modositás");
+    alert("successfull upload");
     return loadCars();
   }
 
@@ -378,6 +382,112 @@ export default function Admin() {
               onClick={() => editCar(selectedCar.vehicle_id)}
             >
               Modify
+            </button>
+          </div>
+        </div>
+      )}
+
+      //car modal for new car
+      {showNewCarModal && selectedCar && (
+        <div className="modal d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content p-3">
+              <label className="form-label fw-bold">category_id:</label>
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={selectedCar.category_id}
+                onChange={(e) => setCategory_id(e.target.value)}
+                placeholder="1"
+              />
+
+              <label className="form-label fw-bold">brand:</label>
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={selectedCar.brand}
+                onChange={(e) => setBrand(e.target.value)}
+                placeholder="Toyota"
+              />
+
+              <label className="form-label fw-bold">model:</label>
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={selectedCar.model}
+                onChange={(e) => setModel(e.target.value)}
+                placeholder="Camry"
+              />
+
+              <label className="form-label fw-bold">color:</label>
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={selectedCar.color}
+                onChange={(e) => setColor(e.target.value)}
+                placeholder="Red"
+              />
+
+              <label className="form-label fw-bold">transmission:</label>
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={selectedCar.transmission}
+                onChange={(e) => setTransmission(e.target.value)}
+                placeholder="Automatic"
+              />
+
+              <label className="form-label fw-bold">license_plate:</label>
+              <input
+                type="text"
+                className="form-control"
+                defaultValue={selectedCar.license_plate}
+                onChange={(e) => setLicensePlate(e.target.value)}
+                placeholder="ABC-123"
+              />
+
+              <label className="form-label fw-bold">year:</label>
+              <input
+                type="number"
+                className="form-control"
+                defaultValue={selectedCar.year}
+                onChange={(e) => setYear(e.target.value)}
+                placeholder="2022"
+              />
+
+              <label className="form-label fw-bold">price_per_day:</label>
+              <input
+                type="number"
+                className="form-control"
+                defaultValue={selectedCar.price_per_day}
+                onChange={(e) => setPricePerDay(e.target.value)}
+                placeholder="50"
+              />
+              <label className="form-label fw-bold">img:</label>
+              <input
+                type="file"
+                className="form-control"
+                accept="image/*"
+                multiple
+                defaultValue={selectedCar.img}
+                onChange={(e) => setimg(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setNewCARshowModal(false)}
+            >
+              Close
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => NewCarwithimgupload()}
+            >
+              Upload new car
             </button>
           </div>
         </div>
