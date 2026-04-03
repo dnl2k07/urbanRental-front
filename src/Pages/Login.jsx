@@ -1,98 +1,62 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar2";
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
+import Gomb from '../components/Gomb'
+import InputMezo from '../components/InputMezo'
+
+import { login } from '../users'
 
 export default function Login() {
-    const [isVisible, setIsVisible] = useState(false);
+    const navigate = useNavigate()
 
-    // Trigger animation on mount
-    useEffect(() => {
-        setTimeout(() => setIsVisible(true), 10);
-    }, []);
-    const [email, setEmail] = useState("");
-    const [psw, setPsw] = useState("");
-    const navigate = useNavigate();
+    const [email, setEmail] = useState('')
+    const [psw, setPsw] = useState('')
+
     const [hiba, setHiba] = useState('')
     const [uzenet, setUzenet] = useState('')
-    const handleSubmit = async (e) => {
-        e.preventDefault();
 
-        const userData = {
-            email: email,
-            psw: psw
-        };
+    async function onLogin() {
+        setHiba('')
+        setUzenet('')
+
+        if (!email || !psw) {
+            return setHiba('Minden mezőt tölts ki!')
+        }
 
         try {
-            const response = await fetch("http://localhost:3000/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userData),
-                credentials: "include"
-            });
+            const data = await login(email, psw)
 
-            const data = await response.json();
-
-            console.log("Server response:", data);
-
-            if (response.ok) {
-                navigate("/");
-            } else {
-                alert(data.message || "Login failed");
+            if (data.error) {
+                return setHiba(data.error)
             }
-
-        } catch (error) {
-            console.error("Error:", error);
+            setUzenet(data.message)
+            setTimeout(() => navigate('/'), 600)
+        } catch (err) {
+            return setHiba('Nem sikerült a backendhez kapcsolódni!')
         }
-    };
+    }
 
     return (
-        <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
-            <Navbar/>
-            <div className="container d-flex flex-column justify-content-center align-items-center vh-100 mt-5">
-                <h1 id="registerText" className={isVisible ? 'animate-fade-in-down' : ''}>LOGIN</h1>
-                <div className={`d-flex flex-column w-50 registerBox ${isVisible ? 'animate-scale-in' : ''}`}>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group mb-3">
-                            <label htmlFor="inputEmail">Email address</label>
-                            <input
-                                type="email"
-                                className="form-control inputArea"
-                                id="inputEmail"
-                                placeholder="name@gmail.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
+        <div className="container" style={{ marginTop: 150, maxWidth: 520 }}>
+            <h1 className="text-center mb-4">Login</h1>
 
-                        <div className="form-group mb-3">
-                            <label htmlFor="inputPassword">Password</label>
-                            <input
-                                type="password"
-                                className="form-control inputArea"
-                                id="inputPassword"
-                                placeholder="Password"
-                                value={psw}
-                                onChange={(e) => setPsw(e.target.value)}
-                            />
-                        </div>
+            {hiba && <div className='alert alert-danger text-center my-2'>{hiba}</div>}
+            {uzenet && <div className='alert alert-success text-center my-2'>{uzenet}</div>}
 
-                        <button type="submit" className="btn btn-secondary w-100">
-                            Login
-                        </button>
-                        <div id="accountHaveP">
-                            <p id="smallLoginText">You don't have an account yet?</p>
-                            <Link to="/register">
-                                <button >Create one!</button>
-                            </Link>
-                        </div>
-                    </form>
-                </div>
+            <InputMezo label='E-mail' type='email' placeholder='example@example.com' value={email} setValue={setEmail} />
+            <InputMezo label='Jelszó' type='password' placeholder='********' value={psw} setValue={setPsw} />
+
+            <div className="text-center mt-3">
+                <Gomb buttonClass='btn btn-dark px-4' content='Bejelentkezés' onClick={onLogin} />
+            </div>
+
+            <div className="text-center mt-3">
+                <Link to='/' className='text-dark text-decoration-none'>Visza a főoldalra</Link>
+            </div>
+
+            <div className="text-center mt-3">
+                <Link to='/register' className='text-dark text-decoration-none'>Még nincs fiókom</Link>
             </div>
         </div>
-    );
+    )
 }
-
