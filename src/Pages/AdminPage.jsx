@@ -1,10 +1,15 @@
 import Navbar from "../components/NavBar"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { whoAmI, logout } from "../usersFolder/users"
+import { useAuth } from "../context/AuthContext"
 import backgroundPic from "../pics/BackgroundPic.png"
+import { Navigate } from "react-router-dom"
 
 export default function AdminPage() {
+    const { user, loading, onLogout } = useAuth()
+    console.log(user);
+    const [allUsers, setAllUsers] = useState(null)
+    const [errorAllusers, seterrorAllusers] = useState('')
     const navigate = useNavigate()
     const [car, setCar] = useState({
         category_id: "",
@@ -16,7 +21,7 @@ export default function AdminPage() {
         year: "",
         price_per_day: ""
     });
-    const [user, setUser] = useState(null)
+
     const [userError, setUserError] = useState(null)
     const [uploadMsg, setUploadMsg] = useState(null)
 
@@ -32,15 +37,6 @@ export default function AdminPage() {
         load()
     }, [])
 
-    async function onLogout() {
-        const data = await logout()
-        if (data.error) {
-            return setUserError(data.error)
-        }
-        setUser(null)
-        navigate('/')
-    }
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCar(prev => ({
@@ -49,56 +45,69 @@ export default function AdminPage() {
         }));
     };
 
+    if (loading) {
+        return (
+            <div className="container py-5">
+                <div className="spinner-border text-danger">
+                    Loading..
+                </div>
+            </div>
+        )
+    }
+    if (!user || user.role !== 'admin') {
+        return <Navigate to='/' />
+    }
+
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    setUploadMsg(null);
+        e.preventDefault();
+        setUploadMsg(null);
 
-    const formData = new FormData();
-    Object.keys(car).forEach(key => formData.append(key, car[key]));
+        const formData = new FormData();
+        Object.keys(car).forEach(key => formData.append(key, car[key]));
 
-    const files = e.currentTarget.querySelector('input[name="img"]').files;
-    for (let i = 0; i < files.length; i++) {
-        formData.append("img", files[i]);
-    }
-
-    try {
-        const response = await fetch('http://localhost:3000/admin/carwithimgupload', {
-            method: "POST",
-            body: formData,
-            credentials: "include"
-        });
-
-        const text = await response.text();
-        console.log("RAW RESPONSE:", text);
-        console.log("STATUS:", response.status);
-
-        let result;
-        try { 
-            result = JSON.parse(text); 
-        } catch {
-            result = { error: text };
+        const files = e.currentTarget.querySelector('input[name="img"]').files;
+        for (let i = 0; i < files.length; i++) {
+            formData.append("img", files[i]);
         }
 
-        if (response.ok) {
-            setUploadMsg(`✅ Sikeres feltöltés!`);
-            setCar({
-                category_id: "",
-                brand: "",
-                model: "",
-                color: "",
-                transmission: "",
-                license_plate: "",
-                year: "",
-                price_per_day: ""
+        try {
+            const response = await fetch('http://localhost:3000/admin/carwithimgupload', {
+                method: "POST",
+                body: formData,
+                credentials: "include"
             });
-            e.target.reset();
-        } else {
-            setUploadMsg(`❌ Hiba: ${result.error || 'Ismeretlen hiba'}`);
+
+            const text = await response.text();
+            console.log("RAW RESPONSE:", text);
+            console.log("STATUS:", response.status);
+
+            let result;
+            try {
+                result = JSON.parse(text);
+            } catch {
+                result = { error: text };
+            }
+
+            if (response.ok) {
+                setUploadMsg(`✅ Sikeres feltöltés!`);
+                setCar({
+                    category_id: "",
+                    brand: "",
+                    model: "",
+                    color: "",
+                    transmission: "",
+                    license_plate: "",
+                    year: "",
+                    price_per_day: ""
+                });
+                e.target.reset();
+            } else {
+                setUploadMsg(`❌ Hiba: ${result.error || 'Ismeretlen hiba'}`);
+            }
+        } catch (err) {
+            setUploadMsg(`❌ Hálózati hiba: ${err.message}`);
         }
-    } catch (err) {
-        setUploadMsg(`❌ Hálózati hiba: ${err.message}`);
-    }
-};
+    };
 
     return (
         <div className="logoutErrorBox">

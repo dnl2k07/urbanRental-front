@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import Navbar from "../components/NavBar";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+    const { updateUserData } = useAuth();
     const [email, setEmail] = useState("");
     const [psw, setPsw] = useState("");
     const navigate = useNavigate();
@@ -32,8 +34,10 @@ export default function Login() {
             console.log("Server response:", data);
 
             if (response.ok) {
-                navigate("/");
+                await updateUserData(); 
+                navigate("/"); 
             } else {
+                const data = await response.json();
                 alert(data.message || "Login failed");
             }
 
