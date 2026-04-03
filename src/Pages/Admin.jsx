@@ -192,6 +192,8 @@ export default function Admin() {
   }
 
   //this will fail if the database doesnt have a category coresponding to it idk how to fix it
+  //todo add a message when it fails to upload wiht wrong or missing category id
+
   async function handleNewcar(car) {
     setgeneralerror("");
     // Initialize with empty values for a new car
