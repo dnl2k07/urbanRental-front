@@ -174,3 +174,21 @@ export async function deleteCar(vehicle_id){
      }
      return await res.json()
  }
+
+ export async function NewCarwithimg(vehicle_id,category_id, brand, model, color, transmission, license_plate, year, price_per_day){
+     const res=await fetch(`${Admin_URL}/editvehicle/${vehicle_id}`,
+         {
+             method:'PUT',
+             credentials:'include',
+             headers: {
+                 'Content-Type': 'application/json'
+             },
+             body: JSON.stringify({ category_id, brand, model, color, transmission, license_plate, year, price_per_day })
+         }
+     )
+     if(!res.ok){
+         const data=await res.json()
+         return {error:data?.error}
+     }
+     return await res.json()
+ }

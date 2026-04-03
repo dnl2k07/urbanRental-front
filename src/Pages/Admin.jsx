@@ -10,6 +10,7 @@ import {
   getAllCars,
   deleteCar,
   updateCar,
+  NewCarwithimg,
 } from "../users";
 import CarTable from "../components/CarTable";
 
@@ -39,7 +40,7 @@ export default function Admin() {
   const [year, setYear] = useState("");
   const [price_per_day, setPricePerDay] = useState("");
   const [showCarModal, setCARshowModal] = useState(false);
-  const [showNewCarModal, setNewCARshowModal] = useState(false);
+  const [showNewCarModal, setNewCARshowModal] = useState(false);.-.-.-.--,.-,
 
 
   //end of usestates
@@ -189,7 +190,7 @@ export default function Admin() {
   async function newcar(vehicle_id) {
     setgeneralerror("");
 
-    const data = await updateCar(
+    const data = await NewCarwithimg(
       vehicle_id,
       category_id,
       brand,
