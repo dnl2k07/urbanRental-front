@@ -13,10 +13,11 @@ import {
   NewCarwithimg,
 } from "../users";
 import CarTable from "../components/CarTable";
+import ModalInput from "../components/ModalInput";
 
 export default function Admin() {
- //usestates
-    //auth
+  //usestates
+  //auth
   const { user, loading, onLogout } = useAuth();
   //console.log(user);
   //user
@@ -42,7 +43,6 @@ export default function Admin() {
   const [img, setimg] = useState([]);
   const [showCarModal, setshowCarModal] = useState(false);
   const [showNewCarModal, setshowNewCarModal] = useState(false);
-
 
   //end of usestates
 
@@ -157,16 +157,16 @@ export default function Admin() {
   }
   async function handleCarEdit(car) {
     setgeneralerror("");
-  setselectedCar(car);
-  setCategory_id(car.category_id || "");
-  setBrand(car.brand || "");
-  setModel(car.model || "");
-  setColor(car.color || "");
-  setTransmission(car.transmission || "");
-  setLicensePlate(car.license_plate || "");
-  setYear(car.year || "");
-  setPricePerDay(car.price_per_day || "");
-  setshowCarModal(true);
+    setselectedCar(car);
+    setCategory_id(car.category_id || "");
+    setBrand(car.brand || "");
+    setModel(car.model || "");
+    setColor(car.color || "");
+    setTransmission(car.transmission || "");
+    setLicensePlate(car.license_plate || "");
+    setYear(car.year || "");
+    setPricePerDay(car.price_per_day || "");
+    setshowCarModal(true);
   }
   async function editCar(vehicle_id) {
     setgeneralerror("");
@@ -191,9 +191,7 @@ export default function Admin() {
     return loadCars();
   }
 
-
-
-//this will fail if the database doesnt have a category coresponding to it idk how to fix it
+  //this will fail if the database doesnt have a category coresponding to it idk how to fix it
   async function handleNewcar(car) {
     setgeneralerror("");
     // Initialize with empty values for a new car
@@ -205,7 +203,7 @@ export default function Admin() {
       transmission: "",
       license_plate: "",
       year: "",
-      price_per_day: ""
+      price_per_day: "",
     });
     setCategory_id("");
     setBrand("");
@@ -230,7 +228,7 @@ export default function Admin() {
       license_plate,
       year,
       price_per_day,
-      img
+      img,
     );
 
     if (data.error) {
@@ -272,32 +270,29 @@ export default function Admin() {
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
-              <label className="form-label fw-bold">Username:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Username:"}
+                type={"text"}
                 defaultValue={selectedUser.username}
                 onChange={(e) => setusername(e.target.value)}
-                placeholder="valaki"
-              />
+                placeholder={"valaki"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">Email:</label>
-              <input
-                type="email"
-                className="form-control"
+              <ModalInput
+                label={"Email:"}
+                type={"email"}
                 defaultValue={selectedUser.email}
                 onChange={(e) => setemail(e.target.value)}
-                placeholder="valami@gmail.com"
-              />
+                placeholder={"valami@gmail.com"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">role:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Role:"}
+                type={"text"}
                 defaultValue={selectedUser.role}
                 onChange={(e) => setrole(e.target.value)}
-                placeholder="user/admin"
-              />
+                placeholder={"user/admin"}
+              ></ModalInput>
 
               <button
                 type="button"
@@ -326,77 +321,69 @@ export default function Admin() {
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
-              <label className="form-label fw-bold">category_id:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Category ID:"}
+                type={"text"}
                 value={category_id}
                 onChange={(e) => setCategory_id(e.target.value)}
-                placeholder="1"
-              />
+                placeholder={"1"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">brand:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Brand:"}
+                type={"text"}
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                placeholder="Toyota"
-              />
+                placeholder={"Toyota"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">model:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Model:"}
+                type={"text"}
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                placeholder="Camry"
-              />
+                placeholder={"Camry"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">color:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Color:"}
+                type={"text"}
                 defaultValue={selectedCar.color}
                 onChange={(e) => setColor(e.target.value)}
-                placeholder="Red"
-              />
+                placeholder={"Red"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">transmission:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Transmission:"}
+                type={"text"}
                 defaultValue={selectedCar.transmission}
                 onChange={(e) => setTransmission(e.target.value)}
-                placeholder="Automatic"
-              />
+                placeholder={"Automatic"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">license_plate:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"License Plate:"}
+                type={"text"}
                 defaultValue={selectedCar.license_plate}
                 onChange={(e) => setLicensePlate(e.target.value)}
-                placeholder="ABC-123"
-              />
+                placeholder={"ABC-123"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">year:</label>
-              <input
-                type="number"
-                className="form-control"
+              <ModalInput
+                label={"Year:"}
+                type={"number"}
                 defaultValue={selectedCar.year}
                 onChange={(e) => setYear(e.target.value)}
-                placeholder="2022"
-              />
+                placeholder={"2022"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">price_per_day:</label>
-              <input
-                type="number"
-                className="form-control"
+              <ModalInput
+                label={"Price Per Day:"}
+                type={"number"}
                 defaultValue={selectedCar.price_per_day}
                 onChange={(e) => setPricePerDay(e.target.value)}
-                placeholder="50"
-              />
+                placeholder={"50"}
+              ></ModalInput>
             </div>
 
             <button
@@ -422,81 +409,74 @@ export default function Admin() {
       )}
 
       {/* //car modal for new car */}
-      {showNewCarModal  && (
+      {showNewCarModal && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
-              <label className="form-label fw-bold">category_id:</label>
-              <input
-                type="text"
-                className="form-control"
-                defaultValue={selectedCar.category_id}
+              <ModalInput
+                label={"Category ID:"}
+                type={"text"}
+                value={category_id}
                 onChange={(e) => setCategory_id(e.target.value)}
-                placeholder="1"
-              />
+                placeholder={"1"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">brand:</label>
-              <input
-                type="text"
-                className="form-control"
-                defaultValue={selectedCar.brand}
+              <ModalInput
+                label={"Brand:"}
+                type={"text"}
+                value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                placeholder="Toyota"
-              />
+                placeholder={"Toyota"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">model:</label>
-              <input
-                type="text"
-                className="form-control"
-                defaultValue={selectedCar.model}
+              <ModalInput
+                label={"Model:"}
+                type={"text"}
+                value={model}
                 onChange={(e) => setModel(e.target.value)}
-                placeholder="Camry"
-              />
+                placeholder={"Camry"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">color:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Color:"}
+                type={"text"}
                 defaultValue={selectedCar.color}
                 onChange={(e) => setColor(e.target.value)}
-                placeholder="Red"
-              />
+                placeholder={"Red"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">transmission:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"Transmission:"}
+                type={"text"}
                 defaultValue={selectedCar.transmission}
                 onChange={(e) => setTransmission(e.target.value)}
-                placeholder="Automatic"
-              />
+                placeholder={"Automatic"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">license_plate:</label>
-              <input
-                type="text"
-                className="form-control"
+              <ModalInput
+                label={"License Plate:"}
+                type={"text"}
                 defaultValue={selectedCar.license_plate}
                 onChange={(e) => setLicensePlate(e.target.value)}
-                placeholder="ABC-123"
-              />
+                placeholder={"ABC-123"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">year:</label>
-              <input
-                type="number"
-                className="form-control"
+              <ModalInput
+                label={"Year:"}
+                type={"number"}
                 defaultValue={selectedCar.year}
                 onChange={(e) => setYear(e.target.value)}
-                placeholder="2022"
-              />
+                placeholder={"2022"}
+              ></ModalInput>
 
-              <label className="form-label fw-bold">price_per_day:</label>
-              <input
-                type="number"
-                className="form-control"
+              <ModalInput
+                label={"Price Per Day:"}
+                type={"number"}
                 defaultValue={selectedCar.price_per_day}
                 onChange={(e) => setPricePerDay(e.target.value)}
-                placeholder="50"
-              />
+                placeholder={"50"}
+              ></ModalInput>
+
               <label className="form-label fw-bold">img:</label>
               <input
                 type="file"
