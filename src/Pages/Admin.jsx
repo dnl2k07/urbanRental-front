@@ -1,13 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
-import Table from "../components/Table";
+import UserTable from "../components/UserTable";
 import { useEffect,useState } from "react";
 import { getAllUsers,deleteUser ,userEdit} from "../users";
 
 export default function Admin() {
     const { user, loading, onLogout } = useAuth()
-    console.log(user);
+    //console.log(user);
     const [allUsers,setAllUsers]=useState(null)
     const[errorAllusers,seterrorAllusers]=useState('')
 
@@ -19,13 +19,20 @@ export default function Admin() {
 
     async function loadUsers(){
         const data=await getAllUsers()
+        console.log("API Response:", data);
 
-        if(!data.error){
-            console.log(data);
+        if(data.error){
+            console.log("Error from API:", data.error);
             
-            return setAllUsers(data)
+            return seterrorAllusers(data.error)
         }
-        return seterrorAllusers(data.error)
+        console.log("Setting users to:", data.result);
+        // Ensure we handle the case where result might be undefined or null
+        if (!data.result) {
+            console.log("No result found in response");
+            return setAllUsers([]);
+        }
+        return setAllUsers(data.result)
     }
     useEffect(()=>{
         loadUsers()
@@ -54,7 +61,7 @@ export default function Admin() {
         const data=await deleteUser(user.user_id)
         if(data.error){
             seterrorAllusers(data.error)
-            return alert(errorAllusers)
+            return alert(data.error)
         }
         setAllUsers(prev=>prev.filter(x=>x.user_id!==user.user_id))
         //or just loadUsers()
@@ -71,7 +78,7 @@ export default function Admin() {
 
         if(data.error){
             seterrorAllusers(data.error)
-            return alert(errorAllusers)
+            return alert(data.error)
         }
         alert('sikeres modositás')
         return loadUsers()
@@ -81,8 +88,20 @@ export default function Admin() {
         <div>
             <NavBar user={user} onLogout={onLogout}></NavBar>
             <div className="container">
-                <h1 className="text-center my-3">admin panel</h1>
-                <Table allUsers={allUsers} onEdit={handleEdit} onDelete={handleDelete} />
+                <h1 className="text-center my-3">Admin panel</h1>
+                <h3>User controls</h3>
+                <UserTable allUsers={allUsers} onEdit={handleEdit} onDelete={handleDelete} />
+                
+                <h3>Car Controls</h3>
+                //table that handles new cars edit delete
+
+                <h3>Reservations</h3>
+                //table that handles reservations edit delete
+                
+
+                <h3>Rentals</h3>
+                //table that handles rentals statuses edit delete completed
+                
 
 
 
@@ -95,20 +114,20 @@ export default function Admin() {
                         <div className="modal-content p-3">
                             <label className="form-label fw-bold">Username:</label>
                             <input type="text" className="form-control"
-                            defaultValue={user.username} onChange={(e)=>setusername(e.target.value)} placeholder="valaki"/>
+                            defaultValue={selectedUser.username} onChange={(e)=>setusername(e.target.value)} placeholder="valaki"/>
 
                             <label className="form-label fw-bold">Email:</label>
                             <input type="email" className="form-control"
-                            defaultValue={user.email} onChange={(e)=>setemail(e.target.value)} placeholder="valami@gmail.com"/>
+                            defaultValue={selectedUser.email} onChange={(e)=>setemail(e.target.value)} placeholder="valami@gmail.com"/>
                             
                             <label className="form-label fw-bold">role:</label>
                             <input type="text" className="form-control"
-                            defaultValue={user.role} onChange={(e)=>setrole(e.target.value)} placeholder="user/admin"/>
+                            defaultValue={selectedUser.role} onChange={(e)=>setrole(e.target.value)} placeholder="user/admin"/>
                             
                             
                             <button type="button" className="btn btn-secondary" onClick={()=>setshowModal(false)}>Beszárás</button>
                             
-                            <button type="button" className="btn btn-primary" onClick={()=>editUser(user.user_id)}>modositás</button>
+                            <button type="button" className="btn btn-primary" onClick={()=>editUser(selectedUser.user_id)}>modositás</button>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 const USER_URL = '/users'
-const ADMIN_URL = '/admin'
+const Admin_URL = '/admin'
+
 
 export async function register(email, username, psw) {
     const res = await fetch(`${USER_URL}/register`, {
@@ -65,16 +66,23 @@ export async function logout(){
 
 
 export async function getAllUsers(){
+    console.log("Attempting to fetch all users...");
     const res = await fetch(`/admin/alluser`,{
         method:'GET',
         credentials:'include'
     })
+    console.log("Response status:", res.status);
+    console.log("Response ok:", res.ok);
+    
     if(!res.ok){
-        console.log(res);
+        console.log("Response error:", res);
         const data=await res.json()
+        console.log("Error data:", data);
         return {error:data?.error}
     }
-    return await res.json()
+    const data = await res.json();
+    console.log("Full response data:", data);
+    return data;
 }
 
 
@@ -93,17 +101,21 @@ export async function deleteUser(user_id){
 }
 
 //not done yet
-export async function userEdit(user_id,username,email,role){
-    const res=await fetch(`${USER_URL}/admin/editUser/${user_id}`,
-        {
-            method:'PUT',
-            credentials:'include'
-        }
-    )
-    if(!res.ok){
-        const data=await res.json()
-        return {error:data?.error}
-    }
-    return await res.json()
-}
+ export async function userEdit(user_id,username,email,role){
+     const res=await fetch(`${USER_URL}/admin/editUser/${user_id}`,
+         {
+             method:'PUT',
+             credentials:'include',
+             headers: {
+                 'Content-Type': 'application/json'
+             },
+             body: JSON.stringify({ username, email, role })
+         }
+     )
+     if(!res.ok){
+         const data=await res.json()
+         return {error:data?.error}
+     }
+     return await res.json()
+ }
 

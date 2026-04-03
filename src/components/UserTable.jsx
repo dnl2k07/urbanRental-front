@@ -1,5 +1,13 @@
 import Gomb from "./Gomb";
-export default function Table({allUsers,onEdit,onDelete}){
+export default function UserTable({allUsers,onEdit,onDelete}){
+    console.log("UserTable received users:", allUsers);
+    
+    // Handle case when allUsers is null or undefined
+    if (!allUsers) {
+        console.log("No users to display");
+        return <div>No users available</div>;
+    }
+    
     return (
         <table className="table table-striped table-hover table-dark">
             <thead>
@@ -14,7 +22,7 @@ export default function Table({allUsers,onEdit,onDelete}){
                 </tr>
             </thead>
             <tbody>
-                {allUsers?.map(user=>(
+                {allUsers.map(user=>(
                     <tr className="text-center" key={user.user_id}>
                         <td>{user.user_id}</td>
                         <td>{user.username}</td>
