@@ -273,7 +273,7 @@ export default function Admin() {
               <ModalInput
                 label={"Username:"}
                 type={"text"}
-                defaultValue={selectedUser.username}
+                defaultValue={username}
                 onChange={(e) => setusername(e.target.value)}
                 placeholder={"valaki"}
               ></ModalInput>
@@ -281,7 +281,7 @@ export default function Admin() {
               <ModalInput
                 label={"Email:"}
                 type={"email"}
-                defaultValue={selectedUser.email}
+                defaultValue={email}
                 onChange={(e) => setemail(e.target.value)}
                 placeholder={"valami@gmail.com"}
               ></ModalInput>
@@ -289,7 +289,7 @@ export default function Admin() {
               <ModalInput
                 label={"Role:"}
                 type={"text"}
-                defaultValue={selectedUser.role}
+                defaultValue={role}
                 onChange={(e) => setrole(e.target.value)}
                 placeholder={"user/admin"}
               ></ModalInput>
@@ -348,7 +348,7 @@ export default function Admin() {
               <ModalInput
                 label={"Color:"}
                 type={"text"}
-                defaultValue={selectedCar.color}
+                defaultValue={color}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder={"Red"}
               ></ModalInput>
@@ -356,7 +356,7 @@ export default function Admin() {
               <ModalInput
                 label={"Transmission:"}
                 type={"text"}
-                defaultValue={selectedCar.transmission}
+                defaultValue={transmission}
                 onChange={(e) => setTransmission(e.target.value)}
                 placeholder={"Automatic"}
               ></ModalInput>
@@ -364,7 +364,7 @@ export default function Admin() {
               <ModalInput
                 label={"License Plate:"}
                 type={"text"}
-                defaultValue={selectedCar.license_plate}
+                defaultValue={license_plate}
                 onChange={(e) => setLicensePlate(e.target.value)}
                 placeholder={"ABC-123"}
               ></ModalInput>
@@ -372,7 +372,7 @@ export default function Admin() {
               <ModalInput
                 label={"Year:"}
                 type={"number"}
-                defaultValue={selectedCar.year}
+                defaultValue={year}
                 onChange={(e) => setYear(e.target.value)}
                 placeholder={"2022"}
               ></ModalInput>
@@ -380,12 +380,10 @@ export default function Admin() {
               <ModalInput
                 label={"Price Per Day:"}
                 type={"number"}
-                defaultValue={selectedCar.price_per_day}
+                defaultValue={price_per_day}
                 onChange={(e) => setPricePerDay(e.target.value)}
                 placeholder={"50"}
               ></ModalInput>
-            </div>
-
             <button
               type="button"
               className="btn btn-secondary"
@@ -404,12 +402,13 @@ export default function Admin() {
             >
               Modify
             </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* //car modal for new car */}
-      {showNewCarModal && (
+      {showNewCarModal && selectedCar&& (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
@@ -440,7 +439,7 @@ export default function Admin() {
               <ModalInput
                 label={"Color:"}
                 type={"text"}
-                defaultValue={selectedCar.color}
+                defaultValue={color}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder={"Red"}
               ></ModalInput>
@@ -448,7 +447,7 @@ export default function Admin() {
               <ModalInput
                 label={"Transmission:"}
                 type={"text"}
-                defaultValue={selectedCar.transmission}
+                defaultValue={transmission}
                 onChange={(e) => setTransmission(e.target.value)}
                 placeholder={"Automatic"}
               ></ModalInput>
@@ -456,7 +455,7 @@ export default function Admin() {
               <ModalInput
                 label={"License Plate:"}
                 type={"text"}
-                defaultValue={selectedCar.license_plate}
+                defaultValue={license_plate}
                 onChange={(e) => setLicensePlate(e.target.value)}
                 placeholder={"ABC-123"}
               ></ModalInput>
@@ -464,7 +463,7 @@ export default function Admin() {
               <ModalInput
                 label={"Year:"}
                 type={"number"}
-                defaultValue={selectedCar.year}
+                defaultValue={year}
                 onChange={(e) => setYear(e.target.value)}
                 placeholder={"2022"}
               ></ModalInput>
@@ -472,7 +471,7 @@ export default function Admin() {
               <ModalInput
                 label={"Price Per Day:"}
                 type={"number"}
-                defaultValue={selectedCar.price_per_day}
+                defaultValue={price_per_day}
                 onChange={(e) => setPricePerDay(e.target.value)}
                 placeholder={"50"}
               ></ModalInput>
@@ -488,8 +487,6 @@ export default function Admin() {
                   setimg(files);
                 }}
               />
-            </div>
-
             <button
               type="button"
               className="btn btn-secondary"
@@ -518,6 +515,8 @@ export default function Admin() {
             >
               Upload new car
             </button>
+            </div>
+
           </div>
         </div>
       )}
