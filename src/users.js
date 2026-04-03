@@ -100,7 +100,6 @@ export async function deleteUser(user_id){
     return await res.json()
 }
 
-//not done yet
  export async function userEdit(user_id,username,email,role){
      const res=await fetch(`${USER_URL}/admin/editUser/${user_id}`,
          {
@@ -119,3 +118,59 @@ export async function deleteUser(user_id){
      return await res.json()
  }
 
+//car functions
+
+export async function getAllCars(){
+    console.log("Attempting to fetch all cars...");
+    const res = await fetch(`${Admin_URL}/adminshowallcars`,{
+        method:'GET',
+        credentials:'include'
+    })
+    console.log("Response status:", res.status);
+    console.log("Response ok:", res.ok);
+    
+    if(!res.ok){
+        console.log("Response error:", res);
+        const data=await res.json()
+        console.log("Error data:", data);
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    console.log("Full response data:", data);
+    return data;
+}
+
+
+
+export async function deleteCar(vehicle_id){
+    const res=await fetch(`${Admin_URL}/deletewholecar/${vehicle_id}`,
+        {
+            method:'DELETE',
+            credentials:'include'
+        }
+    )
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    return await res.json()
+}
+
+
+ export async function updateCar(vehicle_id,category_id, brand, model, color, transmission, license_plate, year, price_per_day){
+     const res=await fetch(`${Admin_URL}/editvehicle/${vehicle_id}`,
+         {
+             method:'PUT',
+             credentials:'include',
+             headers: {
+                 'Content-Type': 'application/json'
+             },
+             body: JSON.stringify({ category_id, brand, model, color, transmission, license_plate, year, price_per_day })
+         }
+     )
+     if(!res.ok){
+         const data=await res.json()
+         return {error:data?.error}
+     }
+     return await res.json()
+ }
