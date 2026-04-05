@@ -157,53 +157,73 @@ export async function deleteCar(vehicle_id){
 }
 
 
- export async function updateCar(vehicle_id,category_id, brand, model, color, transmission, license_plate, year, price_per_day){
-     const res=await fetch(`${Admin_URL}/editvehicle/${vehicle_id}`,
-         {
-             method:'PUT',
-             credentials:'include',
-             headers: {
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify({ category_id, brand, model, color, transmission, license_plate, year, price_per_day })
-         }
-     )
-     if(!res.ok){
-         const data=await res.json()
+    export async function updateCar(vehicle_id,category_id, brand, model, color, transmission, license_plate, year, price_per_day){
+    const res=await fetch(`${Admin_URL}/editvehicle/${vehicle_id}`,
+        {
+            method:'PUT',
+            credentials:'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ category_id, brand, model, color, transmission, license_plate, year, price_per_day })
+        }
+    )
+    if(!res.ok){
+        const data=await res.json()
          return {error:data?.error}
-     }
-     return await res.json()
- }
-
-  export async function NewCarwithimg(category_id, brand, model, color, transmission, license_plate, year, price_per_day,img){
-      // Create FormData object to properly handle file uploads
-      const formData = new FormData();
-      formData.append('category_id', category_id);
-      formData.append('brand', brand);
-      formData.append('model', model);
-      formData.append('color', color);
-      formData.append('transmission', transmission);
-      formData.append('license_plate', license_plate);
-      formData.append('year', year);
-      formData.append('price_per_day', price_per_day);
-      
-      // Append all image files
-      if (img && img.length > 0) {
-          img.forEach((file, index) => {
-              formData.append('img', file);
-          });
-      }
-      
-      const res=await fetch(`${Admin_URL}/carwithimgupload`,
-          {
-              method:'POST',
+        }
+        return await res.json()
+    }
+    
+    export async function NewCarwithimg(category_id, brand, model, color, transmission, license_plate, year, price_per_day,img){
+        // Create FormData object to properly handle file uploads
+        const formData = new FormData();
+        formData.append('category_id', category_id);
+        formData.append('brand', brand);
+        formData.append('model', model);
+        formData.append('color', color);
+        formData.append('transmission', transmission);
+        formData.append('license_plate', license_plate);
+        formData.append('year', year);
+        formData.append('price_per_day', price_per_day);
+        
+        // Append all image files
+        if (img && img.length > 0) {
+            img.forEach((file, index) => {
+                formData.append('img', file);
+            });
+        }
+        
+        const res=await fetch(`${Admin_URL}/carwithimgupload`,
+            {
+                method:'POST',
               credentials:'include',
               body: formData
-          }
-      )
-      if(!res.ok){
-          const data=await res.json()
-          return {error:data?.error}
-      }
-      return await res.json()
-  }
+            }
+        )
+        if(!res.ok){
+            const data=await res.json()
+            return {error:data?.error}
+        }
+        return await res.json()
+    }
+
+    
+    export async function getAllCarswithimg(){
+        const res = await fetch(`${USER_URL}/cars`,{
+            method:'GET',
+            credentials:'include'
+        })
+        console.log("Response status:", res.status);
+        console.log("Response ok:", res.ok);
+        
+        if(!res.ok){
+            console.log("Response error:", res);
+            const data=await res.json()
+            console.log("Error data:", data);
+            return {error:data?.error}
+        }
+        const data = await res.json();
+        console.log("Full response data:", data);
+        return data;
+    }
