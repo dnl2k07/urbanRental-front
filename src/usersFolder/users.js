@@ -1,3 +1,4 @@
+import 'bootstrap/dist/js/bootstrap.bundle'
 const BACKEND_URL = '/users'
 
 export async function register(email, username, psw) {
@@ -170,4 +171,19 @@ export async function filterCars(filters) {
         return {error: data?.error}
     }
     return await res.json()
+}
+
+export async function getAllCarswithimg() {
+    const res = await fetch(`${BACKEND_URL}/cars`, {
+        method: 'GET',
+        credentials: 'include'
+    })
+
+    if (!res.ok) {
+        const data = await res.json()
+        return {error: data?.error}
+    }
+    
+    const data = await res.json();
+    return data;
 }

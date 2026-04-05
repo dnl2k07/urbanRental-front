@@ -1,11 +1,12 @@
 import Navbar from "../components/NavBar"
 import { useState, useEffect } from "react"
-import { data } from "react-router-dom"
+import { whoAmI } from "../usersFolder/users"
 import { useAuth } from "../context/AuthContext"
 import backgroundPic from "../pics/BackgroundPic.png"
 export default function UserProfile() {
 
-    const { user, loading, onLogout } = useAuth()
+    
+    const { user, setUser, loading, onLogout } = useAuth()
     const [userError, setUserError] = useState(null)
 
     useEffect(() => {
@@ -21,10 +22,13 @@ export default function UserProfile() {
     }, [])
 
     async function failedLogin() {
-        const data = await logout()
-        if (data.error === "nincs cookie") {
-            setUserError("Nincs aktív bejelentkezés!")
-        }
+        const res = await logout()
+    if (!res.error) {
+        setUser(null) 
+        navigate("/login") 
+    } else {
+        setUserError("Hiba a kijelentkezés során!")
+    }
     }
 
     return (

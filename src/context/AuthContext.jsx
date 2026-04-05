@@ -1,4 +1,4 @@
-import { createContext, use, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { whoAmI, logout } from "../usersFolder/users";
 
 const AuthContext = createContext()
@@ -6,7 +6,7 @@ const AuthContext = createContext()
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [errorUser, setUserError] = useState('');
-    const [loading, setLoading] = useState(true); // Alapból true legyen!
+    const [loading, setLoading] = useState(true);
 
     async function load() {
         setLoading(true);
@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
         if (!data.error) {
             setUser(data);
         } else {
-            setUser(null); // Ha hiba van, biztosan null legyen
+            setUser(null); // nullos hiba legyen
         }
         setLoading(false);
     }
@@ -23,9 +23,8 @@ export function AuthProvider({ children }) {
         load();
     }, []);
 
-    // EZ HIÁNYZIK: Bejelentkezés utáni azonnali state frissítés
     async function onLoginSuccess() {
-        await load(); // Újra lekérjük a user infót az API-tól a friss token alapján
+        await load(); // User info lekeres by token
     }
 
     async function onLogout() {

@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import backgroundPic from "../pics/BackgroundPic.png"
 import { Navigate } from "react-router-dom"
+import { whoAmI } from "../usersFolder/users"
+import { AuthProvider } from "../context/AuthContext"
 
 export default function AdminPage() {
-    const { user, loading, onLogout } = useAuth()
+    const { user, loading, onLogout, setUser } = useAuth()
     console.log(user);
     const [allUsers, setAllUsers] = useState(null)
     const [errorAllusers, seterrorAllusers] = useState('')
