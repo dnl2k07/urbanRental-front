@@ -10,22 +10,45 @@ export default function Home() {
   const [cars, setCars] = useState([]);
 
   async function loadCars() {
-    const data = await getAllCarswithimg();
-    console.log("API Response:", data);
+  const data = await getAllCarswithimg();
 
-    if (data.error) {
-      console.log("Error from API:", data.error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      console.log("No cars returned");
-      setCars([]);
-      return;
-    }
-    console.log(data[0])
-    setCars(data[0]);
+  if (data.error) {
+    console.log("Error from API:", data.error);
+    return;
   }
+
+  if (!data || data.length === 0) {
+    setCars([]);
+    return;
+  }
+
+  const rawCars = data[0];
+
+  const groupedCars = Object.values(
+    rawCars.reduce((acc, car) => {
+      if (!acc[car.vehicle_id]) {
+        acc[car.vehicle_id] = {
+          vehicle_id: car.vehicle_id,
+          brand: car.brand,
+          model: car.model,
+          color: car.color,
+          transmission: car.transmission,
+          images: []
+        };
+      }
+
+      if (car.img) {
+        acc[car.vehicle_id].images.push(
+          `http://localhost:3000/public/${car.img}`
+        );
+      }
+
+      return acc;
+    }, {})
+  );
+
+  setCars(groupedCars);
+}
 
   useEffect(() => {
     loadCars();
@@ -41,7 +64,7 @@ export default function Home() {
           cars.map((car) => (
             <Card
               key={`${car.vehicle_id}-${car.img}`}
-              logo={`http://localhost:3000/public/${car.img}`}
+              images={car.images}
               brand={car.brand}
               model={car.model}
               color={car.color}
