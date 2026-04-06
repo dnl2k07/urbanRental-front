@@ -61,16 +61,17 @@ export default function Home() {
         {cars.length === 0 ? (
           <p>no cars fuound sadly</p>
         ) : (
-          cars.map((car) => (
-            <Card
-              key={`${car.vehicle_id}-${car.img}`}
-              images={car.images}
-              brand={car.brand}
-              model={car.model}
-              color={car.color}
-              transmission={car.transmission}
-            />
-          ))
+           cars.map((car) => (
+             <Card
+               key={`${car.vehicle_id}-${car.img}`}
+               images={car.images}
+               brand={car.brand}
+               model={car.model}
+               color={car.color}
+               transmission={car.transmission}
+               vehicle_id={car.vehicle_id}
+             />
+           ))
         )}
       </div>
     </div>

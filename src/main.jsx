@@ -8,6 +8,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import { AuthProvider } from './context/AuthContext'
 import Admin from './pages/Admin'
+import ReservationDetail from './pages/ReservationDetail'
 
 // Hello2
 createRoot(document.getElementById('root')).render(
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/register' element={<Register />}/>
           <Route path='/login' element={<Login />}/>
           <Route path='/admin' element={<Admin />}/>
+          <Route path='/car/:vehicle_id' element={<ReservationDetail />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

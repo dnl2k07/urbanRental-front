@@ -1,6 +1,15 @@
 import Gomb from "./Gomb";
-export default function Card({ images, brand, model, color, transmission }) {
+import { useNavigate } from "react-router-dom";
+
+export default function Card({ images, brand, model, color, transmission, vehicle_id }) {
   const carouselId = `carousel-${brand}-${model}-${Math.random()}`;
+  const navigate = useNavigate();
+
+  const handleReserve = () => {
+    if (vehicle_id) {
+      navigate(`/car/${vehicle_id}`);
+    }
+  };
 
   return (
     <div className="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -53,7 +62,7 @@ export default function Card({ images, brand, model, color, transmission }) {
             <Gomb
               buttonClass="btn btn-dark w-100"
               content="Reserve"
-              onClick={() => {}}
+              onClick={handleReserve}
             />
           </div>
         </div>
