@@ -82,7 +82,7 @@ export default function Home() {
                     {user ? (
                         <>
                             <div className="col-md-3 px-4">
-                                <div className="sticky-top" style={{ top: '150px' }}>
+                                <div className="sticky-top" style={{ position: 'fixed', top: '120px',  width: 'inherit', maxWidth: '280px', zIndex: 10 }}>
                                     <div className="card shadow-sm border-0 p-4" style={{ borderRadius: '15px', backgroundColor: '#f8f9fa' }}>
                                         <h2 className="fw-bold mb-1">Hey, {user?.username || 'Guest'}!</h2>
                                         <p className="text-muted small mb-4">Choose from our huge selection!</p>

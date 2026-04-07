@@ -1,14 +1,19 @@
 import Gomb from "./Gomb";
+import { useNavigate } from "react-router-dom";
 
 export default function Card({ car }) {
     const { vehicle_id, brand, model, color, transmission, images, price_per_day, year } = car;
     const carouselId = `carousel-${vehicle_id}`;
+    const navigate = useNavigate();
 
+    const handleReserve = () => {
+        if (vehicle_id) {
+            navigate(`/car/${vehicle_id}`);
+        }
+    };
     return (
         <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
             <div className="card h-100 shadow-sm border-0 mt-5" style={{ borderRadius: '15px', overflow: 'hidden' }}>
-
-                {/* FIX MAGASSÁGÚ KÉP/CAROUSEL */}
                 <div id={carouselId} className="carousel slide" data-bs-ride="false" style={{ height: '200px' }}>
                     <div className="carousel-inner h-100">
                         {images && images.map((img, index) => (
@@ -54,7 +59,7 @@ export default function Card({ car }) {
                         <Gomb
                             buttonClass="btn btn-dark w-50"
                             content="Reserve"
-                            onClick={() => { }}
+                            onClick={handleReserve}
                         />
                     </div>
                 </div>
