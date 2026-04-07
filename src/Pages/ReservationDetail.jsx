@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
@@ -8,17 +8,25 @@ export default function ReservationDetail() {
   const { vehicle_id } = useParams();
   const { user } = useAuth();
   
+  // car states
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
   
   // Form state
   const [pickupDate, setPickupDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
+  
+  // Carousel ref for manual control if needed
+  const carouselRef = useRef(null);
 
   useEffect(() => {
     async function loadCar() {
       try {
+        setLoading(true);
+        setError("");
+        
         const data = await getAllCarswithimg();
         
         if (data.error) {
@@ -27,42 +35,49 @@ export default function ReservationDetail() {
           return;
         }
 
-        if (!data || !Array.isArray(data[0])) {
+        if (!data || !Array.isArray(data[0]) || data[0].length === 0) {
           setError("No cars found");
           return;
         }
 
         // Find the car by vehicle_id
         const rawCars = data[0];
-        const foundCar = rawCars.find(car => car.vehicle_id === parseInt(vehicle_id));
+        const parsedVehicleId = parseInt(vehicle_id);
+        const foundCar = rawCars.find(car => car.vehicle_id === parsedVehicleId);
 
         if (foundCar) {
+          // Handle potential undefined/null image values gracefully
+          const imagePaths = Array.isArray(foundCar.img) 
+            ? foundCar.img.filter(img => Boolean(img))
+            : (foundCar.img ? [foundCar.img] : []);
+            
           setCar({
             vehicle_id: foundCar.vehicle_id,
-            brand: foundCar.brand,
-            model: foundCar.model,
-            color: foundCar.color,
-            transmission: foundCar.transmission,
-            license_plate: foundCar.license_plate,
-            year: foundCar.year,
-            price_per_day: foundCar.price_per_day,
-            category_name: foundCar.category_name,
-            images: [foundCar.img].filter(Boolean).map(img => 
-              `http://localhost:3000/public/${img}`
-            )
+            brand: foundCar.brand || "Unknown Brand",
+            model: foundCar.model || "Unknown Model",
+            color: foundCar.color || "N/A",
+            transmission: foundCar.transmission || "N/A",
+            license_plate: foundCar.license_plate || "N/A",
+            year: foundCar.year || "N/A",
+            price_per_day: foundCar.price_per_day ? parseFloat(foundCar.price_per_day) : 0,
+            category_name: foundCar.category_name || "N/A",
+            images: imagePaths.map(img => `http://localhost:3000/public/${img}`)
           });
         } else {
-          setError("Car not found");
+          setError(`Vehicle with ID ${parsedVehicleId} not found`);
         }
       } catch (err) {
-        console.error(err);
-        setError("Failed to load car details");
+        console.error("Error loading car details:", err);
+        setError(err.message || "Failed to load car details");
       } finally {
         setLoading(false);
       }
     }
 
-    loadCar();
+    if (vehicle_id) {
+      loadCar();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicle_id]);
 
   async function getAllCarswithimg() {
@@ -87,9 +102,18 @@ export default function ReservationDetail() {
 
     if (user && user.user_id) {
       try {
-        const res = await fetch(`/users/newreservation/${user.user_id}/${vehicle_id}/${pickupDate}/${returnDate}`, {
+        const res = await fetch('/users/newreservation', {
           method: 'POST',
-          credentials: 'include'
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            user_id: user.user_id,
+            vehicle_id: parseInt(vehicle_id),
+            pickup_date: pickupDate,
+            return_date: returnDate
+          })
         });
         
         const data = await res.json();
