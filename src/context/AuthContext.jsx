@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
         if (!data.error) {
             setUser(data);
         } else {
-            setUser(null); // nullos hiba legyen
+            setUser(null);
         }
         setLoading(false);
     }
@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
     }, []);
 
     async function onLoginSuccess() {
-        await load(); // User info lekeres by token
+        await load();
     }
 
     async function onLogout() {
