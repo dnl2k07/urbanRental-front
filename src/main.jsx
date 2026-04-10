@@ -9,7 +9,8 @@ import Login from './pages/Login'
 import { AuthProvider } from './context/AuthContext'
 import Admin from './pages/Admin';
 import ReservationDetail from './Pages/ReservationDetail';
-import MyReservations from './Pages/MyReservations'
+import MyReservations from './Pages/MyReservations';
+import Profile from './Pages/Profile';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/login' element={<Login />}/>
           <Route path='/admin' element={<Admin />}/>
           <Route path='/myreservations' element={<MyReservations/>} />
+          <Route path='/profile' element={<Profile />} />
           <Route path='/car/:vehicle_id' element={<ReservationDetail />} />
         </Routes>
       </BrowserRouter>

@@ -209,21 +209,82 @@ export async function deleteCar(vehicle_id){
     }
 
     
-    export async function getAllCarswithimg(){
-        const res = await fetch(`${USER_URL}/cars`,{
-            method:'GET',
-            credentials:'include'
-        })
-        console.log("Response status:", res.status);
-        console.log("Response ok:", res.ok);
-        
-        if(!res.ok){
-            console.log("Response error:", res);
-            const data=await res.json()
-            console.log("Error data:", data);
-            return {error:data?.error}
-        }
-        const data = await res.json();
-        console.log("Full response data:", data);
-        return data;
+export async function getAllCarswithimg(){
+    const res = await fetch(`${USER_URL}/cars`,{
+        method:'GET',
+        credentials:'include'
+    })
+    console.log("Response status:", res.status);
+    console.log("Response ok:", res.ok);
+    
+    if(!res.ok){
+        console.log("Response error:", res);
+        const data=await res.json()
+        console.log("Error data:", data);
+        return {error:data?.error}
     }
+    const data = await res.json();
+    console.log("Full response data:", data);
+    return data;
+}
+
+// Profile functions
+export async function getUserProfile() {
+    const res = await fetch(`${USER_URL}/userprofile`,{
+        method:'GET',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    return await res.json()
+}
+
+export async function updateUserProfile(user_id, username, email) {
+    const res = await fetch(`${USER_URL}/edituserprofile/${user_id}`,{
+        method:'PUT',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, email })
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    return await res.json()
+}
+
+export async function deleteUserProfilePic(user_id) {
+    const res = await fetch(`${USER_URL}/deleteuserpic/${user_id}`,{
+        method:'DELETE',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    return await res.json()
+}
+
+export async function uploadUserProfilePic(user_id, file) {
+    const formData = new FormData();
+    formData.append('img', file);
+    // user_id is passed in the URL, auth middleware handles the rest
+    const res = await fetch(`${USER_URL}/newuserprofile/${user_id}`,{
+        method:'POST',
+        credentials:'include',
+        body: formData
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    return await res.json()
+}
