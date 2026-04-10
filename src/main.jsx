@@ -7,10 +7,10 @@ import Home from './pages/Home'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import { AuthProvider } from './context/AuthContext'
-import Admin from './pages/Admin'
-import ReservationDetail from './pages/ReservationDetail'
+import Admin from './pages/Admin';
+import ReservationDetail from './Pages/ReservationDetail';
+import MyReservations from './Pages/MyReservations'
 
-// Hello2
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
@@ -20,6 +20,7 @@ createRoot(document.getElementById('root')).render(
           <Route path='/register' element={<Register />}/>
           <Route path='/login' element={<Login />}/>
           <Route path='/admin' element={<Admin />}/>
+          <Route path='/myreservations' element={<MyReservations/>} />
           <Route path='/car/:vehicle_id' element={<ReservationDetail />} />
         </Routes>
       </BrowserRouter>
