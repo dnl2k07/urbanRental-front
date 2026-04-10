@@ -17,6 +17,7 @@ export default function ReservationDetail() {
     // Form state
     const [pickupDate, setPickupDate] = useState("");
     const [returnDate, setReturnDate] = useState("");
+    const today = new Date().toLocaleDateString('en-CA');
 
     useEffect(() => {
         async function loadCar() {
@@ -40,11 +41,11 @@ export default function ReservationDetail() {
                 const rawCars = data[0];
                 const parsedVehicleId = parseInt(vehicle_id);
                 const foundCar = rawCars.find(car => car.vehicle_id === parsedVehicleId);
-                
+
                 if (foundCar) {
                     const imagePaths = Array.isArray(foundCar.img)
-                    ? foundCar.img.filter(img => Boolean(img))
-                    : (foundCar.img ? [foundCar.img] : []);
+                        ? foundCar.img.filter(img => Boolean(img))
+                        : (foundCar.img ? [foundCar.img] : []);
                     setCar({
                         brand: foundCar.brand || "Unknown Brand",
                         model: foundCar.model || "Unknown Model",
@@ -53,7 +54,6 @@ export default function ReservationDetail() {
                         license_plate: foundCar.license_plate || "N/A",
                         year: foundCar.year || "N/A",
                         price_per_day: foundCar.price_per_day ? parseFloat(foundCar.price_per_day) : 0,
-                        category_name: foundCar.category_name || "N/A",
                         images: imagePaths.map(img => `http://localhost:3000/public/${img}`)
                     });
                 } else {
@@ -222,12 +222,6 @@ export default function ReservationDetail() {
                                     <strong>Year:</strong> {car.year}
                                 </div>
 
-                                {car.category_name && (
-                                    <div className="mb-2">
-                                        <strong>Category:</strong> {car.category_name}
-                                    </div>
-                                )}
-
                                 {car.price_per_day && (
                                     <div className="mb-2">
                                         <strong>Price per day:</strong> {car.price_per_day} Ft/day
@@ -246,7 +240,6 @@ export default function ReservationDetail() {
                                         {error}
                                     </div>
                                 )}
-
                                 <div className="mb-3">
                                     <label htmlFor="pickupDate" className="form-label">Pickup Date:</label>
                                     <input
@@ -254,6 +247,7 @@ export default function ReservationDetail() {
                                         className="form-control"
                                         id="pickupDate"
                                         value={pickupDate}
+                                        min={today}
                                         onChange={(e) => setPickupDate(e.target.value)}
                                     />
                                 </div>
@@ -265,6 +259,7 @@ export default function ReservationDetail() {
                                         className="form-control"
                                         id="returnDate"
                                         value={returnDate}
+                                        min={pickupDate || today}
                                         onChange={(e) => setReturnDate(e.target.value)}
                                     />
                                 </div>

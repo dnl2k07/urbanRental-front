@@ -21,7 +21,7 @@ export default function Navbar({ user, onLogout }) {
                         <div className="ms-auto d-flex align-items-center gap-2">
                             {isLoggedIn ? (
                                 <>
-                                    <Link to='/reservation' className="nav-link px-3" style={{ fontSize: 20, color: "black" }}>My rentals</Link>
+                                    <Link to='/myreservations' className="nav-link px-3" style={{ fontSize: 20, color: "black" }}>My rentals</Link>
                                     <Link to='/profile' className="nav-link px-3" style={{ fontSize: 20, color: "black" }}>My Profile</Link>
                                     {isAdmin && (
                                         <Link to='/admin' className="nav-link px-3" style={{ fontSize: 20, color: "black" }}>Admin panel</Link>

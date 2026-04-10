@@ -12,6 +12,7 @@ import AdminPage from './Pages/AdminPage';
 import './Design/AdminCarUpload.css'
 import { AuthProvider } from './context/AuthContext'
 import ReservationDetail from './Pages/ReservationDetail'
+import MyReservations from './Pages/MyReservation';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/logout" element={<Login />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path='/myreservations' element={<MyReservations/>} />
           <Route path='/car/:vehicle_id' element={<ReservationDetail />} />
         </Routes>
       </BrowserRouter>

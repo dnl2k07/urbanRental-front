@@ -56,7 +56,7 @@ export default function UserProfile() {
     };
 
     if (loading && !user) return <div className="text-center mt-5"><div className="loading-spinner"></div></div>
-    
+
     // MEGNÉZZÜK VAN-E MENTETT KÉP, HA A BACKEND NEM KÜLDI
     const displayPfp = user?.profile_picture || localStorage.getItem(`user_pfp_${user?.user_id}`);
 
@@ -69,42 +69,14 @@ export default function UserProfile() {
                         <div className={`col-md-4 px-5 align-items-start p-3 ${isVisible ? 'animate-fade-in-left' : ''}`} style={{ backgroundColor: '#e7dcdc' }}>
                             <div className="mt-4 text-center">
                                 <h5>Profile Picture</h5>
-
-                                {userError && <div className="alert alert-danger">{userError}</div>}
-                                {success && <div className="alert alert-success">{success}</div>}
-
                                 <div className="d-flex justify-content-center">
                                     <img
-                                        src={displayPfp 
-                                            ? `http://localhost:3000/${displayPfp.replace('public/', '')}` 
-                                            : "http://localhost:3000/public/userpics/2/2026-04-08-car1.png"}
+                                        src={`https://ui-avatars.com/api/${user?.username || 'User'}&background=random&color=fff`}
                                         alt="Profile"
                                         className="img-fluid rounded-circle mb-3"
-                                        style={{ width: '150px', height: '150px', objectFit: 'cover', border: '3px solid white' }}
-                                        onError={(e) => {
-                                            // Ha az URL szar, betöltjük a kocsist amit tudunk hogy jó
-                                            e.target.src = "http://localhost:3000/public/userpics/2/2026-04-08-car1.png";
-                                        }}
+                                        style={{ width: '150px', height: '150px', border: '3px solid white', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}
                                     />
                                 </div>
-
-                                <form onSubmit={(e) => e.preventDefault()}>
-                                    <input
-                                        type="file"
-                                        ref={fileInputRef}
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        className="form-control mb-2"
-                                    />
-                                    <button
-                                        onClick={handleImageUpload}
-                                        type="button"
-                                        className="btn btn-primary w-100"
-                                        disabled={isUploading || !user}
-                                    >
-                                        {isUploading ? "Uploading..." : "Upload picture"}
-                                    </button>
-                                </form>
                             </div>
 
                             <div className="mt-4">
