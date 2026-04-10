@@ -41,7 +41,9 @@ export default function MyReservations() {
       
       const data = await res.json();
       console.log('Reservations:', data);
-      setReservations(data.result || []);
+       // Ensure we always have an array - handle both {result: [...]} and direct array responses
+       const reservationsData = Array.isArray(data.result) ? data.result : (Array.isArray(data) ? data : []);
+       setReservations(reservationsData);
     } catch (err) {
       console.error("Error fetching reservations:", err);
       setError('Hiba a szerverrel való kommunikációban');
