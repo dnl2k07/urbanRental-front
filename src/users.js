@@ -87,7 +87,7 @@ export async function getAllUsers(){
 
 
 export async function deleteUser(user_id){
-    const res=await fetch(`${USER_URL}/admin/deleteUser/${user_id}`,
+    const res=await fetch(`${Admin_URL}/deleteoneuser/${user_id}`,
         {
             method:'DELETE',
             credentials:'include'
@@ -100,23 +100,23 @@ export async function deleteUser(user_id){
     return await res.json()
 }
 
- export async function userEdit(user_id,username,email,role){
-     const res=await fetch(`${USER_URL}/admin/editUser/${user_id}`,
-         {
-             method:'PUT',
-             credentials:'include',
-             headers: {
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify({ username, email, role })
-         }
-     )
-     if(!res.ok){
-         const data=await res.json()
-         return {error:data?.error}
-     }
-     return await res.json()
- }
+export async function userEdit(user_id,username,email,role){
+    const res=await fetch(`${Admin_URL}/editoneuser/${user_id}`,
+        {
+            method:'PUT',
+            credentials:'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, role })
+        }
+    )
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    return await res.json()
+}
 
 //car functions
 
@@ -305,4 +305,195 @@ export async function uploadUserProfilePic(user_id, file) {
         return {error:data?.error}
     }
     return await res.json()
+}
+
+// ========== RESERVATION FUNCTIONS ==========
+export async function getAllReservations() {
+    const res = await fetch(`${Admin_URL}/reservation`,{
+        method:'GET',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function updateReservation(reservation_id, user_id, vehicle_id, pickup_date, return_date, status) {
+    const res = await fetch(`${Admin_URL}/updatereservation/${reservation_id}`,{
+        method:'PUT',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id, vehicle_id, pickup_date, return_date, status })
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function deleteReservation(reservation_id) {
+    const res = await fetch(`${Admin_URL}/deletereservation/${reservation_id}`,{
+        method:'DELETE',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+// ========== RENTAL FUNCTIONS ==========
+export async function getAllRentals() {
+    const res = await fetch(`${Admin_URL}/allrentals`,{
+        method:'GET',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function getRentalsByUser(user_id) {
+    const res = await fetch(`${Admin_URL}/rentals/${user_id}`,{
+        method:'GET',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function createRental(reservation_id, vehicle_id, user_id, start_time, expected_return, actual_return, status, damage_notes) {
+    const res = await fetch(`${Admin_URL}/newrental`,{
+        method:'POST',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reservation_id, vehicle_id, user_id, start_time, expected_return, actual_return, status, damage_notes })
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function updateRental(user_id, reservation_id, vehicle_id, start_time, expected_return, actual_return, status, damage_notes) {
+    const res = await fetch(`${Admin_URL}/updaterental/${user_id}`,{
+        method:'PUT',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reservation_id, vehicle_id, start_time, expected_return, actual_return, status, damage_notes })
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function deleteRental(rental_id) {
+    const res = await fetch(`${Admin_URL}/deleterental`,{
+        method:'DELETE',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+// ========== CATEGORY FUNCTIONS ==========
+export async function getAllCategories() {
+    const res = await fetch(`${Admin_URL}/allcategory`,{
+        method:'GET',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function createCategory(name) {
+    const res = await fetch(`${Admin_URL}/newcategory`,{
+        method:'POST',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name })
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function updateCategory(category_id, name) {
+    const res = await fetch(`${Admin_URL}/updatecategory/${category_id}`,{
+        method:'PUT',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name })
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
+export async function deleteCategory(category_id) {
+    const res = await fetch(`${Admin_URL}/deletecategory/${category_id}`,{
+        method:'DELETE',
+        credentials:'include'
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
 }

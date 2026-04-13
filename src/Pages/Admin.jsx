@@ -2,8 +2,17 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
 import UserTable from "../components/UserTable";
+import CarTable from "../components/CarTable";
+import ReservationsTable from "../components/ReservationsTable";
+import RentalsTable from "../components/RentalsTable";
+import CategoriesTable from "../components/CategoriesTable";
+import ReservationsModal from "../components/ReservationsModal";
+import RentalsModal from "../components/RentalsModal";
+import CategoriesModal from "../components/CategoriesModal";
+import ModalInput from "../components/ModalInput";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
+
 import {
   getAllUsers,
   deleteUser,
@@ -12,28 +21,42 @@ import {
   deleteCar,
   updateCar,
   NewCarwithimg,
+  // Reservations
+  getAllReservations,
+  updateReservation,
+  deleteReservation,
+  // Rentals
+  getAllRentals,
+  getRentalsByUser,
+  createRental,
+  updateRental,
+  deleteRental,
+  // Categories
+  getAllCategories,
+  updateCategory,
+  createCategory,
+  deleteCategory,
 } from "../users";
-import CarTable from "../components/CarTable";
-import ModalInput from "../components/ModalInput";
 
 export default function Admin() {
-  //usestates
-  //auth
+  // Auth state
   const { user, loading, onLogout } = useAuth();
-  //console.log(user);
-  //user
-  const [allUsers, setAllUsers] = useState(null);
-  const [generalerror, setgeneralerror] = useState("");
-  const [selectedUser, setselectedUser] = useState(null);
-  const [username, setusername] = useState("");
-  const [email, setemail] = useState("");
-  const [role, setrole] = useState("");
-  const [showModal, setshowModal] = useState(false);
 
-  //caredittable
-  const [allvehicle, setallvehicle] = useState([]);
-  const [selectedCar, setselectedCar] = useState(null);
-  const [category_id, setCategory_id] = useState("");
+  // General error state
+  const [generalerror, setGeneralError] = useState("");
+
+  // ==================== USER STATE ====================
+  const [allUsers, setAllUsers] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [showUserModal, setShowUserModal] = useState(false);
+
+  // ==================== CAR STATE ====================
+  const [allCars, setAllCars] = useState([]);
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [category_id, setCategoryId] = useState("");
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [color, setColor] = useState("");
@@ -41,13 +64,32 @@ export default function Admin() {
   const [license_plate, setLicensePlate] = useState("");
   const [year, setYear] = useState("");
   const [price_per_day, setPricePerDay] = useState("");
-  const [img, setimg] = useState([]);
-  const [showCarModal, setshowCarModal] = useState(false);
-  const [showNewCarModal, setshowNewCarModal] = useState(false);
+  const [img, setImg] = useState([]);
+  const [showCarModal, setShowCarModal] = useState(false);
+  const [showNewCarModal, setShowNewCarModal] = useState(false);
 
-  //end of usestates
+  // ==================== RESERVATION STATE ====================
+  const [allReservations, setAllReservations] = useState(null);
+  const [selectedReservation, setSelectedReservation] = useState(null);
+  const [showReservationModal, setShowReservationModal] = useState(false);
 
-  //functions
+  // ==================== RENTAL STATE ====================
+  const [allRentals, setAllRentals] = useState(null);
+  const [selectedRental, setSelectedRental] = useState(null);
+  const [showRentalModal, setShowRentalModal] = useState(false);
+
+  // ==================== CATEGORY STATE ====================
+  const [allCategories, setAllCategories] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
+
+  // ==================== FILTER STATE ====================
+  const [filterBrand, setFilterBrand] = useState("");
+  const [filterModel, setFilterModel] = useState("");
+  const [filterMinPrice, setFilterMinPrice] = useState("");
+  const [filterMaxPrice, setFilterMaxPrice] = useState("");
+
   if (loading) {
     return (
       <div className="container py-5">
@@ -56,36 +98,34 @@ export default function Admin() {
     );
   }
 
-  //user functions
+  if (!user || user.role !== "admin") {
+    return <Navigate to="/" />;
+  }
+
+  // ==================== USER FUNCTIONS ====================
   async function loadUsers() {
     const data = await getAllUsers();
     console.log("API Response:", data);
 
     if (data.error) {
       console.log("Error from API:", data.error);
-
-      return setgeneralerror(data.error);
+      return setGeneralError(data.error);
     }
-    console.log("Setting users to:", data.result);
-    // Ensure we handle the case where result might be undefined or null
     if (!data.result) {
       console.log("No result found in response");
       return setAllUsers([]);
     }
     return setAllUsers(data.result);
   }
+
   useEffect(() => {
     loadUsers();
   }, []);
 
-  if (!user || user.role !== "admin") {
-    return <Navigate to="/" />;
-  }
-
   async function handleDelete(user) {
-    setgeneralerror("");
+    setGeneralError("");
     const confirmDelete = window.confirm(
-      `Biztos törölni akarod a ${user.username} nevü felhasználot`,
+      `Biztos törölni akarod a ${user.username} nevü felhasználot?`
     );
 
     if (!confirmDelete) {
@@ -93,73 +133,75 @@ export default function Admin() {
     }
     const data = await deleteUser(user.user_id);
     if (data.error) {
-      setgeneralerror(data.error);
+      setGeneralError(data.error);
       return alert(data.error);
     }
     setAllUsers((prev) => prev.filter((x) => x.user_id !== user.user_id));
-    //or just loadUsers()
   }
+
   async function handleEdit(user) {
-    setgeneralerror("");
-    setselectedUser(user);
-    setshowModal(true);
+    setGeneralError("");
+    setSelectedUser(user);
+    setUsername(user.username || "");
+    setEmail(user.email || "");
+    setRole(user.role || "");
+    setShowUserModal(true);
   }
+
   async function editUser(user_id) {
-    setgeneralerror("");
+    setGeneralError("");
 
     const data = await userEdit(user_id, username, email, role);
 
     if (data.error) {
-      setgeneralerror(data.error);
+      setGeneralError(data.error);
       return alert(data.error);
     }
-    alert("sikeres modositás");
-    return loadUsers();
+    alert("Sikeres módosítás");
+    setShowUserModal(false);
+    loadUsers();
   }
 
-  //car functions
-
+  // ==================== CAR FUNCTIONS ====================
   async function loadCars() {
-    setgeneralerror("");
+    setGeneralError("");
     const data = await getAllCars();
     console.log("API Response:", data);
 
     if (data.error) {
       console.log("Error from API:", data.error);
-      return setgeneralerror(data.error);
+      return setGeneralError(data.error);
     }
-    //console.log("Setting users to:", data.result);
-    // Ensure we handle the case where result might be undefined or null
     if (!data.result) {
       console.log("No result found in response");
-      return setallvehicle([]);
+      return setAllCars([]);
     }
-    return setallvehicle(data.result);
+    return setAllCars(data.result);
   }
+
   useEffect(() => {
     loadCars();
   }, []);
 
   async function handleCarDelete(car) {
-    setgeneralerror("");
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${car.vehicle_id} `,
-    );
+    setGeneralError("");
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${car.vehicle_id}?`);
 
     if (!confirmDelete) {
       return;
     }
     const data = await deleteCar(car.vehicle_id);
     if (data.error) {
-      setgeneralerror(data.error);
+      setGeneralError(data.error);
       return alert(data.error);
     }
     loadCars();
   }
+
   async function handleCarEdit(car) {
-    setgeneralerror("");
-    setselectedCar(car);
-    setCategory_id(car.category_id || "");
+    setGeneralError("");
+    setSelectedCar(car);
+    setCategoryId(car.category_id || "");
     setBrand(car.brand || "");
     setModel(car.model || "");
     setColor(car.color || "");
@@ -167,10 +209,11 @@ export default function Admin() {
     setLicensePlate(car.license_plate || "");
     setYear(car.year || "");
     setPricePerDay(car.price_per_day || "");
-    setshowCarModal(true);
+    setShowCarModal(true);
   }
+
   async function editCar(vehicle_id) {
-    setgeneralerror("");
+    setGeneralError("");
 
     const data = await updateCar(
       vehicle_id,
@@ -181,24 +224,21 @@ export default function Admin() {
       transmission,
       license_plate,
       year,
-      price_per_day,
+      price_per_day
     );
 
     if (data.error) {
-      setgeneralerror(data.error);
+      setGeneralError(data.error);
       return alert(data.error);
     }
-    alert("sikeres modositás");
-    return loadCars();
+    alert("Sikeres módosítás");
+    setShowCarModal(false);
+    loadCars();
   }
 
-  //this will fail if the database doesnt have a category coresponding to it idk how to fix it
-  //todo add a message when it fails to upload wiht wrong or missing category id
-
-  async function handleNewcar(car) {
-    setgeneralerror("");
-    // Initialize with empty values for a new car
-    setselectedCar({
+  async function handleNewcar() {
+    setGeneralError("");
+    setSelectedCar({
       category_id: "",
       brand: "",
       model: "",
@@ -208,7 +248,7 @@ export default function Admin() {
       year: "",
       price_per_day: "",
     });
-    setCategory_id("");
+    setCategoryId("");
     setBrand("");
     setModel("");
     setColor("");
@@ -216,11 +256,12 @@ export default function Admin() {
     setLicensePlate("");
     setYear("");
     setPricePerDay("");
-    setimg([]);
-    setshowNewCarModal(true);
+    setImg([]);
+    setShowNewCarModal(true);
   }
+
   async function NewCarwithimgupload() {
-    setgeneralerror("");
+    setGeneralError("");
 
     const data = await NewCarwithimg(
       category_id,
@@ -231,78 +272,395 @@ export default function Admin() {
       license_plate,
       year,
       price_per_day,
-      img,
+      img
     );
 
     if (data.error) {
-      setgeneralerror(data.error);
+      setGeneralError(data.error);
       return alert(data.error);
     }
-    alert("successfull upload");
-    return loadCars();
+    alert("Successfull upload");
+    setShowNewCarModal(false);
+    loadCars();
+  }
+
+  // ==================== RESERVATION FUNCTIONS ====================
+  async function loadReservations() {
+    setGeneralError("");
+    const data = await getAllReservations();
+
+    if (data.error) {
+      console.log("Error from API:", data.error);
+      return setGeneralError(data.error);
+    }
+    return setAllReservations(data);
+  }
+
+  useEffect(() => {
+    loadReservations();
+  }, []);
+
+  async function handleReservationEdit(reservation) {
+    setGeneralError("");
+    setSelectedReservation(reservation);
+    setShowReservationModal(true);
+  }
+
+  async function handleReservationDelete(reservation) {
+    setGeneralError("");
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete reservation #${reservation.reservation_id}?`
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+    const data = await deleteReservation(reservation.reservation_id);
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    loadReservations();
+  }
+
+  async function handleUpdateReservation() {
+    setGeneralError("");
+
+    const data = await updateReservation(
+      selectedReservation.reservation_id,
+      selectedReservation.user_id,
+      selectedReservation.vehicle_id,
+      selectedReservation.pickup_date,
+      selectedReservation.return_date,
+      selectedReservation.status
+    );
+
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    alert("Sikeres módosítás");
+    setShowReservationModal(false);
+    loadReservations();
+  }
+
+  // ==================== RENTAL FUNCTIONS ====================
+  async function loadRentals() {
+    setGeneralError("");
+    const data = await getAllRentals();
+
+    if (data.error) {
+      console.log("Error from API:", data.error);
+      return setGeneralError(data.error);
+    }
+    return setAllRentals(data);
+  }
+
+  useEffect(() => {
+    loadRentals();
+  }, []);
+
+  async function handleRentalEdit(rental) {
+    setGeneralError("");
+    setSelectedRental(rental);
+    setShowRentalModal(true);
+  }
+
+  async function handleRentalDelete(rental) {
+    setGeneralError("");
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete rental #${rental.rental_id}?`
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+    const data = await deleteRental(rental.rental_id);
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    loadRentals();
+  }
+
+  async function handleUpdateRental() {
+    setGeneralError("");
+
+    const data = await updateRental(
+      selectedRental.user_id,
+      selectedRental.reservation_id,
+      selectedRental.vehicle_id,
+      selectedRental.start_time,
+      selectedRental.expected_return,
+      selectedRental.actual_return,
+      selectedRental.status,
+      selectedRental.damage_notes || ""
+    );
+
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    alert("Sikeres módosítás");
+    setShowRentalModal(false);
+    loadRentals();
+  }
+
+  // ==================== CATEGORY FUNCTIONS ====================
+  async function loadCategories() {
+    setGeneralError("");
+    const data = await getAllCategories();
+
+    if (data.error) {
+      console.log("Error from API:", data.error);
+      return setGeneralError(data.error);
+    }
+    return setAllCategories(data);
+  }
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  async function handleCategoryEdit(category) {
+    setGeneralError("");
+    setSelectedCategory(category);
+    setShowCategoryModal(true);
+  }
+
+  async function handleCategoryDelete(category) {
+    setGeneralError("");
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete category #${category.category_id} (${category.name})?`
+    );
+
+    if (!confirmDelete) {
+      return;
+    }
+    const data = await deleteCategory(category.category_id);
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    loadCategories();
+  }
+
+  async function handleUpdateCategory() {
+    setGeneralError("");
+
+    const data = await updateCategory(selectedCategory.category_id, selectedCategory.name);
+
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    alert("Sikeres módosítás");
+    setShowCategoryModal(false);
+    loadCategories();
+  }
+
+  async function handleNewCategory() {
+    setSelectedCategory(null);
+    setShowNewCategoryModal(true);
+  }
+
+  async function handleCreateCategory(name) {
+    setGeneralError("");
+
+    const data = await createCategory(name);
+
+    if (data.error) {
+      setGeneralError(data.error);
+      return alert(data.error);
+    }
+    alert("Sikeres hozzáadás");
+    setShowNewCategoryModal(false);
+    loadCategories();
+  }
+
+  // ==================== FILTER FUNCTIONS ====================
+  async function handleFilterCars() {
+    const filters = {};
+    if (filterBrand) filters.brand = filterBrand;
+    if (filterModel) filters.model = filterModel;
+    if (filterMinPrice) filters.min_price = filterMinPrice;
+    if (filterMaxPrice) filters.max_price = filterMaxPrice;
+
+    setGeneralError("");
+    const data = await getAllCars();
+    
+    // Apply client-side filtering
+    let filteredCars = [...allCars];
+    if (filters.brand) {
+      filteredCars = filteredCars.filter(car => car.brand.toLowerCase().includes(filters.brand.toLowerCase()));
+    }
+    if (filters.model) {
+      filteredCars = filteredCars.filter(car => car.model.toLowerCase().includes(filters.model.toLowerCase()));
+    }
+    if (filters.min_price) {
+      filteredCars = filteredCars.filter(car => parseFloat(car.price_per_day) >= parseFloat(filters.min_price));
+    }
+    if (filters.max_price) {
+      filteredCars = filteredCars.filter(car => parseFloat(car.price_per_day) <= parseFloat(filters.max_price));
+    }
+
+    setAllCars(filteredCars);
+  }
+
+  async function handleClearFilter() {
+    setFilterBrand("");
+    setFilterModel("");
+    setFilterMinPrice("");
+    setFilterMaxPrice("");
+    loadCars();
   }
 
   return (
     <div>
       <NavBar user={user} onLogout={onLogout}></NavBar>
       <div className="container">
-        <div className=" text-center bg-danger">{generalerror}</div>
-        <h1 className="text-center my-3">Admin panel</h1>
-        <h3>User controls</h3>
-        <UserTable
-          allUsers={allUsers}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-        <h3>Car Controls</h3>
+        {generalerror && <div className="text-center bg-danger p-2 mb-3">{generalerror}</div>}
+        
+        <h1 className="text-center my-3">Admin Panel</h1>
+
+        {/* Car Filter Section */}
+        <div className="card mb-4 p-3">
+          <h5>Filter Cars</h5>
+          <div className="row g-2">
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Brand..."
+                value={filterBrand}
+                onChange={(e) => setFilterBrand(e.target.value)}
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Model..."
+                value={filterModel}
+                onChange={(e) => setFilterModel(e.target.value)}
+              />
+            </div>
+            <div className="col-md-2">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Min Price"
+                value={filterMinPrice}
+                onChange={(e) => setFilterMinPrice(e.target.value)}
+              />
+            </div>
+            <div className="col-md-2">
+              <input
+                type="number"
+                className="form-control"
+                placeholder="Max Price"
+                value={filterMaxPrice}
+                onChange={(e) => setFilterMaxPrice(e.target.value)}
+              />
+            </div>
+            <div className="col-md-2 d-flex gap-2">
+              <button className="btn btn-primary" onClick={handleFilterCars}>
+                Filter
+              </button>
+              <button className="btn btn-secondary" onClick={handleClearFilter}>
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* User Controls */}
+        <h3>User Controls</h3>
+        <UserTable allUsers={allUsers} onEdit={handleEdit} onDelete={handleDelete} />
+        
+        {/* Car Controls */}
+        <h3 className="mt-4">Car Controls</h3>
         <CarTable
-          allCars={[allvehicle]}
+          allCars={allCars}
           onEdit={handleCarEdit}
           onDelete={handleCarDelete}
           onAdd={handleNewcar}
-        ></CarTable>
-        <h3>Car category</h3>
-        {/* //table that handles rentals statuses edit delete completed */}
-        <h3>Reservations</h3>
-        {/* //table that handles reservations edit delete */}
-        <h3>Rentals</h3>
-        {/* //table that handles rentals statuses edit delete completed */}
+        />
+
+        {/* Categories Section */}
+        <h3 className="mt-4">Car Categories</h3>
+        <CategoriesTable
+          allCategories={allCategories}
+          onEdit={handleCategoryEdit}
+          onDelete={handleCategoryDelete}
+        />
+        
+        {/* Add Category Button */}
+        <button
+          className="btn btn-success mb-3"
+          onClick={handleNewCategory}
+        >
+          + Add New Category
+        </button>
+
+        {/* Reservations Section */}
+        <h3 className="mt-4">Reservations</h3>
+        {allReservations && (
+          <ReservationsTable
+            allReservations={allReservations}
+            onEdit={handleReservationEdit}
+            onDelete={handleReservationDelete}
+          />
+        )}
+        
+        {/* Rentals Section */}
+        <h3 className="mt-4">Rentals</h3>
+        {allRentals && (
+          <RentalsTable
+            allRentals={allRentals}
+            onEdit={handleRentalEdit}
+            onDelete={handleRentalDelete}
+          />
+        )}
       </div>
-      {/* usermodal */}
-      {showModal && selectedUser && (
+
+      {/* User Edit Modal */}
+      {showUserModal && selectedUser && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
+              <h5 className="mb-3">Edit User #{selectedUser.user_id}</h5>
+              
               <ModalInput
                 label={"Username:"}
                 type={"text"}
-                defaultValue={username}
-                onChange={(e) => setusername(e.target.value)}
-                placeholder={"valaki"}
-              ></ModalInput>
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder={selectedUser.username}
+              />
 
               <ModalInput
                 label={"Email:"}
                 type={"email"}
-                defaultValue={email}
-                onChange={(e) => setemail(e.target.value)}
-                placeholder={"valami@gmail.com"}
-              ></ModalInput>
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={selectedUser.email}
+              />
 
               <ModalInput
                 label={"Role:"}
                 type={"text"}
-                defaultValue={role}
-                onChange={(e) => setrole(e.target.value)}
-                placeholder={"user/admin"}
-              ></ModalInput>
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                placeholder={selectedUser.role || "user/admin"}
+              />
 
               <button
                 type="button"
                 className="btn btn-secondary"
                 onClick={() => {
-                  setshowModal(false);
-                  setselectedUser(null);
+                  setShowUserModal(false);
+                  setSelectedUser(null);
                 }}
               >
                 Close
@@ -319,109 +677,115 @@ export default function Admin() {
           </div>
         </div>
       )}
-      {/* //car model for editing */}
+
+      {/* Car Edit Modal */}
       {showCarModal && selectedCar && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
+              <h5 className="mb-3">Edit Car #{selectedCar.vehicle_id}</h5>
+              
               <ModalInput
                 label={"Category ID:"}
                 type={"text"}
                 value={category_id}
-                onChange={(e) => setCategory_id(e.target.value)}
-                placeholder={"1"}
-              ></ModalInput>
+                onChange={(e) => setCategoryId(e.target.value)}
+                placeholder={selectedCar.category_id || "1"}
+              />
 
               <ModalInput
                 label={"Brand:"}
                 type={"text"}
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
-                placeholder={"Toyota"}
-              ></ModalInput>
+                placeholder={selectedCar.brand || "Toyota"}
+              />
 
               <ModalInput
                 label={"Model:"}
                 type={"text"}
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
-                placeholder={"Camry"}
-              ></ModalInput>
+                placeholder={selectedCar.model || "Camry"}
+              />
 
               <ModalInput
                 label={"Color:"}
                 type={"text"}
-                defaultValue={color}
+                value={color}
                 onChange={(e) => setColor(e.target.value)}
-                placeholder={"Red"}
-              ></ModalInput>
+                placeholder={selectedCar.color || "Red"}
+              />
 
               <ModalInput
                 label={"Transmission:"}
                 type={"text"}
-                defaultValue={transmission}
+                value={transmission}
                 onChange={(e) => setTransmission(e.target.value)}
-                placeholder={"Automatic"}
-              ></ModalInput>
+                placeholder={selectedCar.transmission || "Automatic"}
+              />
 
               <ModalInput
                 label={"License Plate:"}
                 type={"text"}
-                defaultValue={license_plate}
+                value={license_plate}
                 onChange={(e) => setLicensePlate(e.target.value)}
-                placeholder={"ABC-123"}
-              ></ModalInput>
+                placeholder={selectedCar.license_plate || "ABC-123"}
+              />
 
               <ModalInput
                 label={"Year:"}
                 type={"number"}
-                defaultValue={year}
+                value={year}
                 onChange={(e) => setYear(e.target.value)}
-                placeholder={"2022"}
-              ></ModalInput>
+                placeholder={selectedCar.year || "2022"}
+              />
 
               <ModalInput
                 label={"Price Per Day:"}
                 type={"number"}
-                defaultValue={price_per_day}
+                value={price_per_day}
                 onChange={(e) => setPricePerDay(e.target.value)}
-                placeholder={"50"}
-              ></ModalInput>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => {
-                setshowCarModal(false);
-                setselectedCar(null);
-              }}
-            >
-              Close
-            </button>
+                placeholder={selectedCar.price_per_day || "50"}
+              />
 
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => editCar(selectedCar.vehicle_id)}
-            >
-              Modify
-            </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  setShowCarModal(false);
+                  setSelectedCar(null);
+                }}
+              >
+                Close
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => editCar(selectedCar.vehicle_id)}
+              >
+                Modify
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* //car modal for new car */}
-      {showNewCarModal && selectedCar&& (
+      {/* New Car Modal */}
+      {showNewCarModal && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
             <div className="modal-content p-3">
+              <h5 className="mb-3">Add New Car</h5>
+              
               <ModalInput
                 label={"Category ID:"}
                 type={"text"}
                 value={category_id}
-                onChange={(e) => setCategory_id(e.target.value)}
+                onChange={(e) => setCategoryId(e.target.value)}
                 placeholder={"1"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"Brand:"}
@@ -429,7 +793,7 @@ export default function Admin() {
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
                 placeholder={"Toyota"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"Model:"}
@@ -437,49 +801,49 @@ export default function Admin() {
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 placeholder={"Camry"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"Color:"}
                 type={"text"}
-                defaultValue={color}
+                value={color}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder={"Red"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"Transmission:"}
                 type={"text"}
-                defaultValue={transmission}
+                value={transmission}
                 onChange={(e) => setTransmission(e.target.value)}
                 placeholder={"Automatic"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"License Plate:"}
                 type={"text"}
-                defaultValue={license_plate}
+                value={license_plate}
                 onChange={(e) => setLicensePlate(e.target.value)}
                 placeholder={"ABC-123"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"Year:"}
                 type={"number"}
-                defaultValue={year}
+                value={year}
                 onChange={(e) => setYear(e.target.value)}
                 placeholder={"2022"}
-              ></ModalInput>
+              />
 
               <ModalInput
                 label={"Price Per Day:"}
                 type={"number"}
-                defaultValue={price_per_day}
+                value={price_per_day}
                 onChange={(e) => setPricePerDay(e.target.value)}
                 placeholder={"50"}
-              ></ModalInput>
+              />
 
-              <label className="form-label fw-bold">img:</label>
+              <label className="form-label fw-bold">Images:</label>
               <input
                 type="file"
                 className="form-control"
@@ -487,41 +851,92 @@ export default function Admin() {
                 multiple
                 onChange={(e) => {
                   const files = Array.from(e.target.files);
-                  setimg(files);
+                  setImg(files);
                 }}
               />
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => {
-                setshowNewCarModal(false);
-                setselectedCar(null);
-                // Reset form fields
-                setCategory_id("");
-                setBrand("");
-                setModel("");
-                setColor("");
-                setTransmission("");
-                setLicensePlate("");
-                setYear("");
-                setPricePerDay("");
-                setimg([]);
-              }}
-            >
-              Close
-            </button>
 
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => NewCarwithimgupload()}
-            >
-              Upload new car
-            </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  setShowNewCarModal(false);
+                  setSelectedCar(null);
+                  setCategoryId("");
+                  setBrand("");
+                  setModel("");
+                  setColor("");
+                  setTransmission("");
+                  setLicensePlate("");
+                  setYear("");
+                  setPricePerDay("");
+                  setImg([]);
+                }}
+              >
+                Close
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={NewCarwithimgupload}
+              >
+                Upload New Car
+              </button>
             </div>
-
           </div>
         </div>
+      )}
+
+      {/* Reservations Modal */}
+      {showReservationModal && selectedReservation && (
+        <ReservationsModal
+          showModal={showReservationModal}
+          selectedReservation={selectedReservation}
+          onClose={() => {
+            setShowReservationModal(false);
+            setSelectedReservation(null);
+          }}
+          onRefresh={loadReservations}
+        />
+      )}
+
+      {/* Rentals Modal */}
+      {showRentalModal && selectedRental && (
+        <RentalsModal
+          showModal={showRentalModal}
+          selectedRental={selectedRental}
+          onClose={() => {
+            setShowRentalModal(false);
+            setSelectedRental(null);
+          }}
+          onRefresh={loadRentals}
+        />
+      )}
+
+      {/* Categories Modal (Edit) */}
+      {showCategoryModal && selectedCategory && (
+        <CategoriesModal
+          showModal={showCategoryModal}
+          selectedCategory={selectedCategory}
+          onClose={() => {
+            setShowCategoryModal(false);
+            setSelectedCategory(null);
+          }}
+          onRefresh={loadCategories}
+        />
+      )}
+
+      {/* New Category Modal */}
+      {showNewCategoryModal && (
+        <CategoriesModal
+          showModal={showNewCategoryModal}
+          selectedCategory={null}
+          onClose={() => {
+            setShowNewCategoryModal(false);
+            setSelectedCategory(null);
+          }}
+          onRefresh={loadCategories}
+        />
       )}
 
       <Footer></Footer>
