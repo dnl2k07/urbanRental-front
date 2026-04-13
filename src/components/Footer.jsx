@@ -52,10 +52,7 @@ export default function Footer() {
                                 <a href="mailto:support@urbanrental.com" className="text-white-50 hover-white text-decoration-none small">Contact Us</a>
                             </li>
                             <li className="mb-2">
-                                <a href="#" className="text-white-50 hover-white text-decoration-none small">Privacy Policy</a>
-                            </li>
-                            <li className="mb-2">
-                                <a href="#" className="text-white-50 hover-white text-decoration-none small">Terms of Service</a>
+                                <Link to="/legal" className="text-white-50 hover-white text-decoration-none small">Privacy Policy & Terms</Link>
                             </li>
                         </ul>
                     </div>
