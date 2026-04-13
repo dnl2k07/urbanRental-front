@@ -228,6 +228,24 @@ export async function getAllCarswithimg(){
     return data;
 }
 
+export async function filterCars(filters) {
+    const res = await fetch(`${USER_URL}/filter`,{
+        method:'POST',
+        credentials:'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(filters)
+    })
+    
+    if(!res.ok){
+        const data=await res.json()
+        return {error:data?.error}
+    }
+    const data = await res.json();
+    return data;
+}
+
 // Profile functions
 export async function getUserProfile() {
     const res = await fetch(`${USER_URL}/userprofile`,{
