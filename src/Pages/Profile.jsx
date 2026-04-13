@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import NavBar from '../components/NavBar';
 import defaultAvatarPhoto from '../assets/default-avatar-photo.jpg';
+import Footer from "../components/Footer";
 import {
     getUserProfile,
     uploadUserProfilePic,
@@ -335,6 +336,7 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </>
     );
 }

@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-
+import Footer from "../components/Footer";
 export default function MyReservations() {
   const { user, onLogout} = useAuth();
   
@@ -404,6 +404,7 @@ export default function MyReservations() {
           </div>
         </div>
       )}
+      <Footer></Footer>
     </div>
   );
 }

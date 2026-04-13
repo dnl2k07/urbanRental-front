@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 export default function ReservationDetail() {
   const navigate = useNavigate();
@@ -296,6 +297,7 @@ export default function ReservationDetail() {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 }

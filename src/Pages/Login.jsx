@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+import Footer from '../components/Footer'
 import Gomb from '../components/Gomb'
 import InputMezo from '../components/InputMezo'
 
@@ -57,6 +58,8 @@ export default function Login() {
             <div className="text-center mt-3">
                 <Link to='/register' className='text-dark text-decoration-none'>Még nincs fiókom</Link>
             </div>
+
+            <Footer />
         </div>
     )
 }

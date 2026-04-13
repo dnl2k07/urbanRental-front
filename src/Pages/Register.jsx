@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Footer from "../components/Footer";
 
 import InputMezo from '../components/InputMezo.jsx'
 import Gomb from '../components/Gomb.jsx'
@@ -64,6 +65,7 @@ export default function Register() {
             <div className="text-center mt-3">
                 <Link to='/login' className='text-dark text-decoration-none'>Már van fiókom</Link>
             </div>
+            <Footer></Footer>
         </div>
     )
 }

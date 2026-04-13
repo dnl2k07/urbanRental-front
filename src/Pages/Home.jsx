@@ -1,4 +1,5 @@
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import Card from "../components/Card.jsx";
@@ -310,6 +311,7 @@ export default function Home() {
           ))
         )}
       </div>
+      <Footer />
     </div>
   );
 }

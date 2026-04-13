@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
 import UserTable from "../components/UserTable";
 import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 import {
   getAllUsers,
   deleteUser,
@@ -522,6 +523,8 @@ export default function Admin() {
           </div>
         </div>
       )}
+
+      <Footer></Footer>
     </div>
   );
 }
