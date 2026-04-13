@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import Navbar from "../components/NavBar";
 import { useAuth } from "../context/AuthContext";
+import Footer from '../components/Footer'
 
 export default function Login() {
     const { updateUserData } = useAuth();
@@ -89,6 +90,7 @@ export default function Login() {
                     </form>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

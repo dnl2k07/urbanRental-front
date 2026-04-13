@@ -6,6 +6,7 @@ import backgroundPic from "../pics/BackgroundPic.png"
 import { Navigate } from "react-router-dom"
 import { whoAmI } from "../usersFolder/users"
 import { AuthProvider } from "../context/AuthContext"
+import Footer from "../components/Footer"
 
 export default function AdminPage() {
     const { user, loading, onLogout, setUser } = useAuth()
@@ -187,6 +188,7 @@ export default function AdminPage() {
                 </div>
             </div>
             {userError && <div className="alert alert-danger text-center my-2 w-25 h-25 m-5">{userError}</div>}
+            <Footer></Footer>
         </div>
     )
 }

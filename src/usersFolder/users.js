@@ -156,23 +156,6 @@ export async function newProfilePic(userId, formData) {
     return await res.json()
 }
 
-export async function filterCars(filters) {
-    const res = await fetch(`${BACKEND_URL}/filter`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(filters)
-    })
-
-    if (!res.ok) {
-        const data = await res.json()
-        return {error: data?.error}
-    }
-    return await res.json()
-}
-
 export async function getAllCarswithimg() {
     const res = await fetch(`${BACKEND_URL}/cars`, {
         method: 'GET',
@@ -184,6 +167,24 @@ export async function getAllCarswithimg() {
         return {error: data?.error}
     }
     
+    const data = await res.json();
+    return data;
+}
+
+export async function filterCars(filters) {
+    const res = await fetch(`${BACKEND_URL}/filter`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(filters)
+    });
+    
+    if (!res.ok) {
+        const data = await res.json();
+        return { error: data?.error };
+    }
     const data = await res.json();
     return data;
 }

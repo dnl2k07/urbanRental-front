@@ -1,6 +1,8 @@
 import NavBar from "../components/NavBar";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { data } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function MyReservations() {
     const { user, onLogout } = useAuth();
@@ -64,6 +66,7 @@ export default function MyReservations() {
                 method: 'DELETE',
                 credentials: 'include'
             });
+            console.log(res);
 
             if (!res.ok) {
                 const data = await res.json();
@@ -83,10 +86,8 @@ export default function MyReservations() {
     function handleUpdate(reservation) {
         setSelectedReservation(reservation);
         setFormData({
-            vehicle_id: reservation.vehicle_id,
             pickup_date: reservation.pickup_date,
-            return_date: reservation.return_date,
-            status: reservation.status || 'lefoglalva'
+            return_date: reservation.return_date
         });
         setShowModal(true);
     }
@@ -127,10 +128,10 @@ export default function MyReservations() {
     }
 
     return (
-        <div>
+        <div className="d-flex flex-column min-vh-100 logoutErrorBox">
             <NavBar user={user} onLogout={onLogout}></NavBar>
 
-            <div style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
+            <div className="container py-5 flex-grow-1" style={{ marginTop: '80px' }}>
                 <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>My Reservations</h1>
 
                 {error && (
@@ -168,7 +169,7 @@ export default function MyReservations() {
                             boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
                         }}>
                             <thead>
-                                <tr style={{ backgroundColor: '#3498db', color: '#fff' }}>
+                                <tr style={{ backgroundColor: '#db5b34', color: '#fff' }}>
                                     <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Car (Brand)</th>
                                     <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Pickup date</th>
                                     <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #ddd' }}>Return date</th>
@@ -183,7 +184,6 @@ export default function MyReservations() {
                                             {reservation.brand ? (
                                                 <>
                                                     <div><strong>{reservation.brand} {reservation.model}</strong></div>
-                                                    <div style={{ fontSize: '0.85em', color: '#666' }}>ID: {reservation.vehicle_id}</div>
                                                     {reservation.color && <div style={{ fontSize: '0.85em', color: '#666' }}>{reservation.color}, {reservation.transmission}</div>}
                                                 </>
                                             ) : (
@@ -214,7 +214,7 @@ export default function MyReservations() {
                                             <button
                                                 onClick={() => handleUpdate(reservation)}
                                                 style={{
-                                                    backgroundColor: '#f39c12',
+                                                    backgroundColor: '#979287',
                                                     color: '#fff',
                                                     border: 'none',
                                                     padding: '8px 16px',
@@ -288,25 +288,6 @@ export default function MyReservations() {
                         )}
 
                         <form onSubmit={handleSubmit}>
-                            <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-                                    Jármű ID:
-                                </label>
-                                <input
-                                    type="number"
-                                    name="vehicle_id"
-                                    value={formData.vehicle_id}
-                                    onChange={(e) => setFormData({ ...formData, vehicle_id: e.target.value })}
-                                    required
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '5px',
-                                        fontSize: '16px'
-                                    }}
-                                />
-                            </div>
 
                             <div style={{ marginBottom: '15px' }}>
                                 <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
@@ -352,28 +333,6 @@ export default function MyReservations() {
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '20px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>
-                                    Státusz:
-                                </label>
-                                <select
-                                    name="status"
-                                    value={formData.status || selectedReservation?.status || 'lefoglalva'}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    style={{
-                                        width: '100%',
-                                        padding: '10px',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '5px',
-                                        fontSize: '16px'
-                                    }}
-                                >
-                                    <option value="lefoglalva">Foglalva</option>
-                                    <option value="aktív">Aktív</option>
-                                    <option value="lezárt">Lezárva</option>
-                                </select>
-                            </div>
-
                             <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
                                 <button
                                     type="submit"
@@ -409,6 +368,7 @@ export default function MyReservations() {
                     </div>
                 </div>
             )}
+            <Footer></Footer>
         </div>
     );
 }

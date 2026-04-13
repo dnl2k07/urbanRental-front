@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 export default function ReservationDetail() {
     const navigate = useNavigate();
@@ -156,10 +157,10 @@ export default function ReservationDetail() {
     return (
         <div>
             <NavBar user={user} />
-            <div className="container mt-4">
+            <div className="container" style={{ marginTop: '100px' }}>
                 <div className="row">
                     {/* Car Images */}
-                    <div className="col-md-6">
+                    <div className="col-md-6 mt-3">
                         {car.images.length > 0 ? (
                             <div id={`reservation-carousel-${car.vehicle_id}`} className="carousel slide">
                                 <div className="carousel-inner">
@@ -167,6 +168,7 @@ export default function ReservationDetail() {
                                         <div
                                             key={index}
                                             className={`carousel-item ${index === 0 ? "active" : ""}`}
+                                            style={{ minWidth: '500px' }}
                                         >
                                             <img src={img} className="d-block w-100 img-fluid" alt={car.brand} />
                                         </div>
@@ -283,6 +285,7 @@ export default function ReservationDetail() {
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

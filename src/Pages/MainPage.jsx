@@ -1,31 +1,40 @@
 import Navbar from "../components/NavBar"
 import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { whoAmI, getAllCarswithimg } from "../usersFolder/users.js";
+import { whoAmI, getAllCarswithimg, filterCars } from "../usersFolder/users.js"
 import Card from "../components/Card"
 import { useAuth } from "../context/AuthContext.jsx"
+import Footer from "../components/Footer";
 
 export default function Home() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [filteredCars, setFilteredCars] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // 1. HIBA JAVÍTVA: A useAuth-ot objektumként { } kell lebontani!
-    const { user, setUser, onLogout } = useAuth()
+    // Csak ezek maradtak a szűréshez:
+    const [transmission, setTransmission] = useState("");
+    const [sortOrder, setSortOrder] = useState("low_to_high");
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-    const [cars, setCars] = useState([])
-    const [userError, setUserError] = useState('')
+    const { user, setUser, onLogout } = useAuth();
+    const [cars, setCars] = useState([]);
+    const [userError, setUserError] = useState('');
 
     // Autók betöltése
     useEffect(() => {
         async function loadCars() {
+            setLoading(true);
             const data = await getAllCarswithimg();
-
             if (data.error) {
                 console.log("Error from API:", data.error);
+                setLoading(false);
                 return;
             }
 
             if (!data || data.length === 0) {
                 setCars([]);
+                setFilteredCars([]);
+                setLoading(false);
                 return;
             }
 
@@ -54,13 +63,68 @@ export default function Home() {
                     return acc;
                 }, {})
             );
-
             setCars(groupedCars);
+            setFilteredCars(groupedCars);
+            setLoading(false);
         }
         loadCars();
     }, []);
 
-    // Felhasználó ellenőrzése
+    async function applyFilters(e) {
+        if (e) e.preventDefault();
+
+        const filterData = {
+            transmission: transmission || undefined,
+            sort_order: sortOrder
+        };
+
+        // Tisztítás
+        Object.keys(filterData).forEach(key => {
+            if (!filterData[key]) delete filterData[key];
+        });
+
+        const data = await filterCars(filterData);
+
+        // Ellenőrizzük, hogy jött-e adat
+        const resultsFromBackend = data.result;
+
+        if (!resultsFromBackend || resultsFromBackend.length === 0) {
+            console.warn("Nincs találat.");
+            setFilteredCars([]);
+            return;
+        }
+
+        // 1. Megjegyezzük az eredeti sorrendet az ID-k alapján
+        const orderedIds = [...new Set(resultsFromBackend.map(car => car.vehicle_id))];
+
+        // 2. Csoportosítás (képek összegyűjtése)
+        const groupedMap = resultsFromBackend.reduce((acc, car) => {
+            if (!acc[car.vehicle_id]) {
+                acc[car.vehicle_id] = {
+                    ...car,
+                    images: []
+                };
+            }
+            if (car.img) {
+                acc[car.vehicle_id].images.push(`http://localhost:3000/public/${car.img}`);
+            }
+            return acc;
+        }, {});
+
+        // 3. Visszaalakítás tömbbé az EREDETI (backend-es) sorrendben
+        const groupedCars = orderedIds.map(id => groupedMap[id]);
+
+        console.log("Rendezett és csoportosított autók:", groupedCars);
+        setFilteredCars(groupedCars);
+    }
+
+    // Reset filters
+    function resetFilters() {
+        setTransmission("");
+        setSortOrder("low_to_high");
+        loadCars();
+    }
+
     useEffect(() => {
         async function load() {
             const data = await whoAmI()
@@ -73,6 +137,16 @@ export default function Home() {
         load()
     }, [setUser])
 
+    // 2. A korai return CSAK EZUTÁN jöhet:
+    if (loading && cars.length === 0) {
+        return (
+            <div>
+                <Navbar user={user} onLogout={onLogout}></Navbar>
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
 
     return (
         <div className="logoutErrorBox">
@@ -82,32 +156,62 @@ export default function Home() {
                     {user ? (
                         <>
                             <div className="col-md-3 px-4">
-                                <div className="sticky-top" style={{ position: 'fixed', top: '120px',  width: 'inherit', maxWidth: '280px', zIndex: 10 }}>
-                                    <div className="card shadow-sm border-0 p-4" style={{ borderRadius: '15px', backgroundColor: '#f8f9fa' }}>
-                                        <h2 className="fw-bold mb-1">Hey, {user?.username || 'Guest'}!</h2>
+                                <div className="sticky-top" style={{ position: 'fixed', top: '120px', width: 'inherit', maxWidth: '280px', zIndex: 10 }}>
+                                    <div className="card border-0 shadow-sm p-4 bg-light" style={{ maxWidth: '400px', borderRadius: '15px' }}>
+                                        <h2 className="fw-bold mb-1" style={{ letterSpacing: '-1px' }}>Hey, Admin Badmin!</h2>
                                         <p className="text-muted small mb-4">Choose from our huge selection!</p>
 
-                                        <hr />
+                                        <hr className="mb-4" />
+
                                         <h5 className="fw-bold mb-3">Filter</h5>
-                                        <div className="mb-3">
-                                            <label className="form-label small fw-bold">Brand</label>
-                                            <select className="form-select form-select-sm shadow-none">
-                                                <option value="">All brands</option>
-                                            {/* ezek itt fixelt értékek */}
-                                                <option value="opel">Opel</option>
-                                                <option value="suzuki">Suzuki</option>
-                                            </select>
-                                        </div>
 
-                                        <div className="mb-3">
-                                            <label className="form-label small fw-bold">Transmission</label>
-                                            <div className="form-check small">
-                                                <input className="form-check-input" type="checkbox" id="manual" />
-                                                <label className="form-check-label" htmlFor="manual">Manual</label>
-                                            </div>
-                                        </div>
+                                        <button
+                                            className="btn btn-outline-secondary btn-sm mb-4"
+                                            onClick={() => setIsFilterOpen(!isFilterOpen)}
+                                        >
+                                            {isFilterOpen ? "Hide Filters" : "Show Filters"}
+                                        </button>
 
-                                        <button className="btn btn-dark w-100 btn-sm fw-bold mt-2">Apply filter</button>
+                                        {isFilterOpen && (
+                                            <form onSubmit={applyFilters}>
+
+                                                {/* Transmission Select */}
+                                                <div className="mb-3 d-flex align-items-center gap-2">
+                                                    <label className="form-label small fw-bold mb-0">Transmission</label>
+                                                    <select
+                                                        className="form-select form-select-sm w-auto"
+                                                        value={transmission}
+                                                        onChange={(e) => setTransmission(e.target.value)}
+                                                    >
+                                                        <option value="">Any</option>
+                                                        <option value="Automatic">Automatic</option>
+                                                        <option value="Manual">Manual</option>
+                                                    </select>
+                                                </div>
+
+                                                {/* Sort */}
+                                                <div className="mb-4">
+                                                    <label className="form-label small fw-bold mb-1">Sort by Price</label>
+                                                    <select
+                                                        className="form-select"
+                                                        value={sortOrder}
+                                                        onChange={(e) => setSortOrder(e.target.value)}
+                                                    >
+                                                        <option value="low_to_high">Low to High</option>
+                                                        <option value="high_to_low">High to Low</option>
+                                                    </select>
+                                                </div>
+                                                {/* Action Buttons */}
+                                                <div className="d-flex flex-column gap-2 mb-4">
+                                                    <button type="button" className="btn btn-outline-dark btn-sm text-start ps-3" onClick={resetFilters}>Reset Filters</button>
+                                                </div>
+
+                                                {/* Main CTA */}
+                                                <button type="submit" className="btn btn-dark w-100 py-2 fw-bold" style={{ borderRadius: '8px' }}>
+                                                    Apply filter
+                                                </button>
+                                            </form>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -115,12 +219,13 @@ export default function Home() {
                             {/* JOBB OLDAL: KÁRTYÁK */}
                             <div className="col-md-9 pe-5">
                                 <div className="row g-4">
-                                    {cars.length === 0 ? (
+                                    {/* JAVÍTÁS: cars helyett filteredCars */}
+                                    {filteredCars.length === 0 ? (
                                         <div className="col-12 text-center py-5">
                                             <p className="h4 text-muted">There aren't any cars right meow 🐱</p>
                                         </div>
                                     ) : (
-                                        cars.map((car) => (
+                                        filteredCars.map((car) => (
                                             <Card key={car.vehicle_id} car={car} />
                                         ))
                                     )}
@@ -141,6 +246,7 @@ export default function Home() {
                     )}
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     )
 }

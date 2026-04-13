@@ -13,6 +13,8 @@ import './Design/AdminCarUpload.css'
 import { AuthProvider } from './context/AuthContext'
 import ReservationDetail from './Pages/ReservationDetail'
 import MyReservations from './Pages/MyReservation';
+import FAQ from './Pages/FAQ';
+import Legal from './Pages/Legal';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -25,8 +27,10 @@ createRoot(document.getElementById('root')).render(
           <Route path="/logout" element={<Login />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route path='/myreservations' element={<MyReservations/>} />
+          <Route path='/myreservations' element={<MyReservations />} />
           <Route path='/car/:vehicle_id' element={<ReservationDetail />} />
+          <Route path='/faq' element={<FAQ />} />
+          <Route path='/legal' element={<Legal />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
