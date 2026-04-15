@@ -5,6 +5,7 @@ import logo from '../pics/urbanRentalLogo.png';
 import { Link } from "react-router-dom";
 import Login from "./Login";
 import Navbar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 export default function Register() {
     const [email, setEmail] = useState("");
@@ -106,6 +107,7 @@ export default function Register() {
                     </form>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }
