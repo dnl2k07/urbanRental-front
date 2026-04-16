@@ -1,7 +1,6 @@
 import NavBar from "../components/NavBar";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { data } from "react-router-dom";
 import Footer from "../components/Footer";
 
 export default function MyReservations() {
