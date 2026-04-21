@@ -55,7 +55,7 @@ export default function ReservationDetail() {
                         license_plate: foundCar.license_plate || "N/A",
                         year: foundCar.year || "N/A",
                         price_per_day: foundCar.price_per_day ? parseFloat(foundCar.price_per_day) : 0,
-                        images: imagePaths.map(img => `http://localhost:3000/public/${img}`)
+                        images: imagePaths.map(img => `https://nodejs208.dszcbaross.edu.hu/public/${img}`)
                     });
                 } else {
                     setError(`Vehicle with ID ${parsedVehicleId} not found`);
@@ -74,7 +74,7 @@ export default function ReservationDetail() {
     }, [vehicle_id]);
 
     async function getAllCarswithimg() {
-        const res = await fetch('/users/cars', {
+        const res = await fetch('https://nodejs208.dszcbaross.edu.hu/users/cars', {
             method: 'GET',
             credentials: 'include'
         });
@@ -96,7 +96,7 @@ export default function ReservationDetail() {
         if (user && user.user_id) {
             console.log(user.user_id, vehicle_id, pickupDate, returnDate);
             try {
-                const res = await fetch('/users/newreservation', {
+                const res = await fetch('https://nodejs208.dszcbaross.edu.hu/users/newreservation', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

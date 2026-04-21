@@ -16,7 +16,7 @@ export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
       <Gomb
         buttonClass="btn btn-sm btn-success"
         content="Add New car"
-        onClick={() => onAdd({})} // Fix: you probably meant to pass an empty object or a new car object
+        onClick={() => onAdd({})} 
       />
       <table className="table table-striped table-hover table-dark">
         <thead>

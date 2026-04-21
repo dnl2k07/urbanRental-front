@@ -21,7 +21,7 @@ export default function Login() {
         };
 
         try {
-            const response = await fetch("http://localhost:3000/users/login", {
+            const response = await fetch("https://nodejs208.dszcbaross.edu.hu/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -39,6 +39,8 @@ export default function Login() {
                 navigate("/"); 
             } else {
                 const data = await response.json();
+                console.log(data);
+                
                 alert(data.message || "Login failed");
             }
 

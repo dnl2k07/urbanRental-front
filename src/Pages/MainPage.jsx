@@ -56,7 +56,7 @@ export default function Home() {
 
                     if (car.img) {
                         acc[car.vehicle_id].images.push(
-                            `http://localhost:3000/public/${car.img}`
+                            `https://nodejs208.dszcbaross.edu.hu/public/${car.img}`
                         );
                     }
 
@@ -106,7 +106,7 @@ export default function Home() {
                 };
             }
             if (car.img) {
-                acc[car.vehicle_id].images.push(`http://localhost:3000/public/${car.img}`);
+                acc[car.vehicle_id].images.push(`https://nodejs208.dszcbaross.edu.hu/public/${car.img}`);
             }
             return acc;
         }, {});
@@ -158,7 +158,7 @@ export default function Home() {
                             <div className="col-md-3 px-4">
                                 <div className="sticky-top" style={{ position: 'fixed', top: '120px', width: 'inherit', maxWidth: '280px', zIndex: 10 }}>
                                     <div className="card border-0 shadow-sm p-4 bg-light" style={{ maxWidth: '400px', borderRadius: '15px' }}>
-                                        <h2 className="fw-bold mb-1" style={{ letterSpacing: '-1px' }}>Hey, Admin Badmin!</h2>
+                                        <h2 className="fw-bold mb-1" style={{ letterSpacing: '-1px' }}>Hey, {user.username}!</h2>
                                         <p className="text-muted small mb-4">Choose from our huge selection!</p>
 
                                         <hr className="mb-4" />

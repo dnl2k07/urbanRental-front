@@ -1,5 +1,5 @@
-const USER_URL = '/users'
-const Admin_URL = '/admin'
+const USER_URL = 'https://nodejs208.dszcbaross.edu.hu/users'
+const Admin_URL = 'https://nodejs208.dszcbaross.edu.hu/admin'
 
 
 export async function register(email, username, psw) {
