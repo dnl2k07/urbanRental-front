@@ -216,6 +216,7 @@ export async function getAllCarswithimg(){
     })
     console.log("Response status:", res.status);
     console.log("Response ok:", res.ok);
+    console.log(res);
     
     if(!res.ok){
         console.log("Response error:", res);

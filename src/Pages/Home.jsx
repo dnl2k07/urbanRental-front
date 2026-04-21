@@ -40,8 +40,10 @@ export default function Home() {
       setLoading(false);
       return;
     }
-
-const rawCars = data[0];
+    console.log(data);
+    
+    const rawCars = data[0];
+    console.log(rawCars);
 
     const groupedCars = Object.values(
       rawCars.reduce((acc, car) => {

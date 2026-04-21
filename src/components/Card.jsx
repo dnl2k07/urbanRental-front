@@ -6,6 +6,7 @@ export default function Card({ images, brand, model, color, transmission, vehicl
   const navigate = useNavigate();
 
   const handleReserve = () => {
+    console.log(vehicle_id);
     if (vehicle_id) {
       navigate(`/car/${vehicle_id}`);
     }
@@ -59,7 +60,7 @@ export default function Card({ images, brand, model, color, transmission, vehicl
           {/* Price Display - Highlighted with gradient background */}
           <div className="price-section mb-3 p-2 rounded">
             <span className="price-label">Price per day:</span>
-            <strong className="price-value">${price_per_day?.toFixed(2) || 'N/A'}</strong>
+            <strong className="price-value">${price_per_day || 'N/A'}</strong>
           </div>
 
           {/* Reserve Button - Gradient Theme */}
