@@ -1,7 +1,7 @@
 import Gomb from "./Gomb";
 import { useNavigate } from "react-router-dom";
 
-export default function Card({ images, brand, model, color, transmission, vehicle_id }) {
+export default function Card({ images, brand, model, color, transmission, vehicle_id, price_per_day }) {
   const carouselId = `carousel-${brand}-${model}-${Math.random()}`;
   const navigate = useNavigate();
 
@@ -49,22 +49,25 @@ export default function Card({ images, brand, model, color, transmission, vehicl
           )}
         </div>
 
-        <div className="card-body">
-          <div className="d-flex justify-content-between">
-            <div>{brand}</div>
-            <div>{model}</div>
-            <div>{color}</div>
-            <div>{transmission}</div>
+<div className="card-body">
+          {/* Car Info Section */}
+          <div className="car-info mb-3">
+            <h5 className="mb-2">{brand} {model}</h5>
+            <p className="mb-1"><small>{color} • {transmission}</small></p>
           </div>
 
-          <div className="mt-2">
-            
-            <Gomb
-              buttonClass="btn btn-dark w-100"
-              content="Reserve"
-              onClick={handleReserve}
-            />
+          {/* Price Display - Highlighted with gradient background */}
+          <div className="price-section mb-3 p-2 rounded">
+            <span className="price-label">Price per day:</span>
+            <strong className="price-value">${price_per_day?.toFixed(2) || 'N/A'}</strong>
           </div>
+
+          {/* Reserve Button - Gradient Theme */}
+          <Gomb
+            buttonClass="btn reserve-btn w-100"
+            content="Reserve Now"
+            onClick={handleReserve}
+          />
         </div>
       </div>
     </div>

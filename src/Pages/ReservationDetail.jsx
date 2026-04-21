@@ -1,14 +1,123 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { ToastContext } from "../context/ToastContext";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
+
+// Payment Modal Component
+function PaymentModal({ isOpen, onClose, amount, onProcessPayment }) {
+    const [cardNumber, setCardNumber] = useState("");
+    const [expiryDate, setExpiryDate] = useState("");
+    const [cardName, setCardName] = useState("");
+    const [cvc, setCvc] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    if (!isOpen) return null;
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            await onProcessPayment({
+                cardNumber,
+                expiryDate,
+                cardName,
+                cvc,
+                amount
+            });
+
+            onClose();
+        } catch (error) {
+            console.error("Payment error:", error);
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <div className="modal-header bg-primary text-white">
+                        <h5 className="modal-title">Payment Details</h5>
+                        <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
+                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="modal-body">
+                            <div className="mb-3">
+                                <label htmlFor="cardNumber" className="form-label">Card Number</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="cardNumber"
+                                    placeholder="****-****-****-1234"
+                                    value={cardNumber}
+                                    onChange={(e) => setCardNumber(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="expiryDate" className="form-label">Expiry Date</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="expiryDate"
+                                    placeholder="MM/YY"
+                                    value={expiryDate}
+                                    onChange={(e) => setExpiryDate(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="cardName" className="form-label">Cardholder Name</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="cardName"
+                                    placeholder="CARDHOLDER NAME"
+                                    value={cardName}
+                                    onChange={(e) => setCardName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="cvc" className="form-label">CVC</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="cvc"
+                                    placeholder="***"
+                                    value={cvc}
+                                    onChange={(e) => setCvc(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="alert alert-info">
+                                <strong>Amount to Pay:</strong> ${amount.toFixed(2)}
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={onClose}>
+                                Cancel
+                            </button>
+                            <button type="submit" className="btn btn-success" disabled={loading}>
+                                {loading ? "Processing..." : "Pay Now"}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default function ReservationDetail() {
   const navigate = useNavigate();
   const { vehicle_id } = useParams();
   const { user } = useAuth();
-  
+  const { showToast } = useContext(ToastContext);
+
   // car states
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,6 +127,8 @@ export default function ReservationDetail() {
   // Form state
   const [pickupDate, setPickupDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [calculatedAmount, setCalculatedAmount] = useState(0);
   
   // Carousel ref for manual control if needed
   const carouselRef = useRef(null);
@@ -95,46 +206,110 @@ export default function ReservationDetail() {
     return data;
   }
 
-  async function handleReserve() {
+async function handleReserve() {
     if (!pickupDate || !returnDate) {
       setError("Please select both pickup and return dates");
+      showToast("Please select both pickup and return dates", "warning");
       return;
     }
 
+    // Calculate rental amount
+    const totalAmount = calculateRentalAmount(pickupDate, returnDate, car.price_per_day);
+    setCalculatedAmount(totalAmount);
+
+    // Open payment modal for mock payment process
     if (user && user.user_id) {
-      try {
-        const res = await fetch('/users/newreservation', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            user_id: user.user_id,
-            vehicle_id: parseInt(vehicle_id),
-            pickup_date: pickupDate,
-            return_date: returnDate
-          })
-        });
-        
-        const data = await res.json();
-        
-        if (!res.ok) {
-          setError(data.error || "Failed to create reservation");
-          return;
-        }
-        
-        // Success - show alert and navigate back to home
-        alert("Reservation successful!");
-        navigate("/");
-      } catch (err) {
-        console.error(err);
-        setError("Failed to reserve car");
-      }
+      setPaymentModalOpen(true);
     } else {
       setError("Please log in to make a reservation");
+      showToast("Please log in to make a reservation", "error");
       navigate("/login");
     }
+  }
+
+  // Payment processing handler
+  async function handleProcessPayment(paymentData) {
+    try {
+      showToast("Processing payment...", "info");
+
+      const res = await fetch('http://localhost:3000/api/payments/process', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...paymentData,
+          reservationId: `RES-${Date.now()}`
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showToast(data.error || "Payment processing failed", "error");
+        throw new Error(data.error || "Payment failed");
+      }
+
+      // Payment successful, now create reservation
+      await createReservation(data.transaction);
+      
+    } catch (err) {
+      console.error("Payment error:", err);
+      showToast(err.message || "Payment processing failed", "error");
+      throw err;
+    }
+  }
+
+  async function createReservation(transactionData) {
+    try {
+      const res = await fetch('/users/newreservation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          user_id: user.user_id,
+          vehicle_id: parseInt(vehicle_id),
+          pickup_date: pickupDate,
+          return_date: returnDate
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showToast(data.error || "Reservation failed", "error");
+        setError(data.error || "Failed to create reservation");
+        return;
+      }
+
+      // Show success message with toast
+      showToast("Reservation successful! Payment processed.", "success");
+      
+      // Close modal and navigate
+      setPaymentModalOpen(false);
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+
+    } catch (err) {
+      console.error(err);
+      setError("Failed to reserve car");
+      showToast("Failed to complete reservation", "error");
+    }
+  }
+
+  // Calculate rental amount helper
+  function calculateRentalAmount(pickupDate, returnDate, pricePerDay) {
+    const start = new Date(pickupDate);
+    const end = new Date(returnDate);
+    
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    const actualDays = Math.max(1, diffDays);
+    return actualDays * pricePerDay;
   }
 
   if (loading) {
@@ -298,6 +473,14 @@ export default function ReservationDetail() {
         </div>
       </div>
       <Footer></Footer>
+
+      {/* Payment Modal */}
+      <PaymentModal 
+        isOpen={paymentModalOpen} 
+        onClose={() => setPaymentModalOpen(false)}
+        amount={calculatedAmount}
+        onProcessPayment={handleProcessPayment}
+      />
     </div>
   );
 }

@@ -41,7 +41,7 @@ export default function Home() {
       return;
     }
 
-    const rawCars = data[0];
+const rawCars = data[0];
 
     const groupedCars = Object.values(
       rawCars.reduce((acc, car) => {
@@ -52,6 +52,7 @@ export default function Home() {
             model: car.model,
             color: car.color,
             transmission: car.transmission,
+            price_per_day: car.price_per_day || 0,
             images: []
           };
         }
@@ -115,7 +116,7 @@ export default function Home() {
       return;
     }
 
-    // Group the filtered cars by vehicle_id
+// Group the filtered cars by vehicle_id
     const groupedCars = Object.values(
       filteredResults.reduce((acc, car) => {
         if (!acc[car.vehicle_id]) {
@@ -125,6 +126,7 @@ export default function Home() {
             model: car.model,
             color: car.color,
             transmission: car.transmission,
+            price_per_day: car.price_per_day || 0,
             images: []
           };
         }
@@ -298,7 +300,7 @@ export default function Home() {
         {filteredCars.length === 0 ? (
           <p>No cars found</p>
         ) : (
-          filteredCars.map((car) => (
+filteredCars.map((car) => (
             <Card
               key={`${car.vehicle_id}-${car.images[0]}`}
               images={car.images}
@@ -307,6 +309,7 @@ export default function Home() {
               color={car.color}
               transmission={car.transmission}
               vehicle_id={car.vehicle_id}
+              price_per_day={car.price_per_day || 0}
             />
           ))
         )}
