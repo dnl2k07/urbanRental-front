@@ -173,7 +173,7 @@ export default function ReservationDetail() {
             year: foundCar.year || "N/A",
             price_per_day: foundCar.price_per_day ? parseFloat(foundCar.price_per_day) : 0,
             category_name: foundCar.category_name || "N/A",
-            images: imagePaths.map(img => `http://localhost:3000/public/${img}`)
+            images: imagePaths.map(img => `https://nodejs208.dszcbaross.edu.hu/public/${img}`)
           });
         } else {
           setError(`Vehicle with ID ${parsedVehicleId} not found`);
@@ -232,7 +232,7 @@ async function handleReserve() {
     try {
       showToast("Processing payment...", "info");
 
-      const res = await fetch('http://localhost:3000/api/payments/process', {
+      const res = await fetch('https://nodejs208.dszcbaross.edu.hu/api/payments/process', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -61,7 +61,7 @@ export default function Home() {
 
         if (car.img) {
           acc[car.vehicle_id].images.push(
-            `http://localhost:3000/public/${car.img}`
+            `https://nodejs208.dszcbaross.edu.hu/public/${car.img}`
           );
         }
 
@@ -135,7 +135,7 @@ export default function Home() {
 
         if (car.img) {
           acc[car.vehicle_id].images.push(
-            `http://localhost:3000/public/${car.img}`
+            `https://nodejs208.dszcbaross.edu.hu/public/${car.img}`
           );
         }
 
