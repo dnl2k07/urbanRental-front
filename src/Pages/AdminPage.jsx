@@ -44,13 +44,13 @@ export default function Admin() {
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [showReservationModal, setShowReservationModal] = useState(false);
 
-  // ==================== CATEGORY STATE ====================
+  // CATEGORY STATE 
   const [allCategories, setAllCategories] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
 
-  // ==================== FILTER STATE ====================
+  //  FILTER STATE 
   const [filterBrand, setFilterBrand] = useState("");
   const [filterModel, setFilterModel] = useState("");
   const [filterMinPrice, setFilterMinPrice] = useState("");
@@ -68,7 +68,7 @@ export default function Admin() {
     return <Navigate to="/" />;
   }
 
-  // ==================== USER FUNCTIONS ====================
+  //  USER FUNCTIONS 
   async function loadUsers() {
     const data = await getAllUsers();
     console.log("API Response:", data);
@@ -128,7 +128,7 @@ export default function Admin() {
     loadUsers();
   }
 
-  // ==================== CAR FUNCTIONS ====================
+  //  CAR FUNCTIONS 
   async function loadCars() {
     setGeneralError("");
     const data = await getAllCars();
@@ -250,7 +250,7 @@ export default function Admin() {
     loadCars();
   }
 
-  // ==================== RESERVATION FUNCTIONS ====================
+  //  RESERVATION FUNCTIONS 
   async function loadReservations() {
     setGeneralError("");
     const data = await getAllReservations();
@@ -311,7 +311,7 @@ export default function Admin() {
   }
 
 
-  // ==================== CATEGORY FUNCTIONS ====================
+  //  CATEGORY FUNCTIONS 
   async function loadCategories() {
     setGeneralError("");
     const data = await getAllCategories();
@@ -383,7 +383,7 @@ export default function Admin() {
     loadCategories();
   }
 
-  // ==================== FILTER FUNCTIONS ====================
+  //  FILTER FUNCTIONS 
   async function handleFilterCars() {
     const filters = {};
     if (filterBrand) filters.brand = filterBrand;
