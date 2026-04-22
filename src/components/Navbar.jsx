@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from '../pics/urbanRentalLogo.png';
+import logo from '/pics/urbanRentalLogo.png';
 
 export default function Navbar({ user, onLogout }) {
     const isLoggedIn = !!user

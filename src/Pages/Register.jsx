@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../pics/urbanRentalLogo.png';
 import { Link } from "react-router-dom";
-import Login from "./Login";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 

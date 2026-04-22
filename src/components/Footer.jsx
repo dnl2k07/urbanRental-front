@@ -1,4 +1,4 @@
-import urbanRentalLogo from "../pics/urbanRentalLogo.png"
+import urbanRentalLogo from "/pics/urbanRentalLogo.png"
 import { Link } from 'react-router-dom';
 
 export default function Footer() {

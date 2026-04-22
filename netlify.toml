@@ -3,32 +3,38 @@
   publish = "dist"
 
 [[redirects]]
-  from = "/api/*"
-  to = "https://nodejs.dszcbaross.edu.hu:21111/api/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/users/*"
-  to = "https://nodejs.dszcbaross.edu.hu:21111/users/:splat"
+  to = "https://nodejs208.dszcbaross.edu.hu/users/:splat"
   status = 200
   force = true
 
 [[redirects]]
   from = "/admin/*"
-  to = "https://nodejs.dszcbaross.edu.hu:21111/admin/:splat"
+  to = "https://nodejs208.dszcbaross.edu.hu/admin/:splat"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/login"
-  to = "https://nodejs.dszcbaross.edu.hu:21111/login"
+  from = "/global/*"
+  to = "https://nodejs208.dszcbaross.edu.hu/global/:splat"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/logout"
-  to = "https://nodejs.dszcbaross.edu.hu:21111/logout"
+  from = "/admin/*"
+  to = "https://nodejs208.dszcbaross.edu.hu/admin/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/payments/*"
+  to = "https://nodejs208.dszcbaross.edu.hu/api/payments/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/public/*"
+  to = "https://nodejs208.dszcbaross.edu.hu/public/:splat"
   status = 200
   force = true
 
@@ -36,3 +42,4 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
