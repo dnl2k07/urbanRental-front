@@ -32,7 +32,7 @@ export default function Register() {
 
             const data = await response.json();
 
-            console.log("Server response:", data);
+            console.log("Server response:", data.error);
 
             if (response.ok) {
                 navigate("/");
