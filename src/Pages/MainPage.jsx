@@ -1,4 +1,4 @@
-import Navbar from "../components/NavBar"
+import NavBar from "../components/NavBarcomponent";
 import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { whoAmI, getAllCarswithimg, filterCars } from "../usersFolder/users.js"
@@ -141,7 +141,7 @@ export default function Home() {
     if (loading && cars.length === 0) {
         return (
             <div>
-                <Navbar user={user} onLogout={onLogout}></Navbar>
+                <NavBar user={user} onLogout={onLogout}></NavBar>
                 <p>Loading...</p>
             </div>
         );
@@ -150,7 +150,7 @@ export default function Home() {
 
     return (
         <div className="logoutErrorBox">
-            <Navbar user={user} onLogout={onLogout} />
+            <NavBar user={user} onLogout={onLogout} />
             <div className="container-fluid min-vh-100" id="mainWindow" style={{ paddingTop: '80px' }}>
                 <div className="row h-100">
                     {user ? (

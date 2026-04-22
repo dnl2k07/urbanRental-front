@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from '/pics/urbanRentalLogo.png';
 
-export default function Navbar({ user, onLogout }) {
+export default function NavBar({ user, onLogout }) {
     const isLoggedIn = !!user
     const isAdmin = user?.role === 'admin'
     return (

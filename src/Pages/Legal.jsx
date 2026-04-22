@@ -1,12 +1,12 @@
 import Footer from "../components/Footer";
-import Navbar from "../components/NavBar";
+import NavBar from "../components/NavBarcomponent";
 import { useAuth } from "../context/AuthContext"
 
 export default function Legal() {
     const { user, onLogout } = useAuth()
     return (
         <div className="container py-5 mt-5">
-            <Navbar user={user} onLogout={onLogout} />
+            <NavBar user={user} onLogout={onLogout} />
             <h1 className="mb-4 fw-bold">Legal Information</h1>
             
             {/* Privacy Policy Section */}

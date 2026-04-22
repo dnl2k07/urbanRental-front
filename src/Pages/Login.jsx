@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
-import Navbar from "../components/NavBar";
+import NavBar from "../components/NavBarcomponent";
 import { useAuth } from "../context/AuthContext";
 import Footer from '../components/Footer'
 
@@ -51,7 +51,7 @@ export default function Login() {
 
     return (
         <div>
-            <Navbar/>
+            <NavBar/>
             <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
                 <h1 id="registerText">LOGIN</h1>
                 <div className="d-flex flex-column w-50 registerBox">

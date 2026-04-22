@@ -1,5 +1,5 @@
 import Footer from "../components/Footer";
-import Navbar from "../components/NavBar";
+import NavBar from "../components/NavBarcomponent";
 import { useAuth } from "../context/AuthContext"
 
 export default function FAQ() {
@@ -7,7 +7,7 @@ export default function FAQ() {
     return (
     /* A d-flex és min-vh-100 kényszeríti az oldalt, hogy kitöltse a képernyőt */
     <div className="d-flex flex-column min-vh-100">
-        <Navbar user={user} onLogout={onLogout} />
+        <NavBar user={user} onLogout={onLogout} />
         
         {/* A flex-grow-1 kitölti az üres helyet, így lefelé tolja a Footert */}
         <div className="container py-5 mt-5 flex-grow-1">

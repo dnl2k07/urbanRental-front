@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import Navbar from "../components/NavBar";
-
+import NavBar from "../components/NavBarcomponent";
 export default function Register() {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
@@ -47,7 +46,7 @@ export default function Register() {
 
     return (
         <div>
-            <Navbar></Navbar>
+            <NavBar></NavBar>
             <div className="container d-flex flex-column justify-content-center align-items-center vh-100">
                 <h1 id="registerText">REGISTER</h1>
                 <div className="d-flex flex-column w-50 registerBox">
