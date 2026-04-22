@@ -44,17 +44,26 @@ export default function Admin() {
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [showReservationModal, setShowReservationModal] = useState(false);
 
-  // ==================== CATEGORY STATE ====================
+  // States for categories
   const [allCategories, setAllCategories] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
 
-  // ==================== FILTER STATE ====================
+  // States for filtering
   const [filterBrand, setFilterBrand] = useState("");
   const [filterModel, setFilterModel] = useState("");
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
+
+  useEffect(() => {
+    if (!loading && user && user.role === "admin") {
+      loadReservations();
+      loadCategories();
+      loadUsers();
+      loadCars();
+    }
+  }, [loading, user]);
 
   if (loading) {
     return (
@@ -68,7 +77,7 @@ export default function Admin() {
     return <Navigate to="/" />;
   }
 
-  // ==================== USER FUNCTIONS ====================
+  // Functions connected with users
   async function loadUsers() {
     const data = await getAllUsers();
     console.log("API Response:", data);
@@ -83,10 +92,6 @@ export default function Admin() {
     }
     return setAllUsers(data.result);
   }
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   async function handleDelete(user) {
     setGeneralError("");
@@ -128,7 +133,7 @@ export default function Admin() {
     loadUsers();
   }
 
-  // ==================== CAR FUNCTIONS ====================
+  // Car functions 
   async function loadCars() {
     setGeneralError("");
     const data = await getAllCars();
@@ -144,10 +149,6 @@ export default function Admin() {
     }
     return setAllCars(data.result);
   }
-
-  useEffect(() => {
-    loadCars();
-  }, []);
 
   async function handleCarDelete(car) {
     setGeneralError("");
@@ -250,7 +251,7 @@ export default function Admin() {
     loadCars();
   }
 
-  // ==================== RESERVATION FUNCTIONS ====================
+  // Reservation functions
   async function loadReservations() {
     setGeneralError("");
     const data = await getAllReservations();
@@ -261,10 +262,6 @@ export default function Admin() {
     }
     return setAllReservations(data);
   }
-
-  useEffect(() => {
-    loadReservations();
-  }, []);
 
   async function handleReservationEdit(reservation) {
     setGeneralError("");
@@ -311,7 +308,7 @@ export default function Admin() {
   }
 
 
-  // ==================== CATEGORY FUNCTIONS ====================
+  // Category functions
   async function loadCategories() {
     setGeneralError("");
     const data = await getAllCategories();
@@ -322,10 +319,7 @@ export default function Admin() {
     }
     return setAllCategories(data);
   }
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  
 
   async function handleCategoryEdit(category) {
     setGeneralError("");
