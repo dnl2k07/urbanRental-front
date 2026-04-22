@@ -9,7 +9,7 @@ import CategoriesModal from "../components/CategoriesModal";
 import ModalInput from "../components/ModalInput";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import Navbar from "../components/NavBar";
+import NavBar from "../components/NavBarcomponent";
 import {getAllUsers,deleteUser,userEdit,getAllCars,deleteCar,updateCar,NewCarwithimg,getAllReservations,updateReservation,deleteReservation,getAllCategories,updateCategory,createCategory,deleteCategory,} from "../usersFolder/users";
 
 export default function Admin() {
@@ -422,7 +422,7 @@ export default function Admin() {
 
   return (
     <div>
-      <Navbar user={user} onLogout={onLogout}></Navbar>
+      <NavBar user={user} onLogout={onLogout}></NavBar>
       <div className="container">
         {generalerror && <div className="text-center bg-danger p-2 mb-3">{generalerror}</div>}
         

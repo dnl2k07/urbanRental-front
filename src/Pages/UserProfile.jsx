@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
-import Navbar from "../components/NavBar"
+import NavBar from "../components/NavBarcomponent";
 import Footer from "../components/Footer"
 
 export default function UserProfile() {
@@ -56,7 +56,7 @@ export default function UserProfile() {
     return (
         <>
             <div className={`page-transition-wrapper ${isVisible ? 'animate-fade-in-up' : ''}`}>
-                <Navbar user={user} onLogout={onLogout} />
+                <NavBar user={user} onLogout={onLogout} />
                 <div className="container-fluid min-vh-100 pt-5 p-0 align-content-center" id="profileWindow">
                     <div className="row g-0 h-100 align-items-center justify-content-center">
 
