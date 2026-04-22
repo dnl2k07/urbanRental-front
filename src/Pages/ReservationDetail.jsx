@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import NavBar from "../components/NavBar";
+import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 
 export default function ReservationDetail() {
@@ -132,7 +132,7 @@ export default function ReservationDetail() {
     if (loading) {
         return (
             <div>
-                <NavBar user={user} />
+                <Navbar user={user} />
                 <div className="container">
                     <p>Loading car details...</p>
                 </div>
@@ -143,7 +143,7 @@ export default function ReservationDetail() {
     if (!car) {
         return (
             <div>
-                <NavBar user={user} />
+                <Navbar user={user} />
                 <div className="container">
                     <p>{error}</p>
                     <button className="btn btn-primary" onClick={() => navigate("/")}>
@@ -156,7 +156,7 @@ export default function ReservationDetail() {
 
     return (
         <div>
-            <NavBar user={user} />
+            <Navbar user={user} />
             <div className="container" style={{ marginTop: '100px' }}>
                 <div className="row">
                     {/* Car Images */}

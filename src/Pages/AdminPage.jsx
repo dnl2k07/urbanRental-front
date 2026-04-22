@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import NavBar from "../components/NavBar";
 import UserTable from "../components/UserTable";
 import CarTable from "../components/CarTable";
 import ReservationsTable from "../components/ReservationsTable";
@@ -10,6 +9,7 @@ import CategoriesModal from "../components/CategoriesModal";
 import ModalInput from "../components/ModalInput";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
+import Navbar from "../components/NavBar";
 
 import {
   getAllUsers,
@@ -443,7 +443,7 @@ export default function Admin() {
 
   return (
     <div>
-      <NavBar user={user} onLogout={onLogout}></NavBar>
+      <Navbar user={user} onLogout={onLogout}></Navbar>
       <div className="container">
         {generalerror && <div className="text-center bg-danger p-2 mb-3">{generalerror}</div>}
         
