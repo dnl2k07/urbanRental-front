@@ -9,7 +9,8 @@ export default function UserTable({allUsers,onEdit,onDelete}){
     }
     
     return (
-        <table className="table table-striped table-hover table-dark">
+        <div className="border-black border p-2">
+        <table className="table table-striped table-hover table-light">
             <thead>
                 <tr className="text-center">
                     <th>#</th>
@@ -37,5 +38,6 @@ export default function UserTable({allUsers,onEdit,onDelete}){
                 ))}
             </tbody>
         </table>
+        </div>
     )
 }

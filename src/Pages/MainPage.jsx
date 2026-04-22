@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBarcomponent";
 import { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { whoAmI, getAllCarswithimg, filterCars } from "../usersFolder/users.js"
+import { whoAmI, getAllCarswithimg, filterCars } from "../users.js"
 import Card from "../components/Card"
 import { useAuth } from "../context/AuthContext.jsx"
 import Footer from "../components/Footer";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ModalInput from "./ModalInput";
-import { updateReservation } from "../usersFolder/users";
+import { updateReservation } from "../users";
 
 export default function ReservationsModal({
   showModal,

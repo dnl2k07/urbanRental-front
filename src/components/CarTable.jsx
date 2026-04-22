@@ -17,7 +17,8 @@ export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
         content="Add New car"
         onClick={() => onAdd({})}
       />
-      <table className="table table-striped table-hover table-dark">
+      <div className="border-black border p-2">
+      <table className="table table-striped table-hover table-light">
         <thead>
           <tr className="text-center">
             <th>vehicle_id</th>
@@ -60,6 +61,7 @@ export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
           ))}
         </tbody>
       </table>
+      </div>
     </>
   );
 }
