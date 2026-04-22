@@ -1,4 +1,4 @@
-import NavBar from "../components/NavBar";
+import Navbar from "../components/NavBar";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
@@ -128,7 +128,7 @@ export default function MyReservations() {
 
     return (
         <div className="d-flex flex-column min-vh-100 logoutErrorBox">
-            <NavBar user={user} onLogout={onLogout}></NavBar>
+            <Navbar user={user} onLogout={onLogout}></Navbar>
 
             <div className="container py-5 flex-grow-1" style={{ marginTop: '80px' }}>
                 <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>My Reservations</h1>
