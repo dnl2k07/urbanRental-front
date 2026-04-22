@@ -293,7 +293,6 @@ export async function deleteUserProfilePic(user_id) {
 export async function uploadUserProfilePic(user_id, file) {
     const formData = new FormData();
     formData.append('img', file);
-    // user_id is passed in the URL, auth middleware handles the rest
     const res = await fetch(`${USER_URL}/newuserprofile/${user_id}`,{
         method:'POST',
         credentials:'include',
@@ -307,7 +306,6 @@ export async function uploadUserProfilePic(user_id, file) {
     return await res.json()
 }
 
-// ========== RESERVATION FUNCTIONS ==========
 export async function getAllReservations() {
     const res = await fetch(`${Admin_URL}/reservation`,{
         method:'GET',
@@ -354,7 +352,6 @@ export async function deleteReservation(reservation_id) {
     return data;
 }
 
-// ========== RENTAL FUNCTIONS ==========
 export async function getAllRentals() {
     const res = await fetch(`${Admin_URL}/allrentals`,{
         method:'GET',
@@ -433,7 +430,6 @@ export async function deleteRental(rental_id) {
     return data;
 }
 
-// ========== CATEGORY FUNCTIONS ==========
 export async function getAllCategories() {
     const res = await fetch(`${Admin_URL}/allcategory`,{
         method:'GET',

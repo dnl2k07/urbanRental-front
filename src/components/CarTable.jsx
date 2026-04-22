@@ -3,20 +3,19 @@ import Gomb from "./Gomb";
 export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
   console.log("CarTable received cars:", allCars);
 
-  // Make sure allCars is an array
   const cars = Array.isArray(allCars) ? allCars : [];
 
-//   if (cars.length === 0) {
-//     console.log("No cars to display");
-//     return <div>No cars available</div>;
-//   }
+  if (cars.length === 0) {
+    console.log("No cars to display");
+    return <div>No cars available</div>;
+  }
 
   return (
     <>
       <Gomb
         buttonClass="btn btn-sm btn-success"
         content="Add New car"
-        onClick={() => onAdd({})} 
+        onClick={() => onAdd({})}
       />
       <table className="table table-striped table-hover table-dark">
         <thead>

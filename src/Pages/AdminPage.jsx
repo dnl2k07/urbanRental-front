@@ -10,34 +10,13 @@ import ModalInput from "../components/ModalInput";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/NavBar";
-
-import {
-  getAllUsers,
-  deleteUser,
-  userEdit,
-  getAllCars,
-  deleteCar,
-  updateCar,
-  NewCarwithimg,
-  // Reservations
-  getAllReservations,
-  updateReservation,
-  deleteReservation,
-  // Categories
-  getAllCategories,
-  updateCategory,
-  createCategory,
-  deleteCategory,
-} from "../usersFolder/users";
+import {getAllUsers,deleteUser,userEdit,getAllCars,deleteCar,updateCar,NewCarwithimg,getAllReservations,updateReservation,deleteReservation,getAllCategories,updateCategory,createCategory,deleteCategory,} from "../usersFolder/users";
 
 export default function Admin() {
-  // Auth state
   const { user, loading, onLogout } = useAuth();
-
-  // General error state
   const [generalerror, setGeneralError] = useState("");
 
-  // ==================== USER STATE ====================
+  // States for the user
   const [allUsers, setAllUsers] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [username, setUsername] = useState("");
@@ -45,7 +24,7 @@ export default function Admin() {
   const [role, setRole] = useState("");
   const [showUserModal, setShowUserModal] = useState(false);
 
-  // ==================== CAR STATE ====================
+  // State for car things :D
   const [allCars, setAllCars] = useState([]);
   const [selectedCar, setSelectedCar] = useState(null);
   const [category_id, setCategoryId] = useState("");
@@ -60,7 +39,7 @@ export default function Admin() {
   const [showCarModal, setShowCarModal] = useState(false);
   const [showNewCarModal, setShowNewCarModal] = useState(false);
 
-  // ==================== RESERVATION STATE ====================
+  // States for reservations
   const [allReservations, setAllReservations] = useState(null);
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [showReservationModal, setShowReservationModal] = useState(false);
