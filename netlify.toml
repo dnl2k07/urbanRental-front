@@ -21,12 +21,6 @@
   force = true
 
 [[redirects]]
-  from = "/admin/*"
-  to = "https://nodejs208.dszcbaross.edu.hu/admin/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/api/payments/*"
   to = "https://nodejs208.dszcbaross.edu.hu/api/payments/:splat"
   status = 200
