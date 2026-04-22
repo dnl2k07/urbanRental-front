@@ -32,7 +32,7 @@ export default function UserProfile() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/users/edituser/${user?.user_id}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://nodejs208.dszcbaross.edu.hu'}/users/edituser/${user?.user_id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

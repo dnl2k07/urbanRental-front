@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../pics/urbanRentalLogo.png';
 import { Link } from "react-router-dom";
-import Login from "./Login";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 
@@ -24,7 +22,7 @@ export default function Register() {
         };
 
         try {
-            const response = await fetch("http://localhost:3000/users/register", {
+            const response = await fetch("https://nodejs208.dszcbaross.edu.hu/users/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

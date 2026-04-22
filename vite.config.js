@@ -7,11 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/users': {
-        target: 'http://localhost:3000',
+        target: 'https://nodejs208.dszcbaross.edu.hu',
         changeOrigin: true
       },
       '/admin': {
-        target: 'http://localhost:3000',
+        target: 'https://nodejs208.dszcbaross.edu.hu',
         changeOrigin: true
       }
     }

@@ -30,7 +30,7 @@ export default function MyReservations() {
 
     async function fetchReservations() {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/users/reservation`, {
+            const res = await fetch(`https://nodejs208.dszcbaross.edu.hu/users/reservation`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -61,7 +61,7 @@ export default function MyReservations() {
         console.log(reservation_id);
         console.log('Reservations:', reservations);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/users/deletereservation/${reservation_id}`, {
+            const res = await fetch(`https://nodejs208.dszcbaross.edu.hu/users/deletereservation/${reservation_id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
