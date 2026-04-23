@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import NavBar from "../components/NavBarcomponent";
 import UserTable from "../components/UserTable";
 import CarTable from "../components/CarTable";
 import ReservationsTable from "../components/ReservationsTable";
@@ -9,14 +10,18 @@ import CategoriesModal from "../components/CategoriesModal";
 import ModalInput from "../components/ModalInput";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import NavBar from "../components/NavBarcomponent";
-import {getAllUsers,deleteUser,userEdit,getAllCars,deleteCar,updateCar,NewCarwithimg,getAllReservations,updateReservation,deleteReservation,getAllCategories,updateCategory,createCategory,deleteCategory,} from "../usersFolder/users";
+
+import {getAllUsers,deleteUser,userEdit,getAllCars,deleteCar,updateCar,NewCarwithimg,getAllReservations,updateReservation,deleteReservation,getAllCategories,updateCategory,createCategory,deleteCategory,
+} from "../users";
 
 export default function Admin() {
+  // Auth state
   const { user, loading, onLogout } = useAuth();
+
+  // General error state
   const [generalerror, setGeneralError] = useState("");
 
-  // States for the user
+  //  USER STATE 
   const [allUsers, setAllUsers] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [username, setUsername] = useState("");
@@ -24,7 +29,7 @@ export default function Admin() {
   const [role, setRole] = useState("");
   const [showUserModal, setShowUserModal] = useState(false);
 
-  // State for car things :D
+  //  CAR STATE 
   const [allCars, setAllCars] = useState([]);
   const [selectedCar, setSelectedCar] = useState(null);
   const [category_id, setCategoryId] = useState("");
@@ -39,12 +44,12 @@ export default function Admin() {
   const [showCarModal, setShowCarModal] = useState(false);
   const [showNewCarModal, setShowNewCarModal] = useState(false);
 
-  // States for reservations
+  //  RESERVATION STATE 
   const [allReservations, setAllReservations] = useState(null);
   const [selectedReservation, setSelectedReservation] = useState(null);
   const [showReservationModal, setShowReservationModal] = useState(false);
 
-  // CATEGORY STATE 
+  //  CATEGORY STATE 
   const [allCategories, setAllCategories] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
@@ -309,7 +314,6 @@ export default function Admin() {
     setShowReservationModal(false);
     loadReservations();
   }
-
 
   //  CATEGORY FUNCTIONS 
   async function loadCategories() {

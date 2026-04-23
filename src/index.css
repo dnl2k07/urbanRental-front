@@ -1,0 +1,285 @@
+/* Urban Rental - CSS Variables and Theme Colors */
+:root {
+    /* Primary Colors - Blue/Green Gradient Theme */
+    --primary-color: #0d6efd;
+    --primary-dark: #0b5ed7;
+    --primary-light: #1987e4;
+    
+    --secondary-color: #28a745;
+    --secondary-dark: #218838;
+    --secondary-light: #34ce61;
+    
+    --accent-color: #00d4aa;
+    --accent-gradient-start: #0d6efd;
+    --accent-gradient-end: #00d4aa;
+
+    /* Background Colors */
+    --bg-dark: #212529;
+    --bg-light: #f8f9fa;
+    
+    /* Text Colors */
+    --text-primary: #333;
+    --text-secondary: #6c757d;
+    --text-white: #ffffff;
+
+    /* Card Styles */
+    --card-bg: #ffffff;
+    --card-border: #dee2e6;
+
+    /* Button Colors */
+    --btn-gradient-start: var(--accent-gradient-start);
+    --btn-gradient-end: var(--accent-gradient-end);
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 3rem;
+}
+
+/* Global Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar Styles */
+.site-nav {
+    background: linear-gradient(135deg, var(--accent-gradient-start), var(--accent-gradient-end));
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-sm) 0;
+}
+
+.site-nav .navbar-brand img:hover {
+    transform: scale(1.05);
+}
+
+.site-nav .nav-link-custom {
+    color: white !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+}
+
+.site-nav .nav-link-custom:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Footer Styles */
+.site-footer {
+    background: linear-gradient(180deg, var(--bg-dark), #1a1d20);
+    color: white;
+    margin-top: auto;
+}
+
+.site-footer .footer-heading {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.site-footer .footer-text {
+    color: #adb5bd;
+}
+
+.site-footer .footer-links .footer-link {
+    color: #adb5bd;
+    transition: all 0.3s ease;
+    display: block;
+    padding: var(--spacing-xs) 0;
+}
+
+.site-footer .footer-links .footer-link:hover {
+    color: white;
+    transform: translateX(5px);
+}
+
+.site-footer .footer-contact {
+    color: #adb5bd;
+}
+
+.site-footer .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.site-footer .footer-copyright {
+    color: #6c757d;
+}
+
+/* Card Styles */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: var(--card-bg);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Car Card Specific Styles */
+.card .car-info h5 {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.card .price-section {
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    border: 1px solid #bae6fd;
+}
+
+.card .price-label {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.card .price-value {
+    color: var(--secondary-color);
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+/* Reserve Button - Gradient Theme */
+.reserve-btn {
+    background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(13, 110, 253, 0.3);
+}
+
+.reserve-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+}
+
+/* Modal Styles */
+.modal-header {
+    background: linear-gradient(135deg, var(--accent-gradient-start), var(--accent-gradient-end));
+    color: white;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* Toast Notification Overrides */
+.toast-success {
+    border-left: 4px solid var(--secondary-color);
+}
+
+.toast-error {
+    border-left: 4px solid #dc3545;
+}
+
+.toast-warning {
+    border-left: 4px solid #ffc107;
+}
+
+.toast-info {
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Form Styles */
+.form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Payment Modal Yellow Inputs */
+.form-yellow-input {
+    background-color: #fff9db;
+    border: 2px solid #ffc107;
+    color: #212529;
+    font-weight: 500;
+}
+
+.form-yellow-input:focus {
+    background-color: #fffde7;
+    border-color: #ffca2c;
+    box-shadow: 0 0 0 0.2rem rgba(255, 209, 43, 0.25);
+    outline: none;
+}
+
+.form-yellow-input::placeholder {
+    color: #8d7a00;
+    opacity: 0.7;
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+}
+
+.btn-success {
+    background-color: var(--secondary-color);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-outline-danger {
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Carousel Styles */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    padding: var(--spacing-sm);
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}

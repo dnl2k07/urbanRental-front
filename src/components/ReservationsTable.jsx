@@ -15,7 +15,8 @@ export default function ReservationsTable({ allReservations, onEdit, onDelete })
 
   return (
     <>
-      <table className="table table-striped table-hover table-dark">
+    <div className="border-black border p-2">
+      <table className="table table-striped table-hover table-light">
         <thead>
           <tr className="text-center">
             <th>reservation_id</th>
@@ -54,6 +55,7 @@ export default function ReservationsTable({ allReservations, onEdit, onDelete })
           ))}
         </tbody>
       </table>
+      </div>
     </>
   );
 }

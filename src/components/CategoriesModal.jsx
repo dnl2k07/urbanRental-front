@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ModalInput from "./ModalInput";
-import { updateCategory, createCategory } from "../usersFolder/users";
+import { updateCategory, createCategory } from "../users";
 
 export default function CategoriesModal({
   showModal,
