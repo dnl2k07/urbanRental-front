@@ -217,6 +217,26 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
 
+/* Payment Modal Yellow Inputs */
+.form-yellow-input {
+    background-color: #fff9db;
+    border: 2px solid #ffc107;
+    color: #212529;
+    font-weight: 500;
+}
+
+.form-yellow-input:focus {
+    background-color: #fffde7;
+    border-color: #ffca2c;
+    box-shadow: 0 0 0 0.2rem rgba(255, 209, 43, 0.25);
+    outline: none;
+}
+
+.form-yellow-input::placeholder {
+    color: #8d7a00;
+    opacity: 0.7;
+}
+
 /* Buttons */
 .btn-primary {
     background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));

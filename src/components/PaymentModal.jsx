@@ -1,107 +1,236 @@
 import { useState } from "react";
 
-export default function PaymentModal({ isOpen, onClose, amount, onProcessPayment }) {
-    const [cardNumber, setCardNumber] = useState("");
-    const [expiryDate, setExpiryDate] = useState("");
-    const [cardName, setCardName] = useState("");
-    const [cvc, setCvc] = useState("");
-    const [loading, setLoading] = useState(false);
+export default function PaymentModal({
+  isOpen,
+  onClose,
+  amount,
+  onProcessPayment,
+}) {
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cardName, setCardName] = useState("");
+  const [cvc, setCvc] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    if (!isOpen) return null;
+  // Format card number with spaces every 4 digits
+  const formatCardNumber = (value) => {
+    const digits = value.replace(/\D/g, "");
+    return digits.replace(/(\d{4})/g, "$1 ").trim();
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+  const handleCardNumberChange = (e) => {
+    const formatted = formatCardNumber(e.target.value);
+    if (formatted.length <= 19) {
+      setCardNumber(formatted);
+    }
+  };
 
-        try {
-            await onProcessPayment({
-                cardNumber,
-                expiryDate,
-                cardName,
-                cvc,
-                amount
-            });
+  // Format expiry date as MM/YY
+  const formatExpiryDate = (value) => {
+    const digits = value.replace(/\D/g, "");
+    if (digits.length >= 2) {
+      return `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+    }
+    return digits;
+  };
 
-            onClose();
-        } catch (error) {
-            console.error("Payment error:", error);
-            setLoading(false);
-        }
-    };
+  const handleExpiryChange = (e) => {
+    const formatted = formatExpiryDate(e.target.value);
+    setExpiryDate(formatted);
+  };
 
-    return (
-        <div className="modal fade show d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                    <div className="modal-header bg-primary text-white">
-                        <h5 className="modal-title">Payment Details</h5>
-                        <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                        <div className="modal-body">
-                            <div className="mb-3">
-                                <label htmlFor="cardNumber" className="form-label">Card Number</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="cardNumber"
-                                    placeholder="****-****-****-1234"
-                                    value={cardNumber}
-                                    onChange={(e) => setCardNumber(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="expiryDate" className="form-label">Expiry Date</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="expiryDate"
-                                    placeholder="MM/YY"
-                                    value={expiryDate}
-                                    onChange={(e) => setExpiryDate(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="cardName" className="form-label">Cardholder Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="cardName"
-                                    placeholder="CARDHOLDER NAME"
-                                    value={cardName}
-                                    onChange={(e) => setCardName(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="cvc" className="form-label">CVC</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="cvc"
-                                    placeholder="***"
-                                    value={cvc}
-                                    onChange={(e) => setCvc(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="alert alert-info">
-                                <strong>Amount to Pay:</strong> ${amount.toFixed(2)}
-                            </div>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" onClick={onClose}>
-                                Cancel
-                            </button>
-                            <button type="submit" className="btn btn-success" disabled={loading}>
-                                {loading ? "Processing..." : "Pay Now"}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+  // Validate expiry date
+  const isValidExpiry = (dateStr) => {
+    if (!dateStr || !/\d{2}\/\d{2}/.test(dateStr)) return false;
+    const [month, year] = dateStr.split("/");
+    const monthNum = parseInt(month, 10);
+    const yearNum = parseInt(year, 10);
+    
+    if (monthNum < 1 || monthNum > 12) return false;
+    
+    const currentYear = new Date().getFullYear() % 100;
+    const currentMonth = new Date().getMonth() + 1;
+    
+    if (yearNum < currentYear) return false;
+    if (yearNum === currentYear && monthNum < currentMonth) return false;
+    
+    return true;
+  };
+
+  // Validate card number (Luhn algorithm)
+  const validateCardNumber = (numberStr) => {
+    const digits = numberStr.replace(/\s/g, "");
+    if (digits.length !== 16) return false;
+    
+    let sum = 0;
+    let isEven = false;
+    
+    for (let i = digits.length - 1; i >= 0; i--) {
+      let digit = parseInt(digits[i], 10);
+      
+      if (isEven) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      
+      sum += digit;
+      isEven = !isEven;
+    }
+    
+    return sum % 10 === 0;
+  };
+
+  // Validate CVC (must be exactly 3 digits)
+  const validateCvc = (value) => {
+    return /^\d{3}$/.test(value);
+  };
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validate all fields
+    if (!validateCardNumber(cardNumber)) {
+      alert("Please enter a valid card number");
+      return;
+    }
+    
+    if (!isValidExpiry(expiryDate)) {
+      alert("Please enter a valid expiry date (MM/YY format)");
+      return;
+    }
+    
+    if (cardName.trim().length < 2) {
+      alert("Please enter your name");
+      return;
+    }
+    
+    if (!validateCvc(cvc)) {
+      alert("Please enter a valid CVC (3 digits)");
+      return;
+    }
+    
+    setLoading(true);
+
+    try {
+      await onProcessPayment({
+        cardNumber,
+        expiryDate,
+        cardName,
+        cvc,
+        amount,
+      });
+
+      onClose();
+    } catch (error) {
+      console.error("Payment error:", error);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="modal fade show d-block"
+
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header bg-primary text-white">
+            <h5 className="modal-title">Payment Details</h5>
+            <button
+              type="button"
+              className="btn-close btn-close-white"
+              onClick={onClose}
+            ></button>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="modal-body">
+              <div className="mb-3">
+                <label htmlFor="cardNumber" className="form-label">
+                  Card Number
+                </label>
+                <input
+                  type="text"
+                  className="form-control form-yellow-input"
+                  id="cardNumber"
+                  placeholder="**** **** **** ****"
+                  value={cardNumber}
+                  onChange={handleCardNumberChange}
+                  maxLength={19}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="expiryDate" className="form-label">
+                  Expiry Date
+                </label>
+                <input
+                  type="text"
+                  className="form-control form-yellow-input"
+                  id="expiryDate"
+                  placeholder="MM/YY"
+                  value={expiryDate}
+                  onChange={handleExpiryChange}
+                  maxLength={5}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="cardName" className="form-label">
+                  Cardholder Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control form-yellow-input"
+                  id="cardName"
+                  placeholder="CARDHOLDER NAME"
+                  value={cardName}
+                  onChange={(e) => setCardName(e.target.value.toUpperCase())}
+                  required
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="cvc" className="form-label">
+                  CVC
+                </label>
+                <input
+                  type="text"
+                  className="form-control form-yellow-input"
+                  id="cvc"
+                  placeholder="***"
+                  value={cvc}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, "").slice(0, 3);
+                    setCvc(val);
+                  }}
+                  maxLength={3}
+                  required
+                />
+              </div>
+              <div className="alert alert-info">
+                <strong>Amount to Pay:</strong> ${amount.toFixed(2)}
+              </div>
             </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="btn btn-success"
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Pay Now"}
+              </button>
+            </div>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
