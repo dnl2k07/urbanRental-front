@@ -61,6 +61,15 @@ export default function Admin() {
   const [filterMinPrice, setFilterMinPrice] = useState("");
   const [filterMaxPrice, setFilterMaxPrice] = useState("");
 
+  useEffect(() => {
+    if (!loading && user && user.role === "admin") {
+      loadReservations();
+      loadCategories();
+      loadUsers();
+      loadCars();
+    }
+  }, [loading, user]);
+
   if (loading) {
     return (
       <div className="container py-5">
@@ -89,9 +98,6 @@ export default function Admin() {
     return setAllUsers(data.result);
   }
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   async function handleDelete(user) {
     setGeneralError("");
@@ -150,9 +156,6 @@ export default function Admin() {
     return setAllCars(data.result);
   }
 
-  useEffect(() => {
-    loadCars();
-  }, []);
 
   async function handleCarDelete(car) {
     setGeneralError("");
@@ -267,9 +270,6 @@ export default function Admin() {
     return setAllReservations(data);
   }
 
-  useEffect(() => {
-    loadReservations();
-  }, []);
 
   async function handleReservationEdit(reservation) {
     setGeneralError("");
@@ -326,10 +326,6 @@ export default function Admin() {
     }
     return setAllCategories(data);
   }
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
 
   async function handleCategoryEdit(category) {
     setGeneralError("");
