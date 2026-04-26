@@ -10,7 +10,7 @@ export default defineConfig({
         target: 'https://nodejs208.dszcbaross.edu.hu',
         changeOrigin: true
       },
-      '/admin': {
+      '/admin-api': {
         target: 'https://nodejs208.dszcbaross.edu.hu',
         changeOrigin: true,
       }
