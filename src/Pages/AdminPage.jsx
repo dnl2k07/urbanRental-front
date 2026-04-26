@@ -423,11 +423,10 @@ export default function Admin() {
   return (
     <div>
       <NavBar user={user} onLogout={onLogout}></NavBar>
-      <div className="container">
+      <div className="container" style={{marginTop: 100}}>
         {generalerror && <div className="text-center bg-danger p-2 mb-3">{generalerror}</div>}
         
         <h1 className="text-center my-3">Admin Panel</h1>
-
         {/* Car Filter Section */}
         <div className="card mb-4 p-3">
           <h5>Filter Cars</h5>
@@ -498,15 +497,8 @@ export default function Admin() {
           allCategories={allCategories}
           onEdit={handleCategoryEdit}
           onDelete={handleCategoryDelete}
+          onAdd={handleNewCategory}
         />
-        
-        {/* Add Category Button */}
-        <button
-          className="btn btn-success mb-3"
-          onClick={handleNewCategory}
-        >
-          + Add New Category
-        </button>
 
         {/* Reservations Section */}
         <h3 className="mt-4">Reservations</h3>

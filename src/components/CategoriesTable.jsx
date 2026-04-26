@@ -1,6 +1,6 @@
 import Gomb from "./Gomb";
 
-export default function CategoriesTable({ allCategories, onEdit, onDelete }) {
+export default function CategoriesTable({ allCategories, onEdit, onDelete, onAdd }) {
   console.log("CategoriesTable received categories:", allCategories);
 
   if (!allCategories || !Array.isArray(allCategories.result)) {
@@ -45,6 +45,11 @@ export default function CategoriesTable({ allCategories, onEdit, onDelete }) {
             ))}
           </tbody>
         </table>
+        <Gomb
+          buttonClass="btn btn-sm btn-success"
+          content="+ Add New category"
+          onClick={() => onAdd({})}
+        />
       </div>
     </>
   );

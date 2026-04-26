@@ -42,7 +42,7 @@ export default function Card({ car }) {
                 <div className="card-body d-flex flex-column p-3">
                     <div className="d-flex justify-content-between align-items-start mb-2">
                         <h6 className="fw-bold m-0 text-uppercase">{brand} {model}</h6>
-                        <span className="badge bg-dark">{year || '2024'}</span>
+                        <span className="badge bg-primary">☑️ Verified</span>
                     </div>
 
                     <div className="d-flex gap-2 mb-3 text-muted" style={{ fontSize: '0.8rem' }}>
@@ -53,7 +53,7 @@ export default function Card({ car }) {
 
                     <div className="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
                         <div>
-                            <span className="fw-bold h6 m-0">{price_per_day}</span>
+                            <span className="fw-bold h6 m-0">{Math.round(price_per_day)}</span>
                             <small className="text-muted"> Ft/nap</small>
                         </div>
                         <Gomb

@@ -31,8 +31,8 @@ export default function UserTable({allUsers,onEdit,onDelete}){
                         <td>{user.role}</td>
                         <td>{user.created_at}</td>
                         <td className="d-flex justify-content-evenly">
-                            <Gomb buttonClass='btn btn-sm btn-warning' content='Szerkeztés' onClick={()=>onEdit(user)}/>
-                            <Gomb buttonClass='btn btn-sm btn-danger' content='tölés' onClick={()=>onDelete(user)}/>
+                            <Gomb buttonClass='btn btn-sm btn-warning' content='Modify' onClick={()=>onEdit(user)}/>
+                            <Gomb buttonClass='btn btn-sm btn-danger' content='Delete' onClick={()=>onDelete(user)}/>
                         </td>
                     </tr>
                 ))}

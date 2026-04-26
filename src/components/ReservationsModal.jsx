@@ -2,18 +2,19 @@ import { useState } from "react";
 import ModalInput from "./ModalInput";
 import { updateReservation } from "../users";
 
-export default function ReservationsModal({
-  showModal,
-  selectedReservation,
-  onClose,
-  onRefresh
-}) {
+const formatDateForInput = (dateString) => {
+  if (!dateString) return "";
+  return new Date(dateString).toISOString().slice(0, 16);
+};
+
+export default function ReservationsModal({ showModal, selectedReservation, onClose, onRefresh }) {
   if (!showModal || !selectedReservation) return null;
 
   const [user_id, setUserId] = useState(selectedReservation.user_id);
   const [vehicle_id, setVehicleId] = useState(selectedReservation.vehicle_id);
-  const [pickup_date, setPickupDate] = useState(selectedReservation.pickup_date);
-  const [return_date, setReturnDate] = useState(selectedReservation.return_date);
+  const [pickup_date, setPickupDate] = useState(formatDateForInput(selectedReservation.pickup_date));
+  const [return_date, setReturnDate] = useState(formatDateForInput(selectedReservation.return_date));
+  
   const [status, setStatus] = useState(selectedReservation.status);
 
   return (
@@ -52,21 +53,6 @@ export default function ReservationsModal({
             onChange={(e) => setReturnDate(e.target.value)}
           />
 
-          <div className="mb-3">
-            <label className="form-label fw-bold">Status:</label>
-            <select
-              className="form-select"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="cancelled">Cancelled</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-            </select>
-          </div>
-
           <button
             type="button"
             className="btn btn-secondary"
@@ -93,8 +79,7 @@ export default function ReservationsModal({
       user_id,
       vehicle_id,
       pickup_date,
-      return_date,
-      status
+      return_date
     );
 
     if (data.error) {

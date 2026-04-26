@@ -45,39 +45,16 @@ export default function PaymentModal({
     const [month, year] = dateStr.split("/");
     const monthNum = parseInt(month, 10);
     const yearNum = parseInt(year, 10);
-    
+
     if (monthNum < 1 || monthNum > 12) return false;
-    
+
     const currentYear = new Date().getFullYear() % 100;
     const currentMonth = new Date().getMonth() + 1;
-    
+
     if (yearNum < currentYear) return false;
     if (yearNum === currentYear && monthNum < currentMonth) return false;
-    
-    return true;
-  };
 
-  // Validate card number (Luhn algorithm)
-  const validateCardNumber = (numberStr) => {
-    const digits = numberStr.replace(/\s/g, "");
-    if (digits.length !== 16) return false;
-    
-    let sum = 0;
-    let isEven = false;
-    
-    for (let i = digits.length - 1; i >= 0; i--) {
-      let digit = parseInt(digits[i], 10);
-      
-      if (isEven) {
-        digit *= 2;
-        if (digit > 9) digit -= 9;
-      }
-      
-      sum += digit;
-      isEven = !isEven;
-    }
-    
-    return sum % 10 === 0;
+    return true;
   };
 
   // Validate CVC (must be exactly 3 digits)
@@ -89,28 +66,31 @@ export default function PaymentModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(cardNumber);
     
-    // Validate all fields
-    if (!validateCardNumber(cardNumber)) {
-      alert("Please enter a valid card number");
+    const rawCardNumber = cardNumber.replace(/\s/g, "");
+
+    if (rawCardNumber.length !== 16) {
+      alert("Please enter a valid 16-digit card number");
       return;
     }
-    
+
     if (!isValidExpiry(expiryDate)) {
       alert("Please enter a valid expiry date (MM/YY format)");
       return;
     }
-    
+
     if (cardName.trim().length < 2) {
       alert("Please enter your name");
       return;
     }
-    
+
     if (!validateCvc(cvc)) {
       alert("Please enter a valid CVC (3 digits)");
       return;
     }
-    
+
     setLoading(true);
 
     try {
@@ -147,7 +127,7 @@ export default function PaymentModal({
           <form onSubmit={handleSubmit}>
             <div className="modal-body">
               <div className="mb-3">
-                <label htmlFor="cardNumber" className="form-label">
+                <label className="form-label">
                   Card Number
                 </label>
                 <input

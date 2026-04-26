@@ -307,10 +307,7 @@ export default function ReservationDetail() {
             transmission: foundCar.transmission || "N/A",
             license_plate: foundCar.license_plate || "N/A",
             year: foundCar.year || "N/A",
-            price_per_day: foundCar.price_per_day
-              ? parseFloat(foundCar.price_per_day)
-              : 0,
-            category_name: foundCar.category_name || "N/A",
+            price_per_day: foundCar.price_per_day ? parseFloat(foundCar.price_per_day): 0,
             images: imagePaths.map(
               (img) => `https://nodejs208.dszcbaross.edu.hu/public/${img}`,
             ),
@@ -492,7 +489,7 @@ export default function ReservationDetail() {
       <div className="container mt-4">
         <div className="row">
           {/* Car Images */}
-          <div className="col-md-6">
+          <div className="col-md-6" style={{marginTop: 110}}>
             {car.images.length > 0 ? (
               <div
                 id={`reservation-carousel-${car.vehicle_id}`}
@@ -541,7 +538,7 @@ export default function ReservationDetail() {
           </div>
 
           {/* Car Details */}
-          <div className="col-md-6">
+          <div className="col-md-6" style={{marginTop: 100}}>
             <h1>
               {car.brand} {car.model}
             </h1>
@@ -572,7 +569,7 @@ export default function ReservationDetail() {
 
                 {car.price_per_day && (
                   <div className="mb-2">
-                    <strong>Price per day:</strong> ${car.price_per_day}
+                    <strong>Price per day:</strong>{car.price_per_day} Ft
                   </div>
                 )}
               </div>
