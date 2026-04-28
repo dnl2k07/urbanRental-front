@@ -5,8 +5,8 @@
 
 ---
 ## Készítette:
-- UrbanRental Fejlesztő Csapat
----
+- Kovács Péter
+- Drágán Dániel
 # Frontend Felépítése:
 
 1. **Technológia Stacking**
@@ -227,6 +227,12 @@ npm run preview
 # Netlify deploy
 netlify deploy --prod
 ```
+---
+
+# Dizájn
+- Megvalósításához a figmát használtuk
+-[Figma Dizájn](https://www.figma.com/design/EphvNI0Vf3FrApCmTH5Qs6/Main-Project?node-id=0-1&p=f&t=p1m9o3ba9EHNCClp-0)
+
 
 ---
 

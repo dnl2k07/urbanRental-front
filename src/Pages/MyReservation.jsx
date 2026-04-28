@@ -9,6 +9,9 @@ export default function MyReservations() {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Get today's date in YYYY-MM-DD format for min date validation
+  const today = new Date().toLocaleDateString('en-CA');
 
   // State for modal (update reservation)
   const [showModal, setShowModal] = useState(false);
@@ -18,6 +21,19 @@ export default function MyReservations() {
     pickup_date: '',
     return_date: ''
   });
+  
+  // Handle pickup date change and validate return date
+  function handlePickupDateChange(date) {
+    setFormData({ ...formData, pickup_date: date });
+  }
+  
+  function handleReturnDateChange(date) {
+    // Only allow return date if it's >= pickup_date (or today if no pickup_date selected yet)
+    const minReturnDate = formData.pickup_date || today;
+    if (!date || date >= minReturnDate) {
+      setFormData({ ...formData, return_date: date });
+    }
+  }
 
   // Fetch reservations on component mount
   useEffect(() => {
@@ -293,7 +309,8 @@ export default function MyReservations() {
                     type="date"
                     name="pickup_date"
                     value={formData.pickup_date}
-                    onChange={(e) => setFormData({ ...formData, pickup_date: e.target.value })}
+                    min={today}
+                    onChange={(e) => handlePickupDateChange(e.target.value)}
                     required
                     style={{
                       width: '100%',
@@ -313,7 +330,8 @@ export default function MyReservations() {
                     type="date"
                     name="return_date"
                     value={formData.return_date}
-                    onChange={(e) => setFormData({ ...formData, return_date: e.target.value })}
+                    min={formData.pickup_date || today}
+                    onChange={(e) => handleReturnDateChange(e.target.value)}
                     required
                     style={{
                       width: '100%',

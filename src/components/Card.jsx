@@ -42,7 +42,7 @@ export default function Card({ car }) {
                 <div className="card-body d-flex flex-column p-3">
                     <div className="d-flex justify-content-between align-items-start mb-2">
                         <h6 className="fw-bold m-0 text-uppercase">{brand} {model}</h6>
-                        <span className="badge bg-primary">☑️ Verified</span>
+                        <span className="badge bg-primary">{year || 'Unknown'}</span>
                     </div>
 
                     <div className="d-flex gap-2 mb-3 text-muted" style={{ fontSize: '0.8rem' }}>

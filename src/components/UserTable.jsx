@@ -29,7 +29,7 @@ export default function UserTable({allUsers,onEdit,onDelete}){
                         <td>{user.username}</td>
                         <td>{user.email}</td>
                         <td>{user.role}</td>
-                        <td>{user.created_at}</td>
+                        <td>{new Date(user.created_at).toISOString().split('T')[0]}</td>
                         <td className="d-flex justify-content-evenly">
                             <Gomb buttonClass='btn btn-sm btn-warning' content='Modify' onClick={()=>onEdit(user)}/>
                             <Gomb buttonClass='btn btn-sm btn-danger' content='Delete' onClick={()=>onDelete(user)}/>
