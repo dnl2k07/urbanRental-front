@@ -1,4 +1,8 @@
 # UrbanRental Frontend
+## A projektről
+
+>Az **UrbanRental** egy modern webes alkalmazás, amely autók bérlését teszi lehetővé online. A felhasználóknak lehetőséget adunk arra, hogy böngésszenek különböző autókat, foglaljanak időpontot, kezeljék saját profiljukat és foglalásaikat, valamint adminisztrátorok számára teljes körű felügyeleti funkciókkal rendelkezünk. A projekt React 19 alapú SPA (Single Page Application) megoldás, amely gyors, dinamikus felhasználói élményt biztosít.
+
 ---
 ## Készítette:
 - UrbanRental Fejlesztő Csapat
@@ -226,9 +230,14 @@ netlify deploy --prod
 
 ---
 
-# Fontos Megjegyzések:
+### Használt eszközök
 
-- A frontend a `https://nodejs208.dszcbaross.edu.hu` backend szerverhez csatlakozik
-- Minden bejelentkezés után cookie-k tárolódnak (credentials: include)
-- A fizetési modal jelenleg szimulált működésű (nem történik valós pénzmozgás)
-- Az oldal teljesen responsive, mobilbarát dizájn
+- [VS code](https://code.visualstudio.com)
+- [MDN Web Docs](https://developer.mozilla.org/en-US/)
+- [W3Schools](https://www.w3schools.com)
+- [StackOverflow](https://stackoverflow.com/questions)
+- [ChatGPT](https://chatgpt.com)
+- [GitHub](https://github.com/)
+- [Netlify](https://www.netlify.com)
+- [Figma](https://www.figma.com)
+- [FontAwesome](https://fontawesome.com)
