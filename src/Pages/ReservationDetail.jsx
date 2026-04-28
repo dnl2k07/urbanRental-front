@@ -60,28 +60,28 @@ function PaymentModal({ isOpen, onClose, amount, onProcessPayment }) {
     return true;
   };
 
-  // Validate card number (Luhn algorithm)
-  const validateCardNumber = (numberStr) => {
-    const digits = numberStr.replace(/\s/g, "");
-    if (digits.length !== 16) return false;
+  // Validate card number (Luhn algorithm) uncommented for simplicity, can be re-enabled if needed
+  // const validateCardNumber = (numberStr) => {
+  //   const digits = numberStr.replace(/\s/g, "");
+  //   if (digits.length !== 16) return false;
     
-    let sum = 0;
-    let isEven = false;
+  //   let sum = 0;
+  //   let isEven = false;
     
-    for (let i = digits.length - 1; i >= 0; i--) {
-      let digit = parseInt(digits[i], 10);
+  //   for (let i = digits.length - 1; i >= 0; i--) {
+  //     let digit = parseInt(digits[i], 10);
       
-      if (isEven) {
-        digit *= 2;
-        if (digit > 9) digit -= 9;
-      }
+  //     if (isEven) {
+  //       digit *= 2;
+  //       if (digit > 9) digit -= 9;
+  //     }
       
-      sum += digit;
-      isEven = !isEven;
-    }
+  //     sum += digit;
+  //     isEven = !isEven;
+  //   }
     
-    return sum % 10 === 0;
-  };
+  //   return sum % 10 === 0;
+  // };
 
   // Validate CVC (must be exactly 3 digits)
   const validateCvc = (value) => {
@@ -91,11 +91,11 @@ function PaymentModal({ isOpen, onClose, amount, onProcessPayment }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate all fields
-    if (!validateCardNumber(cardNumber)) {
-      alert("Please enter a valid card number");
-      return;
-    }
+    // Validate all fields uncommented for simplicity, can be re-enabled if needed
+    // if (!validateCardNumber(cardNumber)) {
+    //   alert("Please enter a valid card number");
+    //   return;
+    // }
     
     if (!isValidExpiry(expiryDate)) {
       alert("Please enter a valid expiry date (MM/YY format)");

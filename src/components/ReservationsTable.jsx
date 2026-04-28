@@ -35,10 +35,10 @@ export default function ReservationsTable({ allReservations, onEdit, onDelete })
               <td>{reservation.reservation_id}</td>
               <td>{reservation.user_id}</td>
               <td>{reservation.vehicle_id}</td>
-              <td>{reservation.pickup_date}</td>
-              <td>{reservation.return_date}</td>
+              <td>{new Date(reservation.pickup_date).toISOString().split('T')[0]}</td>
+              <td>{new Date(reservation.return_date).toISOString().split('T')[0]}</td>
               <td>{reservation.status}</td>
-              <td>{reservation.created_at}</td>
+              <td>{new Date(reservation.created_at).toISOString().split('T')[0]}</td>
               <td className="d-flex justify-content-evenly">
                 <Gomb
                   buttonClass="btn btn-sm btn-warning"

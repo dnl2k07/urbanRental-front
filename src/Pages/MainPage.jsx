@@ -222,7 +222,7 @@ export default function Home() {
                                     {/* JAVÍTÁS: cars helyett filteredCars */}
                                     {filteredCars.length === 0 ? (
                                         <div className="col-12 text-center py-5">
-                                            <p className="h4 text-muted">There aren't any cars right meow 🐱</p>
+                                            <p className="h4 text-muted">There aren't any cars right now </p>
                                         </div>
                                     ) : (
                                         filteredCars.map((car) => (

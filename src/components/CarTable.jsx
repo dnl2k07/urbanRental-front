@@ -39,7 +39,7 @@ export default function CarTable({ allCars, onEdit, onDelete, onAdd }) {
                 <td>{car.transmission}</td>
                 <td>{car.license_plate}</td>
                 <td>{car.year}</td>
-                <td>{car.price_per_day}</td>
+                <td>{Math.round(car.price_per_day)}</td>
                 <td className="d-flex justify-content-evenly">
                   <Gomb
                     buttonClass="btn btn-sm btn-warning"
