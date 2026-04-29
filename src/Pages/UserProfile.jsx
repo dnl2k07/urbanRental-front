@@ -65,10 +65,17 @@ export default function UserProfile() {
                             <div className="mt-4 text-center">
                                 <div className="d-flex justify-content-center">
                                     <img
-                                        src={`https://ui-avatars.com/api/${user?.username || 'User'}&background=random&color=fff`}
+                                        src={user?.role === 'admin' ? '/pics/urbanAdmin.png' : '/pics/urbanUser.png'}
                                         alt="Profile"
                                         className="img-fluid rounded-circle mb-3"
-                                        style={{ width: '150px', height: '150px', border: '3px solid white', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}
+                                        style={{
+                                            width: '150px',
+                                            height: '150px',
+                                            border: user?.role === 'admin' ? '3px solid #dc3545' : '3px solid #0d6efd',
+                                            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                                            objectFit: 'cover',
+                                            backgroundColor: 'white'
+                                        }}
                                     />
                                 </div>
                             </div>

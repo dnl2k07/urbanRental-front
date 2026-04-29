@@ -50,6 +50,7 @@ export default function Home() {
                             color: car.color,
                             transmission: car.transmission,
                             price_per_day: car.price_per_day,
+                            year: car.year,
                             images: []
                         };
                     }
@@ -155,16 +156,13 @@ export default function Home() {
                 <div className="row h-100">
                     {user ? (
                         <>
-                            <div className="col-md-3 px-4">
+                            <div className="col-md-3 px-4 d-none d-md-block">
                                 <div className="sticky-top" style={{ position: 'fixed', top: '120px', width: 'inherit', maxWidth: '280px', zIndex: 10 }}>
                                     <div className="card border-0 shadow-sm p-4 bg-light" style={{ maxWidth: '400px', borderRadius: '15px' }}>
                                         <h2 className="fw-bold mb-1" style={{ letterSpacing: '-1px' }}>Hey, {user.username}!</h2>
                                         <p className="text-muted small mb-4">Choose from our huge selection!</p>
-
                                         <hr className="mb-4" />
-
                                         <h5 className="fw-bold mb-3">Filter</h5>
-
                                         <button
                                             className="btn btn-outline-secondary btn-sm mb-4"
                                             onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -215,7 +213,65 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>
+                            <div className="d-md-none">
+                                <button
+                                    className="btn btn-secondary shadow-lg"
+                                    style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1050, borderRadius: '50px', padding: '12px 25px' }}
+                                    onClick={() => setIsFilterOpen(true)}
+                                >
+                                    Use filter
+                                </button>
 
+                                {/* Egyszerű Overlay Modal mobilon */}
+                                {isFilterOpen && (
+                                    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'white', zIndex: 2000, overflowY: 'auto', padding: '20px' }}>
+                                        <div className="d-flex justify-content-between align-items-center mb-4">
+                                            <h3 className="fw-bold m-0">Filters</h3>
+                                            <button className="btn-close" onClick={() => setIsFilterOpen(false)}></button>
+                                        </div>
+                                        {isFilterOpen && (
+                                            <form onSubmit={applyFilters}>
+
+                                                {/* Transmission Select */}
+                                                <div className="mb-3 d-flex align-items-center gap-2">
+                                                    <label className="form-label small fw-bold mb-0">Transmission</label>
+                                                    <select
+                                                        className="form-select form-select-sm w-auto"
+                                                        value={transmission}
+                                                        onChange={(e) => setTransmission(e.target.value)}
+                                                    >
+                                                        <option value="">Any</option>
+                                                        <option value="Automatic">Automatic</option>
+                                                        <option value="Manual">Manual</option>
+                                                    </select>
+                                                </div>
+
+                                                {/* Sort */}
+                                                <div className="mb-4">
+                                                    <label className="form-label small fw-bold mb-1">Sort by Price</label>
+                                                    <select
+                                                        className="form-select"
+                                                        value={sortOrder}
+                                                        onChange={(e) => setSortOrder(e.target.value)}
+                                                    >
+                                                        <option value="low_to_high">Low to High</option>
+                                                        <option value="high_to_low">High to Low</option>
+                                                    </select>
+                                                </div>
+                                                {/* Action Buttons */}
+                                                <div className="d-flex flex-column gap-2 mb-4">
+                                                    <button type="button" className="btn btn-outline-dark btn-sm text-start ps-3" onClick={resetFilters}>Reset Filters</button>
+                                                </div>
+
+                                                {/* Main CTA */}
+                                                <button type="submit" className="btn btn-dark w-100 py-2 fw-bold" style={{ borderRadius: '8px' }}>
+                                                    Apply filter
+                                                </button>
+                                            </form>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                             {/* JOBB OLDAL: KÁRTYÁK */}
                             <div className="col-md-9 pe-5">
                                 <div className="row g-4">
